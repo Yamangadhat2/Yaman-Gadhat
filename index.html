@@ -2,2419 +2,670 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>أونو الأسطورية الكونية - UNO Cosmic Pro</title>
-    <!-- مكتبة PeerJS للاتصال المباشر عبر CDN -->
-    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaman Gadhat | يمان قدحات - Cyber Portfolio</title>
+
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --red: #ff3b30;
-            --yellow: #ffcc00;
-            --green: #4cd964;
-            --blue: #007aff;
-            --purple: #5856d6;
-            --dark: #05060b;
-            --border: rgba(255, 255, 255, 0.08);
-            --bg-gradient: radial-gradient(circle, #0e122b 0%, #030408 100%);
-        }
-
-        /* قوالب المظهر الكوني المخصصة */
-        body.theme-purple {
-            --purple: #5856d6;
-            --dark: #05060b;
-            --bg-gradient: radial-gradient(circle, #0e122b 0%, #030408 100%);
-        }
-        body.theme-red {
-            --purple: #ff2d55;
-            --dark: #0a0303;
-            --bg-gradient: radial-gradient(circle, #250909 0%, #050101 100%);
-        }
-        body.theme-blue {
-            --purple: #007aff;
-            --dark: #020617;
-            --bg-gradient: radial-gradient(circle, #0f172a 0%, #020617 100%);
-        }
-        body.theme-green {
-            --purple: #4cd964;
-            --dark: #020804;
-            --bg-gradient: radial-gradient(circle, #06200d 0%, #010502 100%);
+            --bg: #03050d;
+            --card-bg: rgba(10, 15, 30, 0.75);
+            --border: rgba(0, 243, 255, 0.25);
+            --primary: #00f3ff;
+            --secondary: #8a2be2;
+            --pink: #ff007f;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --glow-p: 0 0 25px rgba(0, 243, 255, 0.6);
+            --glow-s: 0 0 25px rgba(138, 43, 226, 0.6);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--dark);
-            background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-            background-size: 550px 550px, 350px 350px, 250px 250px;
-            background-position: 0 0, 40px 60px, 130px 270px;
-            animation: cosmicBackground 120s linear infinite;
-            color: #fff;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: background 0.5s ease;
-        }
-
-        @keyframes cosmicBackground {
-            from { background-position: 0 0, 40px 60px, 130px 270px; }
-            to { background-position: 550px 1100px, 1090px 760px, 1380px 1470px; }
-        }
-
-        /* طبقات الرسوم والتفاعلات */
-        #fx-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        #effects-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 10001;
-        }
-
-        .floating-emoji {
-            position: fixed;
-            font-size: 2.5rem;
-            pointer-events: none;
-            z-index: 10005;
-            animation: floatUpAndFade 1.2s forwards ease-out;
-        }
-
-        @keyframes floatUpAndFade {
-            0% { transform: translateY(0) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-120px) scale(1.3); opacity: 0; }
-        }
-
-        /* تصميم الشاشات واللوحات الكونية */
-        .screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-gradient);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .hidden { display: none !important; }
-
-        .cosmic-panel {
-            background: rgba(13, 17, 39, 0.85);
-            border: 2px solid var(--purple);
-            border-radius: 24px;
-            padding: 25px;
-            width: 95%;
-            max-width: 520px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(88, 86, 214, 0.15);
-            backdrop-filter: blur(12px);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 12px var(--red), 0 0 25px var(--purple);
-            animation: titlePulse 2s infinite alternate;
-        }
-
-        @keyframes titlePulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.02); }
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 18px;
-            border-radius: 20px;
-            border: 2px solid var(--purple);
-            background: #15182d;
-            color: #fff;
-            font-size: 1rem;
-            text-align: center;
-            margin-bottom: 15px;
-            outline: none;
-            box-shadow: 0 0 15px rgba(88, 86, 214, 0.2);
-            transition: box-shadow 0.3s;
-        }
-        input:focus {
-            box-shadow: 0 0 20px var(--purple);
-        }
-
-        button {
-            padding: 12px 24px;
-            border-radius: 20px;
-            border: none;
-            background: linear-gradient(135deg, var(--blue), var(--purple));
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 6px;
-            box-shadow: 0 5px 15px rgba(88, 86, 214, 0.4);
-            transition: transform 0.1s, box-shadow 0.2s, background 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(88, 86, 214, 0.6);
-        }
-
-        button:active { transform: scale(0.95) translateY(1px); }
-        .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3); }
-        .btn-yellow:hover { box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5); }
-        .btn-red { background: linear-gradient(135deg, var(--red), #ff2d55); box-shadow: 0 5px 15px rgba(255, 59, 48, 0.3); }
-        .btn-red:hover { box-shadow: 0 8px 20px rgba(255, 59, 48, 0.5); }
-        .btn-green { background: linear-gradient(135deg, var(--green), #248a3d); box-shadow: 0 5px 15px rgba(76, 217, 100, 0.3); }
-        .btn-green:hover { box-shadow: 0 8px 20px rgba(76, 217, 100, 0.5); }
-        .btn-grey { background: #3a3f58; color: #fff; box-shadow: none; }
-
-        /* صندوق شرح وقوانين اللعبة */
-        .rules-guide {
-            text-align: right;
-            max-height: 220px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 14px;
-            padding: 15px;
-            margin-top: 15px;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            border: 1px solid var(--border);
-        }
-
-        .rules-guide h3 {
-            color: var(--yellow);
-            margin-bottom: 8px;
-            font-size: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
-        }
-
-        .rules-guide ul {
-            list-style-type: none;
-            padding-right: 5px;
-        }
-
-        .rules-guide li {
-            margin-bottom: 8px;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
             position: relative;
-            padding-right: 15px;
         }
 
-        .rules-guide li::before {
-            content: "✦";
-            color: var(--yellow);
-            position: absolute;
-            right: 0;
+        /* Glowing Mouse Trail Cursor */
+        .cursor-dot, .cursor-bg {
+            pointer-events: none;
+            position: fixed;
             top: 0;
+            left: 0;
+            border-radius: 50%;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            box-shadow: var(--glow-p);
+        }
+        .cursor-bg {
+            width: 35px;
+            height: 35px;
+            border: 2px solid var(--pink);
+            opacity: 0.5;
+            transition: 0.15s ease-out;
         }
 
-        .rules-toggles {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            text-align: right;
-            margin: 15px 0;
-        }
-
-        .toggle-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.02);
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-
-        /* واجهة اللعبة الرئيسية */
-        #game-board {
+        /* Canvas Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
+            z-index: -1;
         }
 
-        #opponents-container {
-            display: flex;
-            justify-content: space-around;
-            background: rgba(255,255,255,0.015);
-            padding: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .opponent-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 6px 10px;
-            border-radius: 12px;
-            border: 2px solid transparent;
-            background: rgba(255,255,255,0.01);
-            position: relative;
-        }
-
-        .opponent-card.active-turn {
-            border-color: var(--yellow);
-            background: rgba(255, 204, 0, 0.08);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
-        }
-
-        .voice-indicator {
-            position: absolute;
-            top: -5px; right: -5px;
-            background: var(--green);
-            border-radius: 50%;
-            width: 12px; height: 12px;
-            display: none;
-        }
-
-        #center-deck-area {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-            position: relative;
-            perspective: 800px;
-        }
-
-        #direction-badge {
-            position: absolute;
-            top: 15px;
-            font-size: 0.85rem;
-            background: rgba(255,255,255,0.03);
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: #ccc;
-            border: 1px solid var(--border);
-        }
-
-        /* كروت الأونو */
-        .uno-card {
-            width: 80px;
-            height: 120px;
-            border-radius: 12px;
-            border: 3px solid white;
-            position: relative;
-            user-select: none;
-            cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-        }
-
-        /* توهج ملون يتناسب مع لون الكرت */
-        .uno-card.red { background: linear-gradient(135deg, var(--red), #ff2d55); box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4); }
-        .uno-card.yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; box-shadow: 0 6px 15px rgba(255, 204, 0, 0.4); }
-        .uno-card.green { background: linear-gradient(135deg, var(--green), #248a3d); box-shadow: 0 6px 15px rgba(76, 217, 100, 0.4); }
-        .uno-card.blue { background: linear-gradient(135deg, var(--blue), #5856d6); box-shadow: 0 6px 15px rgba(0, 122, 255, 0.4); }
-        .uno-card.black { background: linear-gradient(135deg, #1c1d30 0%, #05060b 100%); border-color: #ffffff; box-shadow: 0 6px 15px rgba(255, 255, 255, 0.25); }
-        .uno-card.back { background: radial-gradient(circle, #ff2d55 0%, #1c1d30 100%); border-color: #ffcc00; box-shadow: 0 6px 15px rgba(255, 45, 85, 0.4); }
-
-        #draw-pile:hover {
-            transform: translateY(-5px) rotateY(-10deg) scale(1.05);
-            box-shadow: 0 12px 25px rgba(255, 45, 85, 0.6);
-        }
-
-        .uno-card::before {
-            content: '';
-            position: absolute;
-            top: 12%; left: 12%; right: 12%; bottom: 12%;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.22);
-            transform: rotate(-22deg);
-        }
-
-        .uno-card .corner-val {
-            position: absolute;
-            font-size: 13px;
-            font-weight: bold;
-            color: inherit;
-        }
-        .uno-card .corner-val.tl { top: 6px; left: 8px; }
-        .uno-card .corner-val.br { bottom: 6px; right: 8px; transform: rotate(180deg); }
-
-        .uno-card .center-val {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 34px;
-            font-weight: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            color: white;
-        }
-        .uno-card.yellow .center-val { color: black; text-shadow: 1px 1px 2px rgba(255,255,255,0.4); }
-
-        /* منطقة اليد */
-        #my-hand-wrapper {
-            background: rgba(0,0,0,0.35);
-            border-top: 1px solid rgba(255,255,255,0.04);
-            padding: 15px 10px;
-            min-height: 165px;
-            position: relative;
-            overflow-x: auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        #my-hand {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding-bottom: 5px;
-            flex-wrap: nowrap;
-            max-width: 100%;
-        }
-
-        #my-hand .uno-card {
-            flex-shrink: 0;
-            transform-origin: bottom center;
-            transition: transform 0.2s, margin 0.2s, z-index 0.2s;
-        }
-
-        #my-hand .uno-card:hover, #my-hand .uno-card:active {
-            transform: translateY(-25px) scale(1.18) rotate(0deg) !important;
-            z-index: 100 !important;
-            margin-right: 5px !important;
-            margin-left: 5px !important;
-        }
-
-        /* مؤشرات التحكم بالدور والمؤقت */
-        #turn-indicator {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(4, 5, 10, 0.95);
-            border: 2px solid rgba(255,255,255,0.1);
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        }
-
-        #turn-indicator.my-turn-active {
-            border-color: var(--green);
-            box-shadow: 0 0 15px rgba(76, 217, 100, 0.3);
-        }
-
-        #timer-countdown { color: var(--yellow); font-size: 1.1rem; }
-
-        /* أزرار الإجراءات السريعة */
-        #action-controls {
-            position: absolute;
-            bottom: 180px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 99;
-        }
-
-        #taunts-panel {
-            position: absolute;
-            bottom: 180px;
-            left: 15px;
-            display: flex;
-            gap: 6px;
-            z-index: 99;
-        }
-
-        #annoyance-panel {
-            position: absolute;
-            bottom: 240px;
-            left: 15px;
-            z-index: 100;
-        }
-
-        .annoyance-select {
-            background: rgba(13, 17, 39, 0.9);
-            color: #fff;
-            border: 1px solid var(--purple);
-            padding: 8px 12px;
-            border-radius: 12px;
-            outline: none;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-
-        #uno-button {
-            position: absolute;
-            bottom: 180px;
-            right: 15px;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--red) 0%, #a30000 100%);
-            border: 3px solid white;
-            color: white;
-            font-weight: 900;
-            font-size: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 99;
-            animation: bounce-rotate 2s infinite alternate;
-        }
-
-        @keyframes bounce-rotate {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-6px) rotate(10deg); }
-        }
-
-        #voice-btn-container {
+        /* Navbar */
+        nav {
             position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 1001;
-        }
-
-        /* نافذة تبادل الأوراق لقانون 7 */
-        #swap-selector-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 4000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .swap-box {
-            background: #111424;
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid var(--border);
-            text-align: center;
-            width: 320px;
-        }
-
-        .swap-options button {
+            top: 0;
             width: 100%;
-            margin: 8px 0;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(3, 5, 13, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
         }
 
-        /* النوافذ العائمة للإعدادات واختيار الألوان */
-        #settings-modal, #color-picker-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 3000;
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-p);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            text-shadow: var(--glow-p);
+        }
+
+        .btn-admin {
+            background: linear-gradient(45deg, var(--secondary), var(--pink));
+            color: #fff;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--glow-s);
+            transition: 0.3s;
+        }
+
+        .btn-admin:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 120px 8% 60px;
+        }
+
+        .hero-text { max-width: 650px; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            background: rgba(0, 243, 255, 0.08);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: var(--glow-p);
+        }
+
+        .hero-text h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 15px;
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .typing-box {
+            font-size: 1.6rem;
+            color: var(--muted);
+            margin-bottom: 30px;
+            height: 45px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+
+        .hero-btns { display: flex; gap: 18px; }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.35s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+            box-shadow: var(--glow-p);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.9);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--secondary);
+            color: #fff;
+            background: rgba(138, 43, 226, 0.15);
+            box-shadow: var(--glow-s);
+        }
+
+        .hero-avatar-box {
+            position: relative;
+            width: 350px;
+            height: 350px;
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(5px);
         }
 
-        .settings-box {
-            background: rgba(13, 17, 39, 0.95);
-            border: 2px solid var(--purple);
-            border-radius: 24px;
-            padding: 30px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 0 30px rgba(88, 86, 214, 0.4);
-            backdrop-filter: blur(20px);
-            color: #fff;
-            text-align: center;
-        }
-
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.95rem;
-        }
-
-        .settings-select {
-            background: #15182d;
-            color: #fff;
-            border: 1.5px solid var(--purple);
-            padding: 8px 12px;
-            border-radius: 10px;
-            outline: none;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .settings-select:focus {
-            box-shadow: 0 0 10px var(--purple);
-        }
-
-        .color-picker-box {
-            background: #111424;
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid var(--border);
-            text-align: center;
-            width: 320px;
-        }
-
-        .color-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .color-btn {
-            height: 60px;
-            border-radius: 15px;
-            border: 3px solid white;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: white;
-            text-shadow: 1px 1px 2px black;
-        }
-        .color-btn.pick-red { background: var(--red); }
-        .color-btn.pick-yellow { background: var(--yellow); color: black; text-shadow: none; }
-        .color-btn.pick-green { background: var(--green); }
-        .color-btn.pick-blue { background: var(--blue); }
-
-        #annoyance-banner {
-            position: fixed;
-            top: -100px; left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 11, 20, 0.95);
-            border: 2px solid var(--yellow);
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-            z-index: 10000;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #annoyance-banner.show { top: 80px; }
-
-        .settings-toggle-btn {
-            position: fixed;
-            top: 15px; right: 15px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid var(--border);
-            padding: 10px;
+        .avatar-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            font-size: 1.3rem;
-            cursor: pointer;
-            z-index: 1001;
-            transition: transform 0.3s;
-        }
-        .settings-toggle-btn:hover {
-            transform: rotate(45deg);
-            background: rgba(255, 255, 255, 0.15);
+            background: conic-gradient(from 0deg, var(--primary), var(--secondary), var(--pink), var(--primary));
+            animation: rotateRing 8s linear infinite;
+            filter: blur(15px);
+            opacity: 0.75;
         }
 
-        /* تنسيق قائمة اللوبي الأنيق */
-        #lobby-players-list li {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 10px 20px;
-            margin-bottom: 8px;
+        .avatar-inner {
+            position: relative;
+            width: 92%;
+            height: 92%;
+            border-radius: 50%;
+            background: #090d1a;
+            border: 3px solid var(--primary);
+            overflow: hidden;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            animation: slideIn 0.3s ease-out;
+            justify-content: center;
         }
-        @keyframes slideIn {
-            from { transform: translateX(20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+
+        .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-inner i { font-size: 8rem; color: var(--primary); }
+
+        /* Sections */
+        section { padding: 100px 8%; position: relative; }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.6rem;
+            margin-bottom: 60px;
+            font-weight: 900;
+        }
+
+        .section-title span {
+            color: var(--primary);
+            text-shadow: var(--glow-p);
+        }
+
+        .tilt-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(12px);
+            transition: transform 0.2s ease-out, border-color 0.3s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .tilt-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--glow-p);
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 30px;
+        }
+
+        /* Skills */
+        .skill-item { margin-bottom: 20px; }
+        .skill-header { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px; }
+        .progress-bar { height: 12px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 1.2s ease; }
+
+        /* Projects */
+        .project-img { width: 100%; height: 210px; object-fit: cover; border-radius: 14px; margin-bottom: 18px; }
+        .project-tags { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
+        .tag { background: rgba(138, 43, 226, 0.25); color: #d8b4fe; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; }
+
+        /* Timeline */
+        .timeline { position: relative; max-width: 850px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; right: 50%; width: 3px; height: 100%; background: linear-gradient(180deg, var(--primary), var(--pink)); }
+        .timeline-item { margin-bottom: 40px; position: relative; width: 50%; padding-left: 35px; }
+        .timeline-item:nth-child(even) { right: 50%; padding-left: 0; padding-right: 35px; }
+        .timeline-dot { position: absolute; right: -10px; top: 15px; width: 20px; height: 20px; background: var(--primary); border-radius: 50%; box-shadow: var(--glow-p); border: 3px solid #000; }
+        .timeline-item:nth-child(even) .timeline-dot { right: auto; left: -10px; }
+
+        /* Contact & Social */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-btn { width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem; text-decoration: none; transition: 0.3s; }
+        .social-btn:hover { background: var(--primary); color: #000; box-shadow: var(--glow-p); }
+
+        /* Inputs */
+        input, textarea { width: 100%; padding: 14px 18px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 12px; color: #fff; margin-bottom: 16px; outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); box-shadow: var(--glow-p); }
+
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); backdrop-filter: blur(16px); z-index: 3000; justify-content: center; align-items: center; }
+        .admin-modal { background: #080d1a; border: 2px solid var(--primary); border-radius: 24px; width: 90%; max-width: 700px; padding: 30px; max-height: 90vh; overflow-y: auto; }
+
+        @keyframes rotateRing { 100% { transform: rotate(360deg); } }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 850px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-text h1 { font-size: 2.6rem; }
+            .hero-btns { justify-content: center; }
+            .timeline::before { right: 15px; }
+            .timeline-item { width: 100%; padding-right: 40px !important; padding-left: 0 !important; right: 0 !important; }
+            .timeline-dot { right: 5px !important; left: auto !important; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
         }
     </style>
 </head>
-<body class="theme-purple">
+<body>
 
-    <canvas id="fx-canvas"></canvas>
-    <div id="effects-layer"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-bg" id="cursorBg"></div>
+    <canvas id="bg-canvas"></canvas>
 
-    <div class="settings-toggle-btn" onclick="toggleSettingsModal()">⚙️</div>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" id="navLogo">YAMAN GADHAT</div>
+        <ul class="nav-links">
+            <li><a href="#hero">الرئيسية</a></li>
+            <li><a href="#about">من أنا</a></li>
+            <li><a href="#skills">المهارات</a></li>
+            <li><a href="#projects">المشاريع</a></li>
+            <li><a href="#experience">الإنجازات</a></li>
+            <li><a href="#contact">التواصل</a></li>
+        </ul>
+        <button class="btn-admin" onclick="openModal()"><i class="fa-solid fa-user-shield"></i> الأدمن</button>
+    </nav>
 
-    <div id="voice-btn-container" class="hidden">
-        <button id="btn-toggle-voice" class="btn-green">تشغيل الصوت 🎤</button>
-    </div>
-
-    <!-- نافذة المبادلة لقانون 7 -->
-    <div id="swap-selector-modal" class="hidden">
-        <div class="swap-box">
-            <h2 style="color: var(--yellow); margin-bottom: 15px;">🔄 قانون 7: مبادلة الأوراق</h2>
-            <p style="color: #ccc; margin-bottom: 15px; font-size: 0.9rem;">اختر الخصم الذي تريد مقايضة كروتك معه بالكامل!</p>
-            <div id="swap-options-list" class="swap-options"></div>
-        </div>
-    </div>
-
-    <!-- نافذة اختيار اللون الجديد للـ Wild -->
-    <div id="color-picker-modal" class="hidden">
-        <div class="color-picker-box">
-            <h2 style="color: var(--yellow); margin-bottom: 10px;">🎨 اختر اللون الجديد</h2>
-            <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 20px;">اختر اللون الذي تفضله لتغيير مسار اللعب ومفاجأة خصومك!</p>
-            <div class="color-options">
-                <button class="color-btn pick-red" onclick="selectColor('red')">الأحمر / Red</button>
-                <button class="color-btn pick-yellow" onclick="selectColor('yellow')">الأصفر / Yellow</button>
-                <button class="color-btn pick-green" onclick="selectColor('green')">الأخضر / Green</button>
-                <button class="color-btn pick-blue" onclick="selectColor('blue')">الأزرق / Blue</button>
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-text reveal">
+            <div class="badge" id="heroBadge"><i class="fa-solid fa-bolt"></i> جاري التحميل...</div>
+            <h1 id="heroTitle">مرحباً، أنا <br><span id="heroName">يمان قدحات</span></h1>
+            <div class="typing-box" id="typewriter"></div>
+            <div class="hero-btns">
+                <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> أحدث أعمالي</a>
+                <a href="#contact" class="btn btn-secondary"><i class="fa-solid fa-paper-plane"></i> تواصل معي</a>
             </div>
         </div>
-    </div>
-
-    <!-- نافذة الإعدادات -->
-    <div id="settings-modal" class="hidden">
-        <div class="settings-box">
-            <h2 id="st-title" style="margin-bottom: 20px; color: var(--yellow);">⚙️ الإعدادات</h2>
-            
-            <div class="settings-row">
-                <span id="st-lang-lbl">اللغة:</span>
-                <select id="st-lang-sel" class="settings-select" onchange="changeLang(this.value)">
-                    <option value="ar">العربية</option>
-                    <option value="en">English</option>
-                </select>
+        <div class="hero-avatar-box reveal">
+            <div class="avatar-ring"></div>
+            <div class="avatar-inner" id="avatarBox">
+                <i class="fa-solid fa-user-ninja"></i>
             </div>
-
-            <div class="settings-row">
-                <span id="st-timer-lbl">مؤقت الدور:</span>
-                <select id="st-timer-sel" class="settings-select" onchange="updateSettingsTimer(this.value)">
-                    <option value="10">10 ثواني (جنوني)</option>
-                    <option value="15" selected>15 ثانية (عادي)</option>
-                    <option value="20">20 ثانية (هادئ)</option>
-                    <option value="30">30 ثانية (سلس)</option>
-                </select>
-            </div>
-
-            <div class="settings-row">
-                <span id="st-sound-lbl">المؤثرات الصوتية:</span>
-                <select id="st-sound-sel" class="settings-select" onchange="updateSettingsSound(this.value)">
-                    <option value="on">تفعيل</option>
-                    <option value="off">إيقاف</option>
-                </select>
-            </div>
-
-            <div class="settings-row">
-                <span id="st-music-lbl">موسيقى نبض الحماس:</span>
-                <select id="st-music-sel" class="settings-select" onchange="updateSettingsMusic(this.value)">
-                    <option value="on">تفعيل</option>
-                    <option value="off">إيقاف</option>
-                </select>
-            </div>
-
-            <div class="settings-row">
-                <span id="st-theme-lbl">المظهر الكوني:</span>
-                <select id="st-theme-sel" class="settings-select" onchange="changeTheme(this.value)">
-                    <option value="purple" selected>سديم أرجواني 🌌</option>
-                    <option value="red">وهج شمسي 🌅</option>
-                    <option value="blue">فضاء عميق 🪐</option>
-                    <option value="green">مجرة زمردية ☄️</option>
-                </select>
-            </div>
-
-            <button id="st-close-btn" onclick="toggleSettingsModal()" class="btn-yellow" style="margin-top: 15px; width: 100%;">حفظ وإغلاق</button>
         </div>
-    </div>
+    </section>
 
-    <!-- 1. شاشة البداية وقوانين اللعبة المعززة -->
-    <div id="start-screen" class="screen">
-        <div class="cosmic-panel">
-            <h1 id="main-title">🃏 أونو الأسطورية 🃏</h1>
-            <p id="main-sub" style="margin-bottom: 20px; color: #aaa; font-size: 0.95rem;">اتصال مباشر ومؤثرات سينمائية فائقة السرعة!</p>
-            
-            <input type="text" id="player-name-input" placeholder="اكتب اسمك هنا..." maxlength="12">
-            
-            <!-- لوحة تفعيل القوانين المخصصة -->
-            <div class="rules-toggles">
-                <div class="toggle-row">
-                    <span>تراكم البطاقات (+2, +4) 🔗</span>
-                    <input type="checkbox" id="rule-stacking" checked style="width: 20px; margin: 0;">
-                </div>
-                <div class="toggle-row">
-                    <span>قانون الـ 7 والـ 0 🔄</span>
-                    <input type="checkbox" id="rule-70" checked style="width: 20px; margin: 0;">
-                </div>
-                <div class="toggle-row">
-                    <span>القطع الخاطف (Jump-in) ⚡</span>
-                    <input type="checkbox" id="rule-jumpin" checked style="width: 20px; margin: 0;">
-                </div>
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title reveal">نبذة عن <span>يمان قدحات</span></h2>
+        <div class="grid-cards">
+            <div class="tilt-card reveal">
+                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i>
+                <h3>صناعة المحتوى الرقمي</h3>
+                <p id="bioText1">جاري تحميل البيانات...</p>
             </div>
-
-            <!-- شرح القوانين التفصيلي المتكامل بالكامل -->
-            <div class="rules-guide">
-                <h3>📖 شرح قوانين اللعب الكونية</h3>
-                <ul>
-                    <li><strong>قانون اللعب الأساسي:</strong> المطابقة تتم برمي كرت متوافق مع الكرت العلوي في الساحة باللون أو بالرقم/النوع.</li>
-                    <li><strong>قانون التراكم (Stacking):</strong> عندما يرمي أحدهم كرت هجوم (+2 أو +4)، يمكنك الرد عليه فوراً برمي كرت مماثل من نفس النوع لتتراكم العقوبة بالكامل على اللاعب الذي يليك لتصبح مضاعفة!</li>
-                    <li><strong>قانون الـ 7 والـ 0 الفضائي:</strong> عند رمي كرت رقم (0)، تدور كروت جميع اللاعبين وتنتقل للشخص التالي حسب اتجاه اللعب. وعند رمي الرقم (7)، تتم تصفية الحسابات؛ حيث تختار أي لاعب وتقايض كروتك معه بالكامل!</li>
-                    <li><strong>القطع الخاطف (Jump-in):</strong> إذا كان معك نفس الكرت الموجود في الساحة تماماً (مطابقة تامة في اللون والقيمة معاً)، يمكنك رميه فوراً لتقطع اللعب وتجعل الدور يبدأ من عندك مباشرة، حتى لو لم يكن دورك!</li>
-                    <li><strong>قول أونو (UNO!):</strong> بمجرد بقاء كرت واحد في يدك، اضغط على زر أونو فوراً، وإلا ستتلقى عقوبة سحب كرتين إضافيين إذا كشفك اللاعبون الآخرون!</li>
-                </ul>
+            <div class="tilt-card reveal">
+                <i class="fa-solid fa-code" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px;"></i>
+                <h3>التطوير والابتكار البرمجي</h3>
+                <p id="bioText2">جاري تحميل البيانات...</p>
             </div>
+            <div class="tilt-card reveal">
+                <i class="fa-solid fa-shield-halved" style="font-size: 2.5rem; color: var(--pink); margin-bottom: 15px;"></i>
+                <h3>الأمان والجودة العالية</h3>
+                <p id="bioText3">جاري تحميل البيانات...</p>
+            </div>
+        </div>
+    </section>
 
-            <div style="margin-top: 15px;">
-                <button id="btn-host" class="btn-yellow">إنشاء غرفة (Host)</button>
-                <button id="btn-join">الانضمام لغرفة</button>
-                <button id="btn-solo" class="btn-green">لعب فردي (ضد البوتات) 🤖</button>
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2 class="section-title reveal">المهارات <span>والقدرات</span></h2>
+        <div class="grid-cards" id="skillsContainer"></div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2 class="section-title reveal">المشاريع <span>الأسطورية</span></h2>
+        <div class="grid-cards" id="projectsContainer"></div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <h2 class="section-title reveal">مسيرة <span>الإنجازات</span></h2>
+        <div class="timeline" id="timelineContainer"></div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title reveal">تواصل <span>مع يمان</span></h2>
+        <div class="contact-grid">
+            <div class="tilt-card reveal">
+                <h3>معلومات التواصل الرسمية</h3>
+                <p style="margin-top: 15px;" id="contactEmail"><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> البريد: ...</p>
+                <p style="margin-top: 10px;" id="contactLocation"><i class="fa-solid fa-location-dot" style="color: var(--pink);"></i> الموقع: ...</p>
+                <div class="social-links" id="socialContainer"></div>
+            </div>
+            <form class="tilt-card reveal" onsubmit="event.preventDefault(); alert('تم استلام رسالتك بنجاح!');">
+                <h3>أرسل رسالة مباشرة</h3>
+                <input type="text" placeholder="اسمك الكريم" required style="margin-top: 15px;">
+                <input type="email" placeholder="بريدك الإلكتروني" required>
+                <textarea rows="4" placeholder="موضوع الرسالة..." required></textarea>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">إرسال الرسالة</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Admin Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="admin-modal">
+            <span style="float: left; font-size: 1.5rem; cursor: pointer; color: var(--pink);" onclick="closeModal()">&times;</span>
+            <div id="loginView">
+                <h2 style="color: var(--primary); margin-bottom: 15px;">دخول الأدمن المحمي</h2>
+                <input type="text" id="userInput" placeholder="اسم المستخدم">
+                <input type="password" id="passInput" placeholder="كلمة السر">
+                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="verifyAdmin()">دخول</button>
+            </div>
+            <div id="dashView" style="display: none;">
+                <h2 style="color: var(--primary); margin-bottom: 10px;">مولد كود data.json المحدث 🔥</h2>
+                <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 15px;">يمكنك هنا توليد الكود المحدث لنسخه ولصقه في GitHub مباشرة من أي جهاز!</p>
+                <textarea id="jsonOutput" rows="12" style="font-family: monospace; font-size: 0.85rem; direction: ltr;"></textarea>
+                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="copyJsonCode()"><i class="fa-solid fa-copy"></i> نسخ كود JSON إلى الحافظة</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. شاشة الانضمام للغرفة -->
-    <div id="join-screen" class="screen hidden">
-        <div class="cosmic-panel">
-            <h1 id="join-title">الانضمام لغرفة</h1>
-            <input type="text" id="room-id-input" placeholder="أدخل كود الغرفة المكون من 5 أحرف...">
-            <div>
-                <button id="btn-connect" class="btn-yellow">اتصال مباشر ⚡</button>
-                <button id="btn-back-to-start" class="btn-red">رجوع</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3. شاشة الانتظار (Lobby) -->
-    <div id="lobby-screen" class="screen hidden">
-        <div class="cosmic-panel">
-            <h1 id="lobby-waiting-title">انتظار اللاعبين...</h1>
-            <div class="share-info">
-                <p id="lobby-share-lbl">شارك هذا الكود مع أصدقائك للعب المشترك:</p>
-                <h2 id="room-code-display" style="color: var(--yellow); letter-spacing: 2px; margin-top: 10px; user-select: all;">-----</h2>
-                <button id="btn-copy-code" style="font-size: 0.8rem; padding: 5px 15px;">نسخ الكود 📋</button>
-            </div>
-            
-            <h3 id="lobby-connected-lbl" style="margin-top: 10px;">اللاعبون المتصلون:</h3>
-            <ul id="lobby-players-list" style="list-style: none; margin: 15px 0; font-size: 1.2rem; color: var(--green);"></ul>
-
-            <!-- إعدادات البوتات الإضافية لملء الغرفة -->
-            <div class="toggle-row" style="margin-bottom: 15px;">
-                <span>إضافة لاعبين آليين (Bots) 🤖</span>
-                <button id="btn-add-bot" class="btn-grey" style="font-size: 0.85rem; padding: 4px 10px;">إضافة بوت (+)</button>
-            </div>
-
-            <div id="host-controls" class="hidden">
-                <button id="btn-start-game" class="btn-yellow">ابدأ اللعب الآن! 🔥</button>
-            </div>
-            <p id="client-wait-msg" class="hidden" style="color: #aaa; font-style: italic;">بانتظار أن يبدأ الـ Host اللعبة...</p>
-        </div>
-    </div>
-
-    <!-- 4. ساحة اللعبة الرئيسية -->
-    <div id="game-board" class="hidden">
-        <div id="opponents-container"></div>
-
-        <div id="turn-indicator">
-            <span id="turn-text">جاري التحميل...</span>
-            <span id="timer-countdown">15</span>
-        </div>
-
-        <div id="center-deck-area">
-            <div id="direction-badge">الاتجاه: مع عقارب الساعة ↻</div>
-            <div id="draw-pile" class="uno-card back"></div>
-            <div id="played-card-container"></div>
-        </div>
-
-        <div id="action-controls">
-            <button id="btn-pass-turn" class="btn-green hidden">تمرير الدور ➡️</button>
-        </div>
-
-        <div id="taunts-panel">
-            <button class="taunt-btn" onclick="sendTaunt('🤡')">🤡</button>
-            <button class="taunt-btn" onclick="sendTaunt('🤫')">🤫</button>
-            <button class="taunt-btn" onclick="sendTaunt('😂')">😂</button>
-            <button class="taunt-btn" onclick="sendTaunt('🔥')">🔥</button>
-        </div>
-
-        <div id="annoyance-panel">
-            <select id="annoy-msg-select" class="annoyance-select" onchange="sendAnnoyanceMessage(this.value)">
-                <option value="" disabled selected>💬 استفزاز الخصوم...</option>
-                <option value="msg1">شكلك نسيت كيف تلعب أونو يا بطل! 🤡</option>
-                <option value="msg2">أنت لسه بتلعب بذكاء القرن الماضي؟ 😂</option>
-                <option value="msg3">سكوتك هذا دليل الهزيمة الوشيكة! 🤫</option>
-                <option value="msg4">مين علمك اللعب؟ خطتك مكشوفة! 🔥</option>
-                <option value="msg5">رميت الكرت ومو داري بالدنيا! 💀</option>
-            </select>
-        </div>
-
-        <div id="uno-button">أونو!</div>
-
-        <div id="my-hand-wrapper">
-            <div id="my-hand"></div>
-        </div>
-    </div>
-
-    <div id="annoyance-banner">تنبيه!</div>
-
-    <!-- كود برمجة اللعبة بالكامل دون أي انقطاع -->
+    <!-- Main Logic Fetch Engine -->
     <script>
-        // --- 1. الترجمات والإعدادات العامة ---
-        const i18n = {
-            ar: {
-                title: "🃏 أونو الأسطورية الكونية 🃏",
-                subtitle: "اتصال مباشر ومؤثرات سينمائية فائقة السرعة!",
-                placeholder_name: "اكتب اسمك هنا...",
-                btn_host: "إنشاء غرفة (Host)",
-                btn_join: "الانضمام لغرفة",
-                btn_connect: "اتصال مباشر ⚡",
-                btn_back: "رجوع",
-                lobby_title: "انتظار اللاعبين...",
-                share_code: "شارك هذا الكود مع أصدقائك للعب المشترك:",
-                btn_copy: "نسخ الكود 📋",
-                btn_copied: "تم نسخ الكود! 📋",
-                connected_players: "اللاعبون المتصلون:",
-                btn_start: "ابدأ اللعب الآن! 🔥",
-                wait_host: "بانتظار أن يبدأ الـ Host اللعبة...",
-                turn_mine: "دورك الآن! العب كرتًا أو اسحب 🃏",
-                turn_waiting: "انتظار... دور: [ {name} ] ⏳",
-                dir_cw: "الاتجاه: مع عقارب الساعة ↻",
-                dir_ccw: "الاتجاه: عكس عقارب الساعة ↺",
-                btn_pass: "تمرير الدور ➡️",
-                alert_drawn_playable: "الكرت المسحوب صالح للعب! يمكنك لعبه الآن أو تمرير الدور.",
-                alert_drawn_unplayable: "كرت غير صالح للعب. اضغط 'تمرير الدور'.",
-                alert_pass_first: "يجب عليك السحب أولاً قبل تمرير الدور!",
-                alert_wait_turn: "انتظر دورك! ⏳",
-                alert_invalid_move: "حركة غير صالحة! الكرت غير مطابق. ❌",
-                alert_forgot_uno: "📢 [{name}] نسي قول أونو وسحب كرتين عقوبة!",
-                alert_winner: "🏆 الفائز هو [{name}]! تهانينا! 🎉",
-                alert_skip: "🚫 تم تخطي دور اللاعب التالي!",
-                alert_reverse: "🔄 تم عكس اتجاه اللعب!",
-                alert_draw2: "🃏 سحب [{name}] كرتين وتخطينا دوره!",
-                alert_draw4: "🃏 سحب [{name}] 4 كروت وتخطينا دوره!",
-                alert_time_out: "⌛ انتهى وقت [{name}] وتم سحب كرت وتمرير الدور له.",
-                alert_already_drawn: "لقد قمت بالسحب بالفعل! يمكنك التمرير أو لعب كرت.",
-                alert_color_changed: "🎨 غير [{name}] اللون إلى [{color}]!",
-                alert_jumpin: "⚡ قطع [{name}] الدور برمي كرت مطابق!",
-                alert_swap: "🔄 قام [{name}] بمبادلة كروته مع [{target}]!",
-                st_title: "⚙️ الإعدادات",
-                st_lang_lbl: "اللغة:",
-                st_timer_lbl: "مؤقت الدور:",
-                st_sound_lbl: "المؤثرات الصوتية:",
-                st_music_lbl: "موسيقى نبض الحماس:",
-                st_theme_lbl: "المظهر الكوني:",
-                st_close_btn: "حفظ وإغلاق",
-                theme_purple: "سديم أرجواني 🌌",
-                theme_red: "وهج شمسي 🌅",
-                theme_blue: "فضاء عميق 🪐",
-                theme_green: "مجرة زمردية ☄️",
-                color_red: "الأحمر",
-                color_yellow: "الأصفر",
-                color_green: "الأخضر",
-                color_blue: "الأزرق"
-            },
-            en: {
-                title: "🃏 UNO Cosmic Pro 🃏",
-                subtitle: "Direct peer connectivity & cinematic visuals!",
-                placeholder_name: "Enter your name...",
-                btn_host: "Create Room (Host)",
-                btn_join: "Join Room",
-                btn_connect: "Direct Connect ⚡",
-                btn_back: "Back",
-                lobby_title: "Waiting for players...",
-                share_code: "Share this code with your friends:",
-                btn_copy: "Copy Code 📋",
-                btn_copied: "Code Copied! 📋",
-                connected_players: "Connected Players:",
-                btn_start: "Start Playing! 🔥",
-                wait_host: "Waiting for Host to start...",
-                turn_mine: "Your turn! Play a card or draw 🃏",
-                turn_waiting: "Waiting... Turn: [ {name} ] ⏳",
-                dir_cw: "Direction: Clockwise ↻",
-                dir_ccw: "Direction: Counter-Clockwise ↺",
-                btn_pass: "Pass Turn ➡️",
-                alert_drawn_playable: "Drawn card is playable! Play it or pass.",
-                alert_drawn_unplayable: "Card unplayable. Tap 'Pass Turn'.",
-                alert_pass_first: "You must draw a card first before passing!",
-                alert_wait_turn: "Wait for your turn! ⏳",
-                alert_invalid_move: "Invalid move! Color or value must match. ❌",
-                alert_forgot_uno: "📢 [{name}] forgot to say UNO! Drew 2 penalty cards!",
-                alert_winner: "🏆 Winner is [{name}]! Congratulations! 🎉",
-                alert_skip: "🚫 Next player skipped!",
-                alert_reverse: "🔄 Play direction reversed!",
-                alert_draw2: "🃏 [{name}] drew 2 cards and got skipped!",
-                alert_draw4: "🃏 [{name}] drew 4 cards and got skipped!",
-                alert_time_out: "⌛ [{name}] ran out of time! Drew a card and turn passed.",
-                alert_already_drawn: "You already drew a card! Play or pass.",
-                alert_color_changed: "🎨 [{name}] changed color to [{color}]!",
-                alert_jumpin: "⚡ [{name}] jumped in with a matching card!",
-                alert_swap: "🔄 [{name}] swapped cards with [{target}]!",
-                st_title: "⚙️ Settings",
-                st_lang_lbl: "Language:",
-                st_timer_lbl: "Turn Timer:",
-                st_sound_lbl: "Sound FX:",
-                st_music_lbl: "Dynamic Hype Beat:",
-                st_theme_lbl: "Cosmic Theme:",
-                st_close_btn: "Save & Close",
-                theme_purple: "Nebula Purple 🌌",
-                theme_red: "Solar Red 🌅",
-                theme_blue: "Deep Space 🪐",
-                theme_green: "Emerald Galaxy ☄️",
-                color_red: "Red",
-                color_yellow: "Yellow",
-                color_green: "Green",
-                color_blue: "Blue"
-            }
-        };
+        let siteData = {};
+        let typingWords = ["صانع محتوى", "مطور ويب"];
 
-        let localSettings = {
-            lang: 'ar',
-            timerVal: 15,
-            soundOn: true,
-            musicOn: true,
-            graphicsHigh: true,
-            theme: 'purple'
-        };
+        // 1. Fetching data.json dynamically
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                siteData = data;
+                renderPage(data);
+            })
+            .catch(err => {
+                console.warn("لم يتم العثور على data.json المحلي، يتم تشغيل البيانات الاحتياطية.");
+            });
 
-        let customRules = {
-            stacking: true,
-            rule70: true,
-            jumpIn: true
-        };
-
-        function saveSettingsToStorage() {
-            localStorage.setItem('uno_cosmic_settings', JSON.stringify(localSettings));
-        }
-
-        function loadSettingsFromStorage() {
-            const stored = localStorage.getItem('uno_cosmic_settings');
-            if (stored) {
-                try {
-                    localSettings = JSON.parse(stored);
-                    document.getElementById('st-lang-sel').value = localSettings.lang;
-                    document.getElementById('st-timer-sel').value = localSettings.timerVal.toString();
-                    document.getElementById('st-sound-sel').value = localSettings.soundOn ? 'on' : 'off';
-                    document.getElementById('st-music-sel').value = localSettings.musicOn ? 'on' : 'off';
-                    if (localSettings.theme) {
-                        document.getElementById('st-theme-sel').value = localSettings.theme;
-                        changeTheme(localSettings.theme);
-                    }
-                    translateUI();
-                } catch (e) {
-                    console.error("Failed to load settings", e);
-                }
-            }
-        }
-
-        function changeLang(lang) {
-            localSettings.lang = lang;
-            saveSettingsToStorage();
-            translateUI();
-        }
-
-        function toggleSettingsModal() {
-            document.getElementById('settings-modal').classList.toggle('hidden');
-        }
-
-        function updateSettingsTimer(val) {
-            localSettings.timerVal = parseInt(val);
-            saveSettingsToStorage();
-            if (isHost) {
-                gameState.timer = localSettings.timerVal;
-                syncStateToAll();
-            }
-        }
-
-        function updateSettingsSound(val) { 
-            localSettings.soundOn = (val === 'on'); 
-            saveSettingsToStorage();
-        }
-        
-        function updateSettingsMusic(val) { 
-            localSettings.musicOn = (val === 'on'); 
-            saveSettingsToStorage();
-            if (!localSettings.musicOn) {
-                clearInterval(musicPulseInterval);
-            }
-        }
-
-        function changeTheme(theme) {
-            document.body.className = ''; 
-            document.body.classList.add('theme-' + theme);
-            localSettings.theme = theme;
-            saveSettingsToStorage();
-            playSynthSound('click');
-        }
-
-        function translateUI() {
-            const dict = i18n[localSettings.lang];
-            document.documentElement.dir = localSettings.lang === 'ar' ? 'rtl' : 'ltr';
-            document.documentElement.lang = localSettings.lang;
-
-            document.getElementById('main-title').innerText = dict.title;
-            document.getElementById('main-sub').innerText = dict.subtitle;
-            document.getElementById('player-name-input').placeholder = dict.placeholder_name;
-            document.getElementById('btn-host').innerText = dict.btn_host;
-            document.getElementById('btn-join').innerText = dict.btn_join;
+        function renderPage(data) {
+            // Navbar & Hero
+            document.getElementById('navLogo').innerText = data.hero.logo;
+            document.getElementById('heroBadge').innerHTML = `<i class="fa-solid fa-bolt"></i> ${data.hero.badge}`;
+            document.getElementById('heroName').innerText = data.hero.name;
+            if(data.hero.avatar) document.getElementById('avatarBox').innerHTML = `<img src="${data.hero.avatar}">`;
             
-            document.getElementById('join-title').innerText = dict.btn_join;
-            document.getElementById('room-id-input').placeholder = dict.placeholder_name;
-            document.getElementById('btn-connect').innerText = dict.btn_connect;
-            document.getElementById('btn-back-to-start').innerText = dict.btn_back;
+            typingWords = data.hero.typing;
 
-            document.getElementById('lobby-waiting-title').innerText = dict.lobby_title;
-            document.getElementById('lobby-share-lbl').innerText = dict.share_code;
-            document.getElementById('btn-copy-code').innerText = dict.btn_copy;
-            document.getElementById('lobby-connected-lbl').innerText = dict.connected_players;
-            document.getElementById('btn-start-game').innerText = dict.btn_start;
-            document.getElementById('client-wait-msg').innerText = dict.wait_host;
-            document.getElementById('btn-pass-turn').innerText = dict.btn_pass;
+            // Bio
+            document.getElementById('bioText1').innerText = data.bio.t1;
+            document.getElementById('bioText2').innerText = data.bio.t2;
+            document.getElementById('bioText3').innerText = data.bio.t3;
 
-            document.getElementById('st-title').innerText = dict.st_title;
-            document.getElementById('st-lang-lbl').innerText = dict.st_lang_lbl;
-            document.getElementById('st-timer-lbl').innerText = dict.st_timer_lbl;
-            document.getElementById('st-sound-lbl').innerText = dict.st_sound_lbl;
-            document.getElementById('st-music-lbl').innerText = dict.st_music_lbl;
-            document.getElementById('st-theme-lbl').innerText = dict.st_theme_lbl;
-            document.getElementById('st-close-btn').innerText = dict.st_close_btn;
+            // Skills
+            document.getElementById('skillsContainer').innerHTML = data.skills.map(s => `
+                <div class="tilt-card skill-item">
+                    <div class="skill-header">
+                        <span>${s.name}</span>
+                        <span style="color: var(--primary);">${s.level}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${s.level}%"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Projects
+            document.getElementById('projectsContainer').innerHTML = data.projects.map(p => `
+                <div class="tilt-card">
+                    <img src="${p.img}" class="project-img" alt="${p.title}">
+                    <h3>${p.title}</h3>
+                    <p style="color: var(--muted); font-size: 0.9rem; margin-top: 8px;">${p.desc}</p>
+                    <div class="project-tags">
+                        ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Timeline
+            document.getElementById('timelineContainer').innerHTML = data.timeline.map(t => `
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="tilt-card">
+                        <h4>${t.title}</h4>
+                        <span style="color: var(--primary); font-size: 0.85rem; font-weight: bold;">${t.date}</span>
+                        <p style="margin-top: 10px; color: var(--muted);">${t.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Contact
+            document.getElementById('contactEmail').innerHTML = `<i class="fa-solid fa-envelope" style="color: var(--primary);"></i> البريد: ${data.contact.email}`;
+            document.getElementById('contactLocation').innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--pink);"></i> الموقع: ${data.contact.location}`;
+            document.getElementById('socialContainer').innerHTML = `
+                ${data.contact.youtube ? `<a href="${data.contact.youtube}" target="_blank" class="social-btn"><i class="fa-brands fa-youtube"></i></a>` : ''}
+                ${data.contact.github ? `<a href="${data.contact.github}" target="_blank" class="social-btn"><i class="fa-brands fa-github"></i></a>` : ''}
+                ${data.contact.instagram ? `<a href="${data.contact.instagram}" target="_blank" class="social-btn"><i class="fa-brands fa-instagram"></i></a>` : ''}
+            `;
         }
 
-        // --- 2. محرك الصوت والمركبات المركبة ---
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        let musicPulseInterval = null;
+        /* --- Obfuscated Security Login --- */
+        function verifyAdmin() {
+            const u = document.getElementById('userInput').value;
+            const p = document.getElementById('passInput').value;
 
-        function initAudio() {
-            if (!audioCtx) audioCtx = new AudioCtx();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            if (btoa(u) === 'WWFtYW4=' && btoa(p) === 'WWFtYW5AMjAwOA==') {
+                document.getElementById('loginView').style.display = 'none';
+                document.getElementById('dashView').style.display = 'block';
+                document.getElementById('jsonOutput').value = JSON.stringify(siteData, null, 2);
+            } else {
+                alert('⚠️ خطأ في بيانات الدخول!');
+            }
         }
 
-        document.addEventListener('click', initAudio, { once: true });
-        document.addEventListener('touchstart', initAudio, { once: true });
+        function copyJsonCode() {
+            const copyText = document.getElementById("jsonOutput");
+            copyText.select();
+            document.execCommand("copy");
+            alert("✅ تم نسخ كود JSON المحدث! يمكنك الآن الذهاب إلى GitHub ولصقه داخل ملف data.json ليتحدث الموقع لجميع الناس.");
+        }
 
-        function playSynthSound(type) {
-            if (!localSettings.soundOn) return;
-            try {
-                initAudio();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                const now = audioCtx.currentTime;
+        function openModal() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-                if (type === 'click') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(550, now);
-                    osc.frequency.exponentialRampToValueAtTime(250, now + 0.12);
-                    gain.gain.setValueAtTime(0.12, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
-                    osc.start(now); osc.stop(now + 0.12);
-                } else if (type === 'error') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(220, now);
-                    osc.frequency.linearRampToValueAtTime(150, now + 0.3);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
-                    osc.start(now); osc.stop(now + 0.3);
-                } else if (type === 'reverse') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.5);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
-                    osc.start(now); osc.stop(now + 0.5);
-                } else if (type === 'siren') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.linearRampToValueAtTime(700, now + 0.2);
-                    osc.frequency.linearRampToValueAtTime(600, now + 0.4);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
-                    osc.start(now); osc.stop(now + 0.5);
-                } else if (type === 'heartbeat') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(70, now);
-                    gain.gain.setValueAtTime(0.35, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
-                    osc.start(now); osc.stop(now + 0.15);
+        /* --- Typewriter --- */
+        let twIndex = 0, twCharIndex = 0, isDeleting = false;
+        function typeWriter() {
+            const currentWord = typingWords[twIndex % typingWords.length];
+            const el = document.getElementById("typewriter");
+
+            if (isDeleting) {
+                el.textContent = currentWord.substring(0, twCharIndex - 1);
+                twCharIndex--;
+            } else {
+                el.textContent = currentWord.substring(0, twCharIndex + 1);
+                twCharIndex++;
+            }
+
+            if (!isDeleting && twCharIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(typeWriter, 1800);
+            } else if (isDeleting && twCharIndex === 0) {
+                isDeleting = false;
+                twIndex++;
+                setTimeout(typeWriter, 400);
+            } else {
+                setTimeout(typeWriter, isDeleting ? 40 : 80);
+            }
+        }
+        typeWriter();
+
+        /* --- Cursor & 3D Tilt --- */
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorBg = document.getElementById('cursorBg');
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            cursorBg.style.left = e.clientX + 'px';
+            cursorBg.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                if(x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    card.style.transform = `perspective(1000px) rotateX(${(y - centerY) / 15}deg) rotateY(${(centerX - x) / 15}deg) translateY(-5px)`;
+                } else {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
                 }
-            } catch (e) {}
-        }
+            });
+        });
 
-        function updateTensionPulse(timeLeft, isMyTurn) {
-            clearInterval(musicPulseInterval);
-            if (!localSettings.musicOn || !isMyTurn) return;
-
-            let tempo = 1200;
-            if (timeLeft <= 8) tempo = 600;
-            if (timeLeft <= 4) tempo = 300;
-
-            musicPulseInterval = setInterval(() => {
-                playHypePulseBeat();
-            }, tempo);
-        }
-
-        function playHypePulseBeat() {
-            try {
-                initAudio();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                const now = audioCtx.currentTime;
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(50, now);
-                osc.frequency.exponentialRampToValueAtTime(25, now + 0.18);
-                
-                gain.gain.setValueAtTime(0.4, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
-                
-                osc.start(now);
-                osc.stop(now + 0.18);
-            } catch(e){}
-        }
-
-        // --- 3. محرك الرسوميات للتأثيرات البصرية ---
-        const canvas = document.getElementById('fx-canvas');
+        /* --- Canvas Background Particles --- */
+        const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let lasers = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         class Particle {
-            constructor(x, y, color) {
-                this.x = x; this.y = y;
-                this.color = color;
-                this.size = Math.random() * (localSettings.graphicsHigh ? 5 : 3) + 2;
-                this.speedX = Math.random() * 6 - 3;
-                this.speedY = Math.random() * -6 - 1;
-                this.gravity = 0.15;
-                this.alpha = 1;
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 1.2;
+                this.speedY = (Math.random() - 0.5) * 1.2;
             }
             update() {
                 this.x += this.speedX;
-                this.speedY += this.gravity;
                 this.y += this.speedY;
-                this.alpha -= 0.025;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
             }
             draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
+                ctx.fillStyle = '#00f3ff';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.restore();
             }
         }
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
 
-        class Laser {
-            constructor(fromX, fromY, toX, toY, color) {
-                this.fromX = fromX; this.fromY = fromY;
-                this.toX = toX; this.toY = toY;
-                this.color = color;
-                this.progress = 0;
-            }
-            update() { this.progress += 0.07; }
-            draw() {
-                ctx.save();
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                const currentX = this.fromX + (this.toX - this.fromX) * this.progress;
-                const currentY = this.fromY + (this.toY - this.fromY) * this.progress;
-                ctx.moveTo(this.fromX, this.fromY);
-                ctx.lineTo(currentX, currentY);
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-
-        function triggerBurst(x, y, color) {
-            const amount = localSettings.graphicsHigh ? 25 : 10;
-            for (let i = 0; i < amount; i++) {
-                particles.push(new Particle(x, y, color));
-            }
-        }
-
-        function triggerLaser(fromX, fromY, toX, toY, color) {
-            lasers.push(new Laser(fromX, fromY, toX, toY, color));
-        }
-
-        function animationLoop() {
+        function animateCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles = particles.filter(p => p.alpha > 0);
             particles.forEach(p => { p.update(); p.draw(); });
-
-            lasers = lasers.filter(l => l.progress < 1);
-            lasers.forEach(l => { l.update(); l.draw(); });
-            requestAnimationFrame(animationLoop);
-        }
-        animationLoop();
-
-        // --- 4. خوادم وإدارة اتصالات PeerJS ---
-        const PEER_CONNECTION_OPTIONS = {
-            host: '0.peerjs.com',
-            port: 443,
-            secure: true,
-            key: 'peerjs',
-            path: '/',
-            debug: 1,
-            config: {
-                iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' }
-                ]
-            }
-        };
-
-        let peer = null;
-        let connections = [];
-        let hostConn = null;
-        let isHost = false;
-        let isSoloMode = false;
-        let myId = "";
-        let playerName = "";
-        let localVoiceStream = null;
-        let isVoiceMuted = true;
-        let turnInterval = null;
-
-        let gameState = {
-            players: [],
-            deck: [],
-            discardPile: [],
-            currentTurnIndex: 0,
-            direction: 1,
-            timer: 15,
-            gameStarted: false,
-            winner: null,
-            hasDrawnThisTurn: false,
-            waitingForColorChoice: false,
-            playerChoosingColor: null,
-            penaltyStack: 0,
-            waitingForSwapChoice: false
-        };
-
-        let hasDeclaredUnoThisTurn = {};
-
-        // توليد رمز غرفة عشوائي فريد ومضمون
-        function generateRoomCode() {
-            const chars = 'abcdefghijklmnopqrstuvwxyz';
-            let code = '';
-            for (let i = 0; i < 5; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
-
-        // --- مؤقت الدور ومزامنته للجميع ---
-        function startTurnTimer() {
-            clearInterval(turnInterval);
-            gameState.timer = localSettings.timerVal;
-            
-            turnInterval = setInterval(() => {
-                if (!gameState.gameStarted || gameState.winner) {
-                    clearInterval(turnInterval);
-                    return;
-                }
-                
-                gameState.timer--;
-                syncStateToAll();
-                
-                if (gameState.timer <= 0) {
-                    clearInterval(turnInterval);
-                    handleTurnTimeout();
-                }
-            }, 1000);
-        }
-
-        // --- إرسال تنبيهات وتأثيرات مباشرة للاعبين ---
-        function sendDirectAlert(playerId, message, sound) {
-            if (playerId === myId) {
-                showAnnoyanceBanner(message);
-                if (sound) playSynthSound(sound);
-            } else {
-                const conn = connections.find(c => c.peer === playerId);
-                if (conn && conn.open) {
-                    conn.send({
-                        type: 'ANNOY_ALERT',
-                        message: message,
-                        sound: sound
-                    });
-                }
-            }
-        }
-
-        // --- مزامنة كامل حالة اللعب وإرسالها لكل لاعب بما يوافق كروته فقط ---
-        function syncStateToAll() {
-            if (!isHost) return;
-
-            gameState.players.forEach(player => {
-                if (player.isBot) return;
-
-                const activePlayer = gameState.players[gameState.currentTurnIndex];
-                if (!activePlayer) return;
-
-                const clientState = {
-                    currentTurnId: activePlayer.id,
-                    timer: gameState.timer,
-                    direction: gameState.direction,
-                    discardPileTop: gameState.discardPile[gameState.discardPile.length - 1],
-                    hasDrawnThisTurn: gameState.hasDrawnThisTurn,
-                    hand: player.cards,
-                    opponents: gameState.players
-                        .filter(p => p.id !== player.id)
-                        .map(p => ({
-                            id: p.id,
-                            name: p.name,
-                            cardCount: p.cards.length,
-                            isTurn: p.id === activePlayer.id
-                        }))
-                };
-
-                if (player.id === myId) {
-                    renderGame(clientState);
-                } else {
-                    const conn = connections.find(c => c.peer === player.id);
-                    if (conn && conn.open) {
-                        conn.send({
-                            type: 'STATE_UPDATE',
-                            state: clientState
-                        });
-                    }
-                }
-            });
-        }
-
-        // --- 5. دعم وضع اللعب الفردي (Bots Mode) ---
-        document.getElementById('btn-solo').addEventListener('click', () => {
-            playSynthSound('click');
-            const nameInput = document.getElementById('player-name-input').value.trim();
-            if (!nameInput) {
-                alert(localSettings.lang === 'ar' ? "الرجاء إدخال اسمك أولاً!" : "Please enter your name first!");
-                return;
-            }
-            playerName = nameInput;
-            isSoloMode = true;
-            isHost = true;
-
-            customRules.stacking = document.getElementById('rule-stacking').checked;
-            customRules.rule70 = document.getElementById('rule-70').checked;
-            customRules.jumpIn = document.getElementById('rule-jumpin').checked;
-
-            gameState.players = [
-                { id: "human", name: playerName, cards: [], isBot: false },
-                { id: "bot-1", name: "بليغ السريع 🤖", cards: [], isBot: true, difficulty: 'beginner' },
-                { id: "bot-2", name: "ماهر الماكر 🔥", cards: [], isBot: true, difficulty: 'expert' },
-                { id: "bot-3", name: "شهاب الفلكي 🛸", cards: [], isBot: true, difficulty: 'expert' }
-            ];
-
-            myId = "human";
-            gameState.deck = generateDeck();
-            
-            gameState.players.forEach(player => {
-                player.cards = [];
-                for (let i = 0; i < 7; i++) {
-                    player.cards.push(gameState.deck.pop());
-                }
-            });
-
-            let startingCard = gameState.deck.pop();
-            while (startingCard.type !== 'number') {
-                gameState.deck.unshift(startingCard);
-                startingCard = gameState.deck.pop();
-            }
-            gameState.discardPile.push(startingCard);
-
-            gameState.currentTurnIndex = 0;
-            gameState.direction = 1;
-            gameState.gameStarted = true;
-            gameState.hasDrawnThisTurn = false;
-            gameState.timer = localSettings.timerVal;
-
-            showScreen('game-board');
-            startTurnTimer();
-            syncStateToAll();
-        });
-
-        // إضافة البوتات لملء الفراغات داخل اللوبي
-        document.getElementById('btn-add-bot').addEventListener('click', () => {
-            if (!isHost) return;
-            const botId = `lobby-bot-${Math.floor(Math.random() * 1000)}`;
-            const difficulties = ['beginner', 'expert'];
-            const randomDiff = difficulties[Math.floor(Math.random() * difficulties.length)];
-            const names = ["آلي مستكشف 🤖", "آلي فضائي محترف 🪐"];
-            const selectedName = randomDiff === 'beginner' ? names[0] : names[1];
-
-            gameState.players.push({
-                id: botId,
-                name: selectedName,
-                cards: [],
-                isBot: true,
-                difficulty: randomDiff
-            });
-            updateLobbyUI();
-            broadcastLobbyUpdate();
-        });
-
-        // ذكاء البوتات (Beginner / Expert)
-        function executeBotTurn(botPlayer) {
-            setTimeout(() => {
-                const topCard = gameState.discardPile[gameState.discardPile.length - 1];
-                let validCards = botPlayer.cards.filter(c => isValidMove(c, topCard));
-
-                if (gameState.penaltyStack > 0 && customRules.stacking) {
-                    const stackValue = topCard.type === 'draw2' ? '+2' : '+4';
-                    validCards = botPlayer.cards.filter(c => c.value === stackValue);
-                }
-
-                if (validCards.length > 0) {
-                    let cardToPlay = validCards[0];
-
-                    if (botPlayer.difficulty === 'expert') {
-                        const opponentsWithFewCards = gameState.players.filter(p => p.id !== botPlayer.id && p.cards.length <= 3);
-                        const hasAttackCard = validCards.some(c => c.type === 'draw2' || c.type === 'wild4');
-
-                        if (hasAttackCard && opponentsWithFewCards.length === 0) {
-                            const safeCards = validCards.filter(c => c.type === 'number');
-                            if (safeCards.length > 0) cardToPlay = safeCards[0];
-                        }
-                    }
-
-                    if (botPlayer.cards.length === 2) {
-                        hasDeclaredUnoThisTurn[botPlayer.id] = true;
-                        triggerTauntEffect('📣', botPlayer.name + " صاح أونوووو!");
-                    }
-
-                    botPlayer.cards = botPlayer.cards.filter(c => c.id !== cardToPlay.id);
-                    gameState.discardPile.push(cardToPlay);
-                    
-                    broadcastToAll({ type: 'FX_PLAY', color: cardToPlay.color });
-                    triggerBurst(window.innerWidth / 2, window.innerHeight / 2 - 50, getHexColor(cardToPlay.color));
-
-                    if (botPlayer.cards.length === 0) {
-                        clearInterval(turnInterval);
-                        broadcastToAll({ type: 'ANNOY_ALERT', message: i18n[localSettings.lang].alert_winner.replace('{name}', botPlayer.name), sound: 'siren' });
-                        setTimeout(() => location.reload(), 5000);
-                        return;
-                    }
-
-                    if (cardToPlay.color === 'black') {
-                        const colors = ['red', 'yellow', 'green', 'blue'];
-                        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                        gameState.waitingForColorChoice = true;
-                        gameState.playerChoosingColor = botPlayer.id;
-                        handleColorChosen(botPlayer.id, randomColor);
-                        return;
-                    }
-
-                    resolveCardAction(cardToPlay);
-                    nextTurn();
-
-                } else {
-                    if (gameState.penaltyStack > 0 && customRules.stacking) {
-                        for (let i = 0; i < gameState.penaltyStack; i++) {
-                            drawCardForPlayer(botPlayer.id);
-                        }
-                        gameState.penaltyStack = 0;
-                        nextTurn();
-                    } else {
-                        const drawn = drawCardForPlayer(botPlayer.id);
-                        if (drawn && isValidMove(drawn, topCard)) {
-                            botPlayer.cards = botPlayer.cards.filter(c => c.id !== drawn.id);
-                            gameState.discardPile.push(drawn);
-                            broadcastToAll({ type: 'FX_PLAY', color: drawn.color });
-                            if (drawn.color === 'black') {
-                                const colors = ['red', 'yellow', 'green', 'blue'];
-                                handleColorChosen(botPlayer.id, colors[Math.floor(Math.random() * colors.length)]);
-                                return;
-                            }
-                            resolveCardAction(drawn);
-                        }
-                        nextTurn();
-                    }
-                }
-            }, 1500);
-        }
-
-        // --- 7. ميكانيكية الدردشة الصوتية الحية WebRTC ---
-        document.getElementById('btn-toggle-voice').addEventListener('click', async () => {
-            initAudio();
-            if (isVoiceMuted) {
-                try {
-                    localVoiceStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    isVoiceMuted = false;
-                    document.getElementById('btn-toggle-voice').innerText = "كتم المايك 🎤";
-                    document.getElementById('btn-toggle-voice').className = "btn-red";
-
-                    connections.forEach(conn => {
-                        if (conn.open) {
-                            peer.call(conn.peer, localVoiceStream);
-                        }
-                    });
-                } catch (e) {
-                    alert("يرجى تفعيل صلاحيات الميكروفون لاستخدام المحادثة الصوتية!");
-                }
-            } else {
-                if (localVoiceStream) {
-                    localVoiceStream.getTracks().forEach(track => track.stop());
-                }
-                isVoiceMuted = true;
-                document.getElementById('btn-toggle-voice').innerText = "تشغيل الصوت 🎤";
-                document.getElementById('btn-toggle-voice').className = "btn-green";
-            }
-        });
-
-        function handleVoiceCall(call) {
-            call.answer(localVoiceStream);
-            const audio = document.createElement('audio');
-            call.on('stream', (remoteStream) => {
-                audio.srcObject = remoteStream;
-                audio.play();
-            });
-        }
-
-        // --- 8. ميكانيكيات اللعب والأكشن المعقدة ---
-        function generateDeck() {
-            const colors = ['red', 'yellow', 'green', 'blue'];
-            let deck = [];
-            let cardId = 0;
-
-            colors.forEach(color => {
-                deck.push({ id: `c-${cardId++}`, color, type: 'number', value: '0' });
-                for (let i = 1; i <= 9; i++) {
-                    deck.push({ id: `c-${cardId++}`, color, type: 'number', value: i.toString() });
-                    deck.push({ id: `c-${cardId++}`, color, type: 'number', value: i.toString() });
-                }
-                for (let j = 0; j < 2; j++) {
-                    deck.push({ id: `c-${cardId++}`, color, type: 'skip', value: 'Skip' });
-                    deck.push({ id: `c-${cardId++}`, color, type: 'reverse', value: '⇆' });
-                    deck.push({ id: `c-${cardId++}`, color, type: 'draw2', value: '+2' });
-                }
-            });
-
-            for (let i = 0; i < 4; i++) {
-                deck.push({ id: `c-${cardId++}`, color: 'black', type: 'wild', value: '🎨' });
-                deck.push({ id: `c-${cardId++}`, color: 'black', type: 'wild4', value: '+4' });
-            }
-            
-            for (let i = deck.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [deck[i], deck[j]] = [deck[j], deck[i]];
-            }
-            return deck;
-        }
-
-        function resolveCardAction(card) {
-            const dict = i18n[localSettings.lang];
-            
-            if (customRules.stacking) {
-                if (card.type === 'draw2') {
-                    gameState.penaltyStack += 2;
-                    return;
-                } else if (card.type === 'wild4') {
-                    gameState.penaltyStack += 4;
-                    return;
-                }
-            }
-
-            if (customRules.rule70) {
-                if (card.value === '0') {
-                    rotateHands();
-                    broadcastToAll({ type: 'ANNOY_ALERT', message: "🔄 قانون 0: تم تدوير جميع الأوراق مع اتجاه اللعب!", sound: 'reverse' });
-                } else if (card.value === '7') {
-                    triggerSwapSequence();
-                }
-            }
-
-            if (card.type === 'skip') {
-                gameState.currentTurnIndex = (gameState.currentTurnIndex + gameState.direction + gameState.players.length) % gameState.players.length;
-                broadcastToAll({ type: 'FX_SKIP' });
-                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_skip, sound: 'error' });
-            } else if (card.type === 'reverse') {
-                gameState.direction *= -1;
-                broadcastToAll({ type: 'FX_REVERSE' });
-                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_reverse, sound: 'reverse' });
-            } else if (card.type === 'draw2' && !customRules.stacking) {
-                const nextPlayerIdx = (gameState.currentTurnIndex + gameState.direction + gameState.players.length) % gameState.players.length;
-                const victim = gameState.players[nextPlayerIdx];
-                drawCardForPlayer(victim.id);
-                drawCardForPlayer(victim.id);
-                gameState.currentTurnIndex = nextPlayerIdx;
-                broadcastToAll({ type: 'FX_DRAW2' });
-                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_draw2.replace('{name}', victim.name), sound: 'error' });
-            } else if (card.type === 'wild4' && !customRules.stacking) {
-                const nextPlayerIdx = (gameState.currentTurnIndex + gameState.direction + gameState.players.length) % gameState.players.length;
-                const victim = gameState.players[nextPlayerIdx];
-                for (let i = 0; i < 4; i++) drawCardForPlayer(victim.id);
-                gameState.currentTurnIndex = nextPlayerIdx;
-                broadcastToAll({ type: 'FX_DRAW4' });
-                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_draw4.replace('{name}', victim.name), sound: 'error' });
-            }
-        }
-
-        function rotateHands() {
-            const size = gameState.players.length;
-            if (size <= 1) return;
-            
-            let tempHands = gameState.players.map(p => [...p.cards]);
-            for (let i = 0; i < size; i++) {
-                let targetIdx = (i + gameState.direction + size) % size;
-                gameState.players[targetIdx].cards = tempHands[i];
-            }
-        }
-
-        function triggerSwapSequence() {
-            const activePlayer = gameState.players[gameState.currentTurnIndex];
-            gameState.waitingForSwapChoice = true;
-
-            if (activePlayer.isBot) {
-                const humanPlayer = gameState.players.find(p => !p.isBot);
-                if (humanPlayer) executeSwap(activePlayer.id, humanPlayer.id);
-            } else if (activePlayer.id === myId) {
-                const modal = document.getElementById('swap-selector-modal');
-                const list = document.getElementById('swap-options-list');
-                list.innerHTML = '';
-                
-                gameState.players.forEach(p => {
-                    if (p.id !== myId) {
-                        const btn = document.createElement('button');
-                        btn.className = 'btn-yellow';
-                        btn.innerText = p.name + ` (${p.cards.length} كرت)`;
-                        btn.onclick = () => {
-                            modal.classList.add('hidden');
-                            executeSwap(myId, p.id);
-                        };
-                        list.appendChild(btn);
-                    }
-                });
-                modal.classList.remove('hidden');
-            }
-        }
-
-        function executeSwap(playerAId, playerBId) {
-            const pA = gameState.players.find(p => p.id === playerAId);
-            const pB = gameState.players.find(p => p.id === playerBId);
-            
-            const temp = [...pA.cards];
-            pA.cards = [...pB.cards];
-            pB.cards = temp;
-
-            gameState.waitingForSwapChoice = false;
-            broadcastToAll({
-                type: 'ANNOY_ALERT',
-                message: i18n[localSettings.lang].alert_swap.replace('{name}', pA.name).replace('{target}', pB.name),
-                sound: 'reverse'
-            });
-            nextTurn();
-        }
-
-        function handleJumpInAttempt(playerId, cardId) {
-            if (!customRules.jumpIn) return;
-            const player = gameState.players.find(p => p.id === playerId);
-            const card = player.cards.find(c => c.id === cardId);
-            const topCard = gameState.discardPile[gameState.discardPile.length - 1];
-
-            if (card && card.color === topCard.color && card.value === topCard.value) {
-                player.cards = player.cards.filter(c => c.id !== cardId);
-                gameState.discardPile.push(card);
-                
-                const targetIdx = gameState.players.findIndex(p => p.id === playerId);
-                gameState.currentTurnIndex = targetIdx;
-                gameState.hasDrawnThisTurn = false;
-
-                broadcastToAll({ type: 'FX_PLAY', color: card.color });
-                broadcastToAll({ type: 'ANNOY_ALERT', message: i18n[localSettings.lang].alert_jumpin.replace('{name}', player.name), sound: 'reverse' });
-                
-                resolveCardAction(card);
-                nextTurn();
-            }
-        }
-
-        function isValidMove(card, topCard) {
-            if (card.color === 'black') return true;
-            return card.color === topCard.color || card.value === topCard.value;
-        }
-
-        // --- 9. التحديث الشامل وتصدير الرسوم والعرض للعملاء ---
-        function renderGame(state) {
-            const isMyTurn = state.currentTurnId === myId;
-            const turnText = document.getElementById('turn-text');
-            const countdownText = document.getElementById('timer-countdown');
-            const turnIndicator = document.getElementById('turn-indicator');
-            const passBtn = document.getElementById('btn-pass-turn');
-            const dict = i18n[localSettings.lang];
-
-            countdownText.innerText = state.timer;
-            updateTensionPulse(state.timer, isMyTurn);
-
-            if (isMyTurn) {
-                turnText.innerText = dict.turn_mine;
-                turnText.style.color = "var(--green)";
-                turnIndicator.classList.add('my-turn-active');
-                
-                if (state.hasDrawnThisTurn) {
-                    passBtn.classList.remove('hidden');
-                } else {
-                    passBtn.classList.add('hidden');
-                }
-            } else {
-                const currentTurnPlayer = state.opponents.find(o => o.id === state.currentTurnId) || { name: 'الخصم' };
-                turnText.innerText = dict.turn_waiting.replace('{name}', currentTurnPlayer.name);
-                turnText.style.color = "var(--yellow)";
-                turnIndicator.classList.remove('my-turn-active');
-                passBtn.classList.add('hidden');
-            }
-
-            const directionBadge = document.getElementById('direction-badge');
-            directionBadge.innerText = state.direction === 1 ? dict.dir_cw : dict.dir_ccw;
-
-            const opponentsContainer = document.getElementById('opponents-container');
-            opponentsContainer.innerHTML = '';
-            state.opponents.forEach(opp => {
-                const cardEl = document.createElement('div');
-                cardEl.className = `opponent-card ${opp.isTurn ? 'active-turn' : ''}`;
-                cardEl.innerHTML = `
-                    <div class="voice-indicator" id="voice-${opp.id}"></div>
-                    <div class="opponent-avatar">👤</div>
-                    <div class="opponent-name">${opp.name}</div>
-                    <div class="opponent-cards-count">🃏 ${opp.cardCount}</div>
-                `;
-                opponentsContainer.appendChild(cardEl);
-            });
-
-            const playedContainer = document.getElementById('played-card-container');
-            playedContainer.innerHTML = '';
-            if (state.discardPileTop) {
-                playedContainer.appendChild(createCardDOM(state.discardPileTop));
-            }
-
-            const handContainer = document.getElementById('my-hand');
-            handContainer.innerHTML = '';
-            const totalCards = state.hand.length;
-            const overlapMargin = totalCards > 7 ? Math.max(-55, -20 - (totalCards * 3.5)) : -20;
-
-            state.hand.forEach((card, idx) => {
-                const cardDom = createCardDOM(card);
-                const angle = (idx - (totalCards - 1) / 2) * 3;
-                cardDom.style.transform = `rotate(${angle}deg)`;
-                cardDom.style.marginRight = `${overlapMargin}px`;
-                
-                cardDom.addEventListener('click', () => {
-                    if (!isMyTurn && customRules.jumpIn) {
-                        handleJumpInAttempt(myId, card.id);
-                    } else {
-                        playCard(card.id);
-                    }
-                });
-                
-                handContainer.appendChild(cardDom);
-            });
-        }
-
-        function createCardDOM(card) {
-            const cardDiv = document.createElement('div');
-            cardDiv.className = `uno-card ${card.color}`;
-            
-            const tl = document.createElement('span');
-            tl.className = 'corner-val tl';
-            tl.innerText = card.value;
-            
-            const center = document.createElement('span');
-            center.className = 'center-val';
-            center.innerText = card.value;
-            
-            const br = document.createElement('span');
-            br.className = 'corner-val br';
-            br.innerText = card.value;
-            
-            cardDiv.appendChild(tl);
-            cardDiv.appendChild(center);
-            cardDiv.appendChild(br);
-            
-            return cardDiv;
-        }
-
-        function playCard(cardId) {
-            if (isHost) {
-                handleCardPlayed(myId, cardId);
-            } else {
-                hostConn.send({ type: 'PLAY_CARD', cardId });
-            }
-        }
-
-        document.getElementById('draw-pile').addEventListener('click', () => {
-            playSynthSound('click');
-            if (isHost) {
-                handleDrawRequest(myId);
-            } else {
-                hostConn.send({ type: 'DRAW_CARD' });
-            }
-        });
-
-        document.getElementById('btn-pass-turn').addEventListener('click', () => {
-            playSynthSound('click');
-            if (isHost) {
-                handlePassRequest(myId);
-            } else {
-                hostConn.send({ type: 'PASS_TURN' });
-            }
-        });
-
-        document.getElementById('uno-button').addEventListener('click', () => {
-            playSynthSound('click');
-            if (isHost) {
-                hasDeclaredUnoThisTurn[myId] = true;
-                triggerTauntEffect('📣', playerName + " صاح أونوووو!");
-            } else {
-                hostConn.send({ type: 'UNO_DECLARATION', name: playerName });
-            }
-        });
-
-        // --- 10. إرسال الرسائل المستفزة وسخرية الخصوم ---
-        function sendAnnoyanceMessage(val) {
-            const select = document.getElementById('annoy-msg-select');
-            const text = select.options[select.selectedIndex].text;
-            select.value = ""; 
-
-            if (isHost) {
-                broadcastToAll({ type: 'TAUNT_SPAM_EFFECT', emoji: '💀', name: playerName + `: ${text}` });
-                triggerTauntEffect('💀', playerName + `: ${text}`);
-            } else {
-                hostConn.send({ type: 'TAUNT_SPAM', emoji: '💀', name: playerName + `: ${text}` });
-            }
-        }
-
-        function sendTaunt(emoji) {
-            playSynthSound('click');
-            if (isHost) {
-                broadcastToAll({ type: 'TAUNT_SPAM_EFFECT', emoji: emoji, name: playerName + " يرسل تفاعلاً!" });
-                triggerTauntEffect(emoji, playerName + " يتفاعل!");
-            } else {
-                hostConn.send({ type: 'TAUNT_SPAM', emoji: emoji, name: playerName });
-            }
-        }
-
-        function triggerTauntEffect(emoji, message) {
-            showAnnoyanceBanner(message);
-            playSynthSound('click');
-
-            const layer = document.getElementById('effects-layer') || document.body;
-            const amount = localSettings.graphicsHigh ? 6 : 3;
-            for (let i = 0; i < amount; i++) {
-                const el = document.createElement('div');
-                el.className = 'floating-emoji';
-                el.innerText = emoji;
-                el.style.left = (Math.random() * 80 + 10) + 'vw';
-                el.style.top = (Math.random() * 40 + 40) + 'vh';
-                layer.appendChild(el);
-                setTimeout(() => el.remove(), 1200);
-            }
-        }
-
-        function showAnnoyanceBanner(text) {
-            const banner = document.getElementById('annoyance-banner');
-            banner.innerHTML = `🔔 <span>${text}</span>`;
-            banner.classList.add('show');
-            setTimeout(() => banner.classList.remove('show'), 2500);
-        }
-
-        // --- 11. إدارة الغرفة وربط اللاعبين والتحويل لـ Bot عند الانقطاع ---
-        document.getElementById('btn-host').addEventListener('click', () => {
-            playSynthSound('click');
-            const nameInput = document.getElementById('player-name-input').value.trim();
-            if (!nameInput) {
-                alert(localSettings.lang === 'ar' ? "الرجاء إدخال اسمك أولاً!" : "Please enter your name first!");
-                return;
-            }
-            playerName = nameInput;
-            isHost = true;
-            isSoloMode = false;
-
-            customRules.stacking = document.getElementById('rule-stacking').checked;
-            customRules.rule70 = document.getElementById('rule-70').checked;
-            customRules.jumpIn = document.getElementById('rule-jumpin').checked;
-
-            const roomCode = generateRoomCode();
-            peer = new Peer('unocosmic' + roomCode, PEER_CONNECTION_OPTIONS);
-
-            peer.on('open', (id) => {
-                myId = id;
-                document.getElementById('room-code-display').innerText = roomCode.toUpperCase();
-                document.getElementById('host-controls').classList.remove('hidden');
-                document.getElementById('client-wait-msg').classList.add('hidden');
-                document.getElementById('voice-btn-container').classList.remove('hidden');
-
-                gameState.players.push({
-                    id: myId,
-                    name: playerName + " (Host)",
-                    cards: [],
-                    isBot: false
-                });
-                updateLobbyUI();
-                showScreen('lobby-screen');
-            });
-
-            peer.on('connection', (conn) => {
-                conn.on('open', () => {
-                    connections.push(conn);
-                });
-                conn.on('data', (data) => {
-                    handleHostReceivedData(conn, data);
-                });
-                conn.on('close', () => {
-                    handlePlayerDisconnect(conn.peer);
-                });
-            });
-
-            peer.on('error', (err) => {
-                console.error(err);
-                if (err.type === 'unavailable-id') {
-                    alert(localSettings.lang === 'ar' ? "كود الغرفة هذا مستخدم بالفعل! جرب إنشاء غرفة أخرى." : "This room code is already taken! Try hosting again.");
-                } else {
-                    alert("حدث خطأ في الاتصال: " + err.message);
-                }
-            });
-
-            peer.on('call', handleVoiceCall);
-        });
-
-        document.getElementById('btn-join').addEventListener('click', () => {
-            playSynthSound('click');
-            const nameInput = document.getElementById('player-name-input').value.trim();
-            if (!nameInput) {
-                alert(localSettings.lang === 'ar' ? "الرجاء إدخال اسمك أولاً!" : "Please enter your name first!");
-                return;
-            }
-            playerName = nameInput;
-            showScreen('join-screen');
-        });
-
-        document.getElementById('btn-back-to-start').addEventListener('click', () => {
-            playSynthSound('click');
-            showScreen('start-screen');
-        });
-
-        document.getElementById('btn-copy-code').addEventListener('click', () => {
-            playSynthSound('click');
-            const roomCode = document.getElementById('room-code-display').innerText;
-            navigator.clipboard.writeText(roomCode).then(() => {
-                alert(i18n[localSettings.lang].btn_copied || "تم نسخ الكود!");
-            });
-        });
-
-        document.getElementById('btn-connect').addEventListener('click', () => {
-            playSynthSound('click');
-            const codeInput = document.getElementById('room-id-input').value.trim().toLowerCase();
-            if (codeInput.length !== 5) {
-                alert("يرجى إدخال كود صحيح من 5 أحرف.");
-                return;
-            }
-
-            peer = new Peer(null, PEER_CONNECTION_OPTIONS);
-
-            peer.on('open', (id) => {
-                myId = id;
-                hostConn = peer.connect('unocosmic' + codeInput);
-                hostConn.on('open', () => {
-                    document.getElementById('room-code-display').innerText = codeInput.toUpperCase();
-                    document.getElementById('voice-btn-container').classList.remove('hidden');
-                    hostConn.send({ type: 'JOIN_REQUEST', name: playerName });
-                    showScreen('lobby-screen');
-                });
-                hostConn.on('data', handleClientReceivedData);
-                hostConn.on('close', () => location.reload());
-            });
-
-            peer.on('error', (err) => {
-                console.error(err);
-                alert("تعذر الاتصال بالغرفة الفضائية، تأكد من الرمز.");
-            });
-
-            peer.on('call', handleVoiceCall);
-        });
-
-        // تشغيل اللعبة من الـ Host وبدء الجلسة
-        document.getElementById('btn-start-game').addEventListener('click', () => {
-            if (!isHost) return;
-            playSynthSound('click');
-            
-            if (gameState.players.length < 2) {
-                alert(localSettings.lang === 'ar' ? "تحتاج إلى لاعبين اثنين على الأقل لبدء اللعبة!" : "You need at least 2 players to start the game!");
-                return;
-            }
-
-            gameState.deck = generateDeck();
-            
-            gameState.players.forEach(player => {
-                player.cards = [];
-                for (let i = 0; i < 7; i++) {
-                    player.cards.push(gameState.deck.pop());
-                }
-            });
-
-            let startingCard = gameState.deck.pop();
-            while (startingCard.type !== 'number') {
-                gameState.deck.unshift(startingCard);
-                startingCard = gameState.deck.pop();
-            }
-            gameState.discardPile.push(startingCard);
-
-            gameState.currentTurnIndex = 0;
-            gameState.direction = 1;
-            gameState.gameStarted = true;
-            gameState.hasDrawnThisTurn = false;
-            gameState.timer = localSettings.timerVal;
-
-            broadcastToAll({ 
-                type: 'GAME_STARTED',
-                rules: customRules
-            });
-            
-            showScreen('game-board');
-            startTurnTimer();
-            syncStateToAll();
-        });
-
-        function handlePlayerDisconnect(peerId) {
-            const player = gameState.players.find(p => p.id === peerId);
-            if (player) {
-                player.isBot = true;
-                player.name += " (آلي 🤖)";
-                player.difficulty = 'expert';
-                broadcastToAll({ type: 'ANNOY_ALERT', message: `🔌 انقطع اتصال [${player.name}] وتولى البوت اللعب مكانه!`, sound: 'error' });
-                syncStateToAll();
-            }
-        }
-
-        function updateLobbyUI() {
-            const listEl = document.getElementById('lobby-players-list');
-            listEl.innerHTML = '';
-            gameState.players.forEach(p => {
-                const li = document.createElement('li');
-                li.innerText = `🎮 ${p.name}`;
-                listEl.appendChild(li);
-            });
-        }
-
-        function broadcastLobbyUpdate() {
-            broadcastToAll({
-                type: 'LOBBY_UPDATE',
-                players: gameState.players.map(p => ({ id: p.id, name: p.name }))
-            });
-        }
-
-        function handleClientReceivedData(data) {
-            if (data.type === 'LOBBY_UPDATE') {
-                renderLobbyPlayers(data.players);
-            } else if (data.type === 'GAME_STARTED') {
-                if (data.rules) customRules = data.rules;
-                showScreen('game-board');
-            } else if (data.type === 'STATE_UPDATE') {
-                renderGame(data.state);
-            } else if (data.type === 'CHOOSE_COLOR_REQUEST') {
-                showColorPicker();
-            } else if (data.type === 'TAUNT_SPAM_EFFECT') {
-                triggerTauntEffect(data.emoji, data.name);
-            } else if (data.type === 'ANNOY_ALERT') {
-                showAnnoyanceBanner(data.message);
-                if (data.sound) {
-                    playSynthSound(data.sound);
-                    if (data.sound === 'reverse') {
-                        triggerBurst(window.innerWidth / 2, window.innerHeight / 2, '#5856d6');
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 110) {
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${1 - dist / 110})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
                     }
                 }
             }
+            requestAnimationFrame(animateCanvas);
         }
+        animateCanvas();
 
-        function renderLobbyPlayers(players) {
-            const list = document.getElementById('lobby-players-list');
-            list.innerHTML = '';
-            players.forEach(p => {
-                const li = document.createElement('li');
-                li.innerText = `🎮 ${p.name}`;
-                list.appendChild(li);
+        /* --- Scroll Reveal --- */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
             });
-        }
-
-        function handleHostReceivedData(conn, data) {
-            if (data.type === 'JOIN_REQUEST') {
-                gameState.players.push({ id: conn.peer, name: data.name, cards: [], isBot: false });
-                updateLobbyUI();
-                broadcastLobbyUpdate();
-            } else if (data.type === 'PLAY_CARD') {
-                handleCardPlayed(conn.peer, data.cardId);
-            } else if (data.type === 'DRAW_CARD') {
-                handleDrawRequest(conn.peer);
-            } else if (data.type === 'PASS_TURN') {
-                handlePassRequest(conn.peer);
-            } else if (data.type === 'COLOR_CHOSEN') {
-                handleColorChosen(conn.peer, data.color);
-            } else if (data.type === 'UNO_DECLARATION') {
-                hasDeclaredUnoThisTurn[conn.peer] = true;
-                triggerTauntEffect('📣', data.name + " صاح أونوووو!");
-            } else if (data.type === 'TAUNT_SPAM') {
-                broadcastToAll({ type: 'TAUNT_SPAM_EFFECT', emoji: data.emoji, name: data.name });
-            }
-        }
-
-        // --- 12. محاذاة اللعب وتوليد الكروت على السيرفر ---
-        function handleCardPlayed(playerId, cardId) {
-            const activePlayer = gameState.players[gameState.currentTurnIndex];
-            const dict = i18n[localSettings.lang];
-
-            if (activePlayer.id !== playerId) {
-                sendDirectAlert(playerId, dict.alert_wait_turn, 'error');
-                return;
-            }
-
-            const cardIndex = activePlayer.cards.findIndex(c => c.id === cardId);
-            if (cardIndex === -1) return;
-
-            const card = activePlayer.cards[cardIndex];
-            const topCard = gameState.discardPile[gameState.discardPile.length - 1];
-
-            if (gameState.penaltyStack > 0 && customRules.stacking) {
-                const expectedValue = topCard.type === 'draw2' ? '+2' : '+4';
-                if (card.value !== expectedValue) {
-                    sendDirectAlert(playerId, "يجب عليك الرد بكرت هجوم متراكم أو سحب الكروت المتراكمة!", 'error');
-                    return;
-                }
-            } else if (!isValidMove(card, topCard)) {
-                sendDirectAlert(playerId, dict.alert_invalid_move, 'error');
-                return;
-            }
-
-            activePlayer.cards.splice(cardIndex, 1);
-            gameState.discardPile.push(card);
-
-            broadcastToAll({ type: 'FX_PLAY', color: card.color });
-            triggerBurst(window.innerWidth / 2, window.innerHeight / 2 - 50, getHexColor(card.color));
-
-            if (activePlayer.cards.length === 1 && !hasDeclaredUnoThisTurn[playerId]) {
-                for (let i = 0; i < 2; i++) drawCardForPlayer(playerId);
-                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_forgot_uno.replace('{name}', activePlayer.name), sound: 'siren' });
-            }
-
-            hasDeclaredUnoThisTurn = {};
-
-            if (activePlayer.cards.length === 0) {
-                clearInterval(turnInterval);
-                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_winner.replace('{name}', activePlayer.name), sound: 'siren' });
-                setTimeout(() => location.reload(), 5000);
-                return;
-            }
-
-            if (card.color === 'black') {
-                gameState.waitingForColorChoice = true;
-                gameState.playerChoosingColor = playerId;
-                gameState.timer = localSettings.timerVal;
-
-                if (playerId === myId) {
-                    showColorPicker();
-                } else {
-                    const conn = connections.find(c => c.peer === playerId);
-                    if (conn) conn.send({ type: 'CHOOSE_COLOR_REQUEST' });
-                }
-                syncStateToAll();
-                return;
-            }
-
-            resolveCardAction(card);
-            nextTurn();
-        }
-
-        function handleColorChosen(playerId, chosenColor) {
-            if (!gameState.waitingForColorChoice || gameState.playerChoosingColor !== playerId) return;
-
-            const topCard = gameState.discardPile[gameState.discardPile.length - 1];
-            if (topCard && topCard.color === 'black') {
-                topCard.color = chosenColor;
-            }
-
-            const activePlayer = gameState.players.find(p => p.id === playerId);
-            const dict = i18n[localSettings.lang];
-
-            const colorNames = { red: dict.color_red, yellow: dict.color_yellow, green: dict.color_green, blue: dict.color_blue };
-            const colorName = colorNames[chosenColor] || chosenColor;
-
-            broadcastToAll({
-                type: 'ANNOY_ALERT',
-                message: dict.alert_color_changed.replace('{name}', activePlayer.name).replace('{color}', colorName),
-                sound: 'reverse'
-            });
-
-            resolveCardAction(topCard);
-
-            gameState.waitingForColorChoice = false;
-            gameState.playerChoosingColor = null;
-            nextTurn();
-        }
-
-        function handleDrawRequest(playerId) {
-            const activePlayer = gameState.players[gameState.currentTurnIndex];
-            if (activePlayer.id !== playerId) return;
-
-            if (gameState.penaltyStack > 0 && customRules.stacking) {
-                for (let i = 0; i < gameState.penaltyStack; i++) {
-                    drawCardForPlayer(playerId);
-                }
-                gameState.penaltyStack = 0;
-                nextTurn();
-                return;
-            }
-
-            if (gameState.hasDrawnThisTurn) {
-                sendDirectAlert(playerId, "لقد قمت بالسحب بالفعل لهذا الدور!", 'error');
-                return;
-            }
-
-            const drawnCard = drawCardForPlayer(playerId);
-            gameState.hasDrawnThisTurn = true;
-
-            const topCard = gameState.discardPile[gameState.discardPile.length - 1];
-            if (drawnCard && isValidMove(drawnCard, topCard)) {
-                sendDirectAlert(playerId, i18n[localSettings.lang].alert_drawn_playable, 'click');
-            } else {
-                sendDirectAlert(playerId, i18n[localSettings.lang].alert_drawn_unplayable, 'error');
-            }
-
-            syncStateToAll();
-        }
-
-        function handlePassRequest(playerId) {
-            const activePlayer = gameState.players[gameState.currentTurnIndex];
-            if (activePlayer.id !== playerId) return;
-
-            if (!gameState.hasDrawnThisTurn) {
-                sendDirectAlert(playerId, i18n[localSettings.lang].alert_pass_first, 'error');
-                return;
-            }
-
-            nextTurn();
-        }
-
-        function nextTurn() {
-            gameState.currentTurnIndex = (gameState.currentTurnIndex + gameState.direction + gameState.players.length) % gameState.players.length;
-            gameState.hasDrawnThisTurn = false;
-            
-            const nextPlayer = gameState.players[gameState.currentTurnIndex];
-            
-            startTurnTimer();
-            syncStateToAll();
-
-            if (nextPlayer && nextPlayer.isBot) {
-                executeBotTurn(nextPlayer);
-            }
-        }
-
-        function drawCardForPlayer(playerId) {
-            const player = gameState.players.find(p => p.id === playerId);
-            if (gameState.deck.length === 0) {
-                const topCard = gameState.discardPile.pop();
-                gameState.deck = gameState.discardPile;
-                gameState.discardPile = [topCard];
-                for (let i = gameState.deck.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [gameState.deck[i], gameState.deck[j]] = [gameState.deck[j], gameState.deck[i]];
-                }
-            }
-            if (gameState.deck.length > 0) {
-                const drawn = gameState.deck.pop();
-                player.cards.push(drawn);
-                return drawn;
-            }
-            return null;
-        }
-
-        function handleTurnTimeout() {
-            const activePlayer = gameState.players[gameState.currentTurnIndex];
-            
-            if (gameState.waitingForColorChoice && gameState.playerChoosingColor === activePlayer.id) {
-                const colors = ['red', 'yellow', 'green', 'blue'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                handleColorChosen(activePlayer.id, randomColor);
-                return;
-            }
-
-            drawCardForPlayer(activePlayer.id);
-            const dict = i18n[localSettings.lang];
-            broadcastToAll({ 
-                type: 'ANNOY_ALERT', 
-                message: dict.alert_time_out.replace('{name}', activePlayer.name), 
-                sound: 'error' 
-            });
-            nextTurn();
-        }
-
-        function getHexColor(color) {
-            if (color === 'red') return '#ff3b30';
-            if (color === 'yellow') return '#ffcc00';
-            if (color === 'green') return '#4cd964';
-            if (color === 'blue') return '#007aff';
-            return '#ffffff';
-        }
-
-        function broadcastToAll(msg) {
-            connections.forEach(conn => {
-                if (conn.open) {
-                    conn.send(msg);
-                }
-            });
-        }
-
-        function showScreen(screenId) {
-            const screens = ['start-screen', 'join-screen', 'lobby-screen', 'game-board'];
-            screens.forEach(s => {
-                document.getElementById(s).classList.add('hidden');
-            });
-            document.getElementById(screenId).classList.remove('hidden');
-        }
-
-        function showColorPicker() {
-            document.getElementById('color-picker-modal').classList.remove('hidden');
-        }
-
-        function selectColor(color) {
-            document.getElementById('color-picker-modal').classList.add('hidden');
-            if (isHost) {
-                handleColorChosen(myId, color);
-            } else {
-                hostConn.send({ type: 'COLOR_CHOSEN', color: color });
-            }
-        }
-
-        // تحميل الإعدادات المحفوظة مسبقاً
-        loadSettingsFromStorage();
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>

@@ -17,23 +17,43 @@
     "t3": "الاهتمام بأدق التفاصيل البرمجية لضمان الأمان الفائق، الأداء الخارق، وتجربة مستخدم لا تُنسى."
   },
   "skills": [
-    { "name": "صناعة وتطوير المحتوى الرقمي", "level": 98 },
-    { "name": "تطوير واجهات المستخدم UI/UX", "level": 95 },
-    { "name": "البرمجة والأمن السيبراني Frontend/Cyber", "level": 92 },
-    { "name": "الأنميشنات والتأثيرات التفاعلية 3D Effects", "level": 96 }
+    {
+      "name": "صناعة وتطوير المحتوى الرقمي",
+      "level": 98
+    },
+    {
+      "name": "تطوير واجهات المستخدم UI/UX",
+      "level": 95
+    },
+    {
+      "name": "البرمجة والأمن السيبراني Frontend/Cyber",
+      "level": 92
+    },
+    {
+      "name": "الأنميشنات والتأثيرات التفاعلية 3D Effects",
+      "level": 96
+    }
   ],
   "projects": [
     {
       "title": "قناة يمان قدحات الرقمية (Yamangadhat1)",
-      "desc": "منصة إبداعية ترفيهية وتقنية حصدت آلاف المتابعين بفضل المحتوى المبتكر والجودة العالية.",
-      "tags": ["YouTube", "Content Creation", "Digital Branding"],
+      "desc": "منصة إبداعية وتقنية حصدت آلاف المتابعين بفضل المحتوى المبتكر والجودة العالية.",
+      "tags": [
+        "YouTube",
+        "Content Creation",
+        "Digital Branding"
+      ],
       "img": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80",
       "link": "https://youtube.com/@Yamangadhat1"
     },
     {
       "title": "نظام أونو الكوني الأسطوري (UNO Cosmic Pro)",
       "desc": "تجربة تفاعلية مباشرة مع مؤثرات بصرية وسينمائية فائقة السرعة ونظام اتصالات.",
-      "tags": ["Realtime Engine", "Interactive Effects", "WebSockets"],
+      "tags": [
+        "Realtime Engine",
+        "Interactive Effects",
+        "WebSockets"
+      ],
       "img": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
       "link": "#"
     }

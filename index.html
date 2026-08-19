@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YamanGram Pro | منصة التواصل والمكالمات الحية</title>
+    <title>YamanGram Pro | منصة التواصل والمكالمات الحية فائقة السرعة</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -105,7 +105,7 @@
                 <!-- الشعار -->
                 <div class="cursor-pointer px-2 flex items-center gap-2.5" onclick="switchTab('feed')">
                     <span class="text-2xl font-black italic tracking-wide insta-gradient bg-clip-text text-transparent">YamanGram</span>
-                    <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 font-black border border-amber-500/40">PRO v2</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 font-black border border-amber-500/40">PRO v3</span>
                 </div>
 
                 <!-- أزرار التنقل الرئيسية -->
@@ -162,7 +162,6 @@
 
             <!-- 1. تبويب الرئيسية (Feed + Stories) -->
             <section id="tab-feed" class="tab-content flex-1 p-3 md:py-6 w-full space-y-6">
-                
                 <!-- شريط القصص (Stories Reel) -->
                 <div class="bg-ig-card border border-ig-border rounded-3xl p-3.5 flex items-center gap-4 overflow-x-auto no-scrollbar">
                     <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer" onclick="openCreateStoryModal()">
@@ -237,7 +236,6 @@
                     
                     <textarea id="create-post-caption" rows="4" placeholder="اكتب ما يدور في ذهنك... #yamangram" class="w-full bg-ig-black border border-ig-border rounded-2xl p-3.5 text-xs outline-none focus:border-slate-500 text-white resize-none"></textarea>
                     
-                    <!-- رفع صورة من الجهاز أو رابط مباشر -->
                     <div class="space-y-2">
                         <label class="text-xs text-slate-400 font-semibold block">إرفاق صورة للمنشور:</label>
                         
@@ -258,7 +256,6 @@
                         <input type="url" id="create-post-image" placeholder="https://example.com/photo.jpg" class="w-full bg-ig-black border border-ig-border rounded-xl px-3.5 py-2.5 text-xs outline-none focus:border-slate-500 text-white">
                     </div>
 
-                    <!-- معاينة الصورة -->
                     <div id="post-image-preview-box" class="hidden relative rounded-2xl overflow-hidden max-h-48 border border-ig-border">
                         <img id="post-image-preview" class="w-full h-full object-cover">
                         <button onclick="clearPostImagePreview()" class="absolute top-2 right-2 w-7 h-7 bg-black/70 rounded-full text-white flex items-center justify-center text-xs"><i class="fa-solid fa-xmark"></i></button>
@@ -453,54 +450,75 @@
         </div>
     </div>
 
-    <!-- نافذة المكالمة المباشرة المتوافقة كلياً مع Safari وChrome -->
+    <!-- نافذة المكالمة المباشرة المطورة مع خاصية التصغير (PiP) -->
     <div id="call-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden flex flex-col items-center justify-between p-4 md:p-8">
         
         <!-- الهيدر الخاص بالمكالمة -->
-        <div class="text-center space-y-1.5 z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-[11px] text-slate-300">
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                <span id="call-timer">00:00</span>
+        <div class="w-full flex items-center justify-between z-10 max-w-xl">
+            <button onclick="toggleMinimizeCall()" class="p-2.5 rounded-full bg-ig-elevated hover:bg-ig-subtle text-slate-300 transition" title="تصغير المكالمة ومتابعة التصفح">
+                <i class="fa-solid fa-down-left-and-up-right-to-center text-xs"></i>
+            </button>
+
+            <div class="text-center space-y-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-[11px] text-slate-300">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    <span id="call-timer">00:00</span>
+                </div>
+                <h3 class="font-black text-base md:text-lg text-white" id="call-partner-name">مكالمة مباشرة</h3>
+                <p class="text-[11px] text-slate-400" id="call-status">جاري إنشاء الاتصال الآمن...</p>
             </div>
-            <h3 class="font-black text-lg text-white" id="call-partner-name">مكالمة مباشرة</h3>
-            <p class="text-xs text-slate-400" id="call-status">جاري إنشاء الاتصال الآمن...</p>
+
+            <button onclick="toggleCameraFlip()" id="btn-flip-cam" class="p-2.5 rounded-full bg-ig-elevated hover:bg-ig-subtle text-amber-400 transition" title="قلب الكاميرا">
+                <i class="fa-solid fa-camera-rotate text-xs"></i>
+            </button>
         </div>
 
         <!-- مساحة عرض الفيديو -->
-        <div class="w-full max-w-xl h-[480px] bg-ig-card rounded-3xl overflow-hidden relative border border-ig-border flex items-center justify-center shadow-2xl">
-            <!-- فيديو الطرف الآخر (Playsinline مخصص لسفاري وiOS) -->
+        <div class="w-full max-w-xl flex-1 max-h-[500px] my-auto bg-ig-card rounded-3xl overflow-hidden relative border border-ig-border flex items-center justify-center shadow-2xl">
+            <!-- فيديو الطرف الآخر -->
             <video id="remote-video" autoplay playsinline class="w-full h-full object-cover"></video>
             
             <!-- فيديو الكاميرا المحلية -->
-            <video id="local-video" autoplay playsinline muted class="w-32 h-44 object-cover rounded-2xl border-2 border-white/30 absolute bottom-4 right-4 shadow-2xl bg-black transition-all"></video>
-            
-            <!-- عنصر الصوت -->
-            <audio id="remote-audio" autoplay playsinline></audio>
+            <video id="local-video" autoplay playsinline muted class="w-28 h-40 md:w-32 md:h-44 object-cover rounded-2xl border-2 border-white/30 absolute bottom-4 right-4 shadow-2xl bg-black transition-all"></video>
 
             <!-- واجهة المكالمة الصوتية بدون كاميرا -->
             <div id="audio-call-placeholder" class="hidden flex flex-col items-center gap-4">
                 <div class="w-28 h-28 rounded-full insta-gradient flex items-center justify-center text-4xl text-white font-black shadow-2xl animate-ring-pulse">
                     <i class="fa-solid fa-microphone"></i>
                 </div>
-                <span class="text-sm text-slate-200 font-bold">مكالمة صوتية مشفرة HD</span>
+                <span class="text-sm text-slate-200 font-bold">مكالمة صوتية فائقة النقاء HD</span>
             </div>
         </div>
 
         <!-- أزرار التحكم بالمكالمة -->
-        <div class="flex items-center gap-4 z-10">
-            <button onclick="toggleMuteMic()" id="btn-toggle-mic" class="w-13 h-13 p-3.5 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="كتم الميكروفون">
-                <i class="fa-solid fa-microphone text-base"></i>
+        <div class="flex items-center gap-3 md:gap-4 z-10">
+            <button onclick="toggleMuteMic()" id="btn-toggle-mic" class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="كتم/تشغيل الميكروفون">
+                <i class="fa-solid fa-microphone text-sm md:text-base"></i>
             </button>
-            <button onclick="toggleCamera()" id="btn-toggle-cam" class="w-13 h-13 p-3.5 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="تشغيل/إيقاف الكاميرا">
-                <i class="fa-solid fa-video text-base"></i>
+            <button onclick="toggleCamera()" id="btn-toggle-cam" class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="تشغيل/إيقاف الكاميرا">
+                <i class="fa-solid fa-video text-sm md:text-base"></i>
             </button>
-            <button onclick="toggleScreenShare()" id="btn-share-screen" class="w-13 h-13 p-3.5 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="مشاركة الشاشة">
-                <i class="fa-solid fa-display text-base"></i>
+            <button onclick="toggleScreenShare()" id="btn-share-screen" class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="مشاركة الشاشة">
+                <i class="fa-solid fa-display text-sm md:text-base"></i>
             </button>
-            <button onclick="hangupCurrentCall()" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-2xl shadow-red-600/50 transition active:scale-95" title="إنهاء المكالمة">
-                <i class="fa-solid fa-phone-slash text-xl"></i>
+            <button onclick="hangupCurrentCall()" class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-2xl shadow-red-600/50 transition active:scale-95" title="إنهاء المكالمة">
+                <i class="fa-solid fa-phone-slash text-lg md:text-xl"></i>
             </button>
         </div>
+    </div>
+
+    <!-- نافذة المكالمة المصغرة العائمة Floating Bubble -->
+    <div id="floating-call-bubble" class="hidden fixed bottom-16 right-4 md:bottom-6 md:right-6 z-50 p-3.5 bg-ig-card border-2 border-ig-blue rounded-3xl shadow-2xl flex items-center gap-3 backdrop-blur-xl animate-pulse cursor-pointer" onclick="toggleMinimizeCall()">
+        <div class="w-10 h-10 rounded-full insta-gradient flex items-center justify-center text-white text-sm font-black">
+            <i class="fa-solid fa-phone"></i>
+        </div>
+        <div>
+            <h5 class="text-xs font-bold text-white" id="float-partner-name">المكالمة مستمرة</h5>
+            <span class="text-[10px] text-green-400 font-mono" id="float-call-timer">00:00</span>
+        </div>
+        <button onclick="event.stopPropagation(); hangupCurrentCall();" class="p-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs ml-1" title="إنهاء">
+            <i class="fa-solid fa-phone-slash"></i>
+        </button>
     </div>
 
     <!-- نافذة استقبال مكالمة واردة -->
@@ -551,7 +569,8 @@
                 { urls: 'stun:stun1.l.google.com:19302' },
                 { urls: 'stun:stun2.l.google.com:19302' },
                 { urls: 'stun:stun3.l.google.com:19302' },
-                { urls: 'stun:stun4.l.google.com:19302' }
+                { urls: 'stun:stun4.l.google.com:19302' },
+                { urls: 'stun:stun.cloudflare.com:3478' }
             ],
             iceCandidatePoolSize: 10
         };
@@ -571,7 +590,7 @@
         let selectedPostImageBase64 = null;
         let selectedStoryImageBase64 = null;
 
-        // متغيرات المكالمات
+        // متغيرات WebRTC المتقدمة
         let peerConnection = null;
         let localStream = null;
         let remoteStream = null;
@@ -581,8 +600,11 @@
         let offerCandidatesUnsub = null;
         let answerCandidatesUnsub = null;
         let callTimerInterval = null;
+        let callTimeoutTimer = null;
         let callSeconds = 0;
         let pendingCandidatesQueue = [];
+        let isCallMinimized = false;
+        let currentFacingMode = "user";
 
         // -------------------------------------------------------------
         // محرك المؤثرات الصوتية والرنين المتواصل (Web Audio API)
@@ -605,21 +627,30 @@
                 const playTone = () => {
                     if (!this.ctx) return;
                     try {
-                        const osc = this.ctx.createOscillator();
+                        const osc1 = this.ctx.createOscillator();
+                        const osc2 = this.ctx.createOscillator();
                         const gain = this.ctx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-                        osc.frequency.setValueAtTime(480, this.ctx.currentTime + 0.1);
-                        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.8);
-                        osc.connect(gain);
+
+                        osc1.type = 'sine';
+                        osc2.type = 'sine';
+                        osc1.frequency.setValueAtTime(440, this.ctx.currentTime);
+                        osc2.frequency.setValueAtTime(480, this.ctx.currentTime);
+
+                        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
+
+                        osc1.connect(gain);
+                        osc2.connect(gain);
                         gain.connect(this.ctx.destination);
-                        osc.start();
-                        osc.stop(this.ctx.currentTime + 0.8);
+
+                        osc1.start();
+                        osc2.start();
+                        osc1.stop(this.ctx.currentTime + 1.2);
+                        osc2.stop(this.ctx.currentTime + 1.2);
                     } catch(e) {}
                 };
                 playTone();
-                this.ringInterval = setInterval(playTone, 1500);
+                this.ringInterval = setInterval(playTone, 2000);
             },
             startOutgoingRingback() {
                 this.stopRingtone();
@@ -632,11 +663,11 @@
                         osc.type = 'sine';
                         osc.frequency.setValueAtTime(425, this.ctx.currentTime);
                         gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
+                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.0);
                         osc.connect(gain);
                         gain.connect(this.ctx.destination);
                         osc.start();
-                        osc.stop(this.ctx.currentTime + 1.2);
+                        osc.stop(this.ctx.currentTime + 1.0);
                     } catch(e) {}
                 };
                 playBeep();
@@ -649,14 +680,14 @@
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-                    osc.frequency.setValueAtTime(150, this.ctx.currentTime + 0.15);
+                    osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+                    osc.frequency.setValueAtTime(140, this.ctx.currentTime + 0.2);
                     gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+                    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
                     osc.start();
-                    osc.stop(this.ctx.currentTime + 0.3);
+                    osc.stop(this.ctx.currentTime + 0.35);
                 } catch(e) {}
             },
             stopRingtone() {
@@ -667,7 +698,7 @@
             }
         };
 
-        // تفعيل الصوت عند أول نقرة لمطابقة شروط متصفح Safari
+        // تفعيل الصوت عند أول نقرة لمطابقة شروط متصفح Safari و Chrome
         window.addEventListener('click', () => AudioFX.init(), { once: true });
         window.addEventListener('touchstart', () => AudioFX.init(), { once: true });
 
@@ -807,7 +838,7 @@
             }
         });
 
-        // جلب قائمة المستخدمين وتحديد UID الحقيقي للمؤسس
+        // جلب قائمة المستخدمين
         async function loadFounderAndUsersCache() {
             const snap = await getDocs(collection(db, "users"));
             allUsersCache = [];
@@ -819,7 +850,6 @@
                 }
             });
 
-            // ربط أزرار بطاقة المؤسس
             if (founderActualUid) {
                 document.getElementById('founder-chat-btn').onclick = () => startDirectChat(founderActualUid, 'Yaman Gadhat 👑');
                 document.getElementById('founder-call-btn').onclick = () => initiateWebRTCCall(founderActualUid, 'Yaman Gadhat 👑', true);
@@ -827,23 +857,28 @@
         }
 
         // -------------------------------------------------------------
-        // نظام مكالمات WebRTC المتكامل (متوافق مع Safari & Chrome)
+        // نظام مكالمات WebRTC المصحح والمطور بالكامل
         // -------------------------------------------------------------
         function startCallTimer() {
             clearInterval(callTimerInterval);
             callSeconds = 0;
             const timerEl = document.getElementById('call-timer');
+            const floatTimerEl = document.getElementById('float-call-timer');
             callTimerInterval = setInterval(() => {
                 callSeconds++;
                 const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
                 const secs = String(callSeconds % 60).padStart(2, '0');
-                timerEl.innerText = `${mins}:${secs}`;
+                const formatted = `${mins}:${secs}`;
+                timerEl.innerText = formatted;
+                floatTimerEl.innerText = formatted;
             }, 1000);
         }
 
         function stopCallTimer() {
             clearInterval(callTimerInterval);
+            clearTimeout(callTimeoutTimer);
             document.getElementById('call-timer').innerText = "00:00";
+            document.getElementById('float-call-timer').innerText = "00:00";
         }
 
         async function createSafePeerConnection() {
@@ -852,24 +887,32 @@
                 peerConnection = null;
             }
             pendingCandidatesQueue = [];
+            remoteStream = new MediaStream();
             peerConnection = new RTCPeerConnection(rtcConfig);
 
-            // استقبال التراكات
+            // استقبال التراكات (Audio + Video) في عنصر فيديو واحد لمنع ارتداد الصدى
             peerConnection.ontrack = (event) => {
-                if (!remoteStream) remoteStream = new MediaStream();
-                remoteStream.addTrack(event.track);
+                event.streams[0].getTracks().forEach(track => {
+                    remoteStream.addTrack(track);
+                });
 
                 const remoteVideo = document.getElementById('remote-video');
-                const remoteAudio = document.getElementById('remote-audio');
-                
                 remoteVideo.srcObject = remoteStream;
-                remoteAudio.srcObject = remoteStream;
+                remoteVideo.play().catch(e => console.log("Remote play error:", e));
 
-                // تشغيل صريح للتوافق مع سفاري
-                remoteVideo.play().catch(() => {});
-                remoteAudio.play().catch(() => {});
+                document.getElementById('call-status').innerText = "متصل بجودة فائقة HD ⚡";
+            };
 
-                document.getElementById('call-status').innerText = "المكالمة متصلة الآن بجودة فائقة";
+            // مراقبة استقرار الشبكة والاتصال
+            peerConnection.oniceconnectionstatechange = () => {
+                if (peerConnection) {
+                    const state = peerConnection.iceConnectionState;
+                    if (state === 'disconnected' || state === 'failed') {
+                        document.getElementById('call-status').innerText = "جاري إعادة التوصيل...";
+                    } else if (state === 'connected' || state === 'completed') {
+                        document.getElementById('call-status').innerText = "المكالمة متصلة ومستقرة";
+                    }
+                }
             };
 
             return peerConnection;
@@ -881,7 +924,9 @@
                 const cand = pendingCandidatesQueue.shift();
                 try {
                     await peerConnection.addIceCandidate(new RTCIceCandidate(cand));
-                } catch (e) {}
+                } catch (e) {
+                    console.error("Candidate error: ", e);
+                }
             }
         }
 
@@ -893,17 +938,20 @@
             try {
                 AudioFX.startOutgoingRingback();
                 
+                currentFacingMode = "user";
                 localStream = await navigator.mediaDevices.getUserMedia({
-                    video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" } : false,
-                    audio: true
+                    video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: currentFacingMode } : false,
+                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
                 });
 
                 document.getElementById('local-video').srcObject = localStream;
                 document.getElementById('call-partner-name').innerText = targetName;
-                document.getElementById('call-status').innerText = "جاري الاتصال والانتظار...";
+                document.getElementById('float-partner-name').innerText = targetName;
+                document.getElementById('call-status').innerText = "جاري الرنين والاتصال...";
                 document.getElementById('call-modal').classList.remove('hidden');
                 document.getElementById('audio-call-placeholder').classList.toggle('hidden', isVideo);
                 document.getElementById('remote-video').classList.toggle('hidden', !isVideo);
+                document.getElementById('btn-flip-cam').classList.toggle('hidden', !isVideo);
 
                 await createSafePeerConnection();
 
@@ -929,23 +977,37 @@
                     }
                 };
 
-                const offerDescription = await peerConnection.createOffer();
+                const offerDescription = await peerConnection.createOffer({
+                    offerToReceiveAudio: true,
+                    offerToReceiveVideo: isVideo
+                });
                 await peerConnection.setLocalDescription(offerDescription);
 
                 await updateDoc(callDocRef, {
                     offer: { type: offerDescription.type, sdp: offerDescription.sdp }
                 });
 
+                // مهلة 35 ثانية لعدم الرد
+                clearTimeout(callTimeoutTimer);
+                callTimeoutTimer = setTimeout(() => {
+                    showToast("لم يتم الرد من الطرف الآخر.", "info");
+                    hangupCurrentCall();
+                }, 35000);
+
                 callUnsubscribe = onSnapshot(callDocRef, async (snapshot) => {
                     const data = snapshot.data();
                     if (!data) return;
 
-                    if (data.status === 'rejected' || data.status === 'ended') {
-                        showToast("تم إنهاء المكالمة أو رفضها.", "info");
+                    if (data.status === 'rejected') {
+                        showToast("تم رفض المكالمة.", "info");
+                        hangupCurrentCall();
+                    } else if (data.status === 'ended') {
+                        showToast("تم إنهاء المكالمة.", "info");
                         hangupCurrentCall();
                     }
 
                     if (!peerConnection.currentRemoteDescription && data.answer) {
+                        clearTimeout(callTimeoutTimer);
                         AudioFX.stopRingtone();
                         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
                         await processCandidateQueue();
@@ -957,7 +1019,7 @@
                     snapshot.docChanges().forEach(async (change) => {
                         if (change.type === 'added') {
                             const candidateData = change.doc.data();
-                            if (peerConnection.remoteDescription) {
+                            if (peerConnection && peerConnection.remoteDescription) {
                                 try {
                                     await peerConnection.addIceCandidate(new RTCIceCandidate(candidateData));
                                 } catch (e) {}
@@ -1003,18 +1065,21 @@
             try {
                 currentCallDocId = incomingCallData.id;
                 const isVideo = incomingCallData.isVideo;
+                currentFacingMode = "user";
 
                 localStream = await navigator.mediaDevices.getUserMedia({
-                    video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" } : false,
-                    audio: true
+                    video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: currentFacingMode } : false,
+                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
                 });
 
                 document.getElementById('local-video').srcObject = localStream;
                 document.getElementById('call-partner-name').innerText = incomingCallData.callerName;
-                document.getElementById('call-status').innerText = "جاري الاتصال...";
+                document.getElementById('float-partner-name').innerText = incomingCallData.callerName;
+                document.getElementById('call-status').innerText = "جاري الربط والاتصال...";
                 document.getElementById('call-modal').classList.remove('hidden');
                 document.getElementById('audio-call-placeholder').classList.toggle('hidden', isVideo);
                 document.getElementById('remote-video').classList.toggle('hidden', !isVideo);
+                document.getElementById('btn-flip-cam').classList.toggle('hidden', !isVideo);
 
                 await createSafePeerConnection();
 
@@ -1030,8 +1095,15 @@
                     }
                 };
 
-                const callData = (await getDoc(callDocRef)).data();
+                const callSnap = await getDoc(callDocRef);
+                const callData = callSnap.data();
+
+                if (!callData || !callData.offer) {
+                    throw new Error("بيانات الاتصال غير صالحة أو تم إلغاؤها");
+                }
+
                 await peerConnection.setRemoteDescription(new RTCSessionDescription(callData.offer));
+                await processCandidateQueue();
 
                 const answerDescription = await peerConnection.createAnswer();
                 await peerConnection.setLocalDescription(answerDescription);
@@ -1047,9 +1119,13 @@
                     snapshot.docChanges().forEach(async (change) => {
                         if (change.type === 'added') {
                             const candData = change.doc.data();
-                            try {
-                                await peerConnection.addIceCandidate(new RTCIceCandidate(candData));
-                            } catch (e) {}
+                            if (peerConnection && peerConnection.remoteDescription) {
+                                try {
+                                    await peerConnection.addIceCandidate(new RTCIceCandidate(candData));
+                                } catch (e) {}
+                            } else {
+                                pendingCandidatesQueue.push(candData);
+                            }
                         }
                     });
                 });
@@ -1057,6 +1133,7 @@
                 callUnsubscribe = onSnapshot(callDocRef, (snap) => {
                     const data = snap.data();
                     if (data && (data.status === 'ended' || data.status === 'rejected')) {
+                        showToast("تم إنهاء المكالمة", "info");
                         hangupCurrentCall();
                     }
                 });
@@ -1071,7 +1148,9 @@
             AudioFX.stopRingtone();
             document.getElementById('incoming-call-modal').classList.add('hidden');
             if (incomingCallData) {
-                await updateDoc(doc(db, "calls", incomingCallData.id), { status: 'rejected' });
+                try {
+                    await updateDoc(doc(db, "calls", incomingCallData.id), { status: 'rejected' });
+                } catch(e) {}
                 incomingCallData = null;
             }
         };
@@ -1098,13 +1177,57 @@
                 localStream = null;
             }
 
+            if (remoteStream) {
+                remoteStream.getTracks().forEach(t => t.stop());
+                remoteStream = null;
+            }
+
             document.getElementById('local-video').srcObject = null;
             document.getElementById('remote-video').srcObject = null;
-            document.getElementById('remote-audio').srcObject = null;
             document.getElementById('call-modal').classList.add('hidden');
+            document.getElementById('floating-call-bubble').classList.add('hidden');
+            isCallMinimized = false;
             
             currentCallDocId = null;
             incomingCallData = null;
+        };
+
+        // تصغير وتكبير نافذة المكالمة (PiP)
+        window.toggleMinimizeCall = () => {
+            isCallMinimized = !isCallMinimized;
+            document.getElementById('call-modal').classList.toggle('hidden', isCallMinimized);
+            document.getElementById('floating-call-bubble').classList.toggle('hidden', !isCallMinimized);
+        };
+
+        // قلب الكاميرا
+        window.toggleCameraFlip = async () => {
+            if (!localStream || !peerConnection) return;
+            try {
+                currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+                const newStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: currentFacingMode },
+                    audio: false
+                });
+
+                const newVideoTrack = newStream.getVideoTracks()[0];
+                const oldVideoTrack = localStream.getVideoTracks()[0];
+
+                if (oldVideoTrack) {
+                    oldVideoTrack.stop();
+                    localStream.removeTrack(oldVideoTrack);
+                }
+
+                localStream.addTrack(newVideoTrack);
+                document.getElementById('local-video').srcObject = localStream;
+
+                const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                if (sender) {
+                    await sender.replaceTrack(newVideoTrack);
+                }
+                showToast("تم تبديل الكاميرا", "info");
+            } catch (e) {
+                showToast("تعذر التبديل بين الكاميرات", "error");
+            }
         };
 
         window.toggleMuteMic = () => {
@@ -1112,7 +1235,10 @@
                 const audioTrack = localStream.getAudioTracks()[0];
                 if (audioTrack) {
                     audioTrack.enabled = !audioTrack.enabled;
-                    document.getElementById('btn-toggle-mic').classList.toggle('bg-red-600', !audioTrack.enabled);
+                    const btn = document.getElementById('btn-toggle-mic');
+                    btn.classList.toggle('bg-red-600', !audioTrack.enabled);
+                    btn.classList.toggle('bg-ig-elevated', audioTrack.enabled);
+                    showToast(audioTrack.enabled ? "تم تشغيل الصوت" : "تم كتم الصوت", "info");
                 }
             }
         };
@@ -1122,7 +1248,10 @@
                 const videoTrack = localStream.getVideoTracks()[0];
                 if (videoTrack) {
                     videoTrack.enabled = !videoTrack.enabled;
-                    document.getElementById('btn-toggle-cam').classList.toggle('bg-red-600', !videoTrack.enabled);
+                    const btn = document.getElementById('btn-toggle-cam');
+                    btn.classList.toggle('bg-red-600', !videoTrack.enabled);
+                    btn.classList.toggle('bg-ig-elevated', videoTrack.enabled);
+                    showToast(videoTrack.enabled ? "تم تشغيل الكاميرا" : "تم إيقاف الكاميرا", "info");
                 }
             }
         };
@@ -1132,15 +1261,16 @@
             try {
                 const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
                 const screenTrack = screenStream.getVideoTracks()[0];
-                const sender = peerConnection.getSenders().find(s => s.track.kind === 'video');
+                const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
                 if (sender) {
                     sender.replaceTrack(screenTrack);
                     screenTrack.onended = () => {
                         if (localStream) sender.replaceTrack(localStream.getVideoTracks()[0]);
                     };
                 }
+                showToast("تم بدء مشاركة الشاشة", "success");
             } catch (e) {
-                showToast("مشاركة الشاشة غير مدعومة على هذا الجهاز أو تم إلغاؤها", "info");
+                showToast("مشاركة الشاشة غير مدعومة أو تم إلغاؤها", "info");
             }
         };
 

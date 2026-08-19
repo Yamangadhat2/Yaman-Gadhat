@@ -1,9 +1,12 @@
+إليك الكود كاملاً من البداية للنهاية بدون أي نقص، جاهز للنسخ المباشر ووضعه داخل
+ملف index.html في مستودع GitHub:
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YamanGram Pro | الإصدار المتطور</title>
+    <title>YamanGram Pro | منصة التواصل والمكالمات الحية</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,8 +20,8 @@
                             black: '#000000',
                             card: '#121212',
                             elevated: '#1e1e1e',
-                            border: '#2a2a2a',
-                            subtle: '#363636',
+                            border: '#282828',
+                            subtle: '#333333',
                             blue: '#0095f6',
                             red: '#ed4956',
                             gold: '#f59e0b',
@@ -48,17 +51,17 @@
         }
         .animate-heart-fade { animation: heartFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-        @keyframes ripple {
-            0% { box-shadow: 0 0 0 0 rgba(237, 73, 86, 0.6); }
-            70% { box-shadow: 0 0 0 15px rgba(237, 73, 86, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(237, 73, 86, 0); }
+        @keyframes ringPulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 149, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(0, 149, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 149, 246, 0); }
         }
-        .animate-calling { animation: ripple 1.5s infinite; }
+        .animate-ring-pulse { animation: ringPulse 1.8s infinite; }
     </style>
 </head>
 <body class="bg-ig-black text-slate-100 min-h-screen selection:bg-ig-blue selection:text-white pb-16 md:pb-0 overflow-x-hidden">
 
-    <!-- نظام التنبيهات المنبثقة Toast Notifications -->
+    <!-- حاوية الإشعارات المنبثقة Toast -->
     <div id="toast-container" class="fixed top-5 right-5 left-5 md:left-auto md:w-96 z-50 pointer-events-none space-y-2"></div>
 
     <!-- شاشة تسجيل الدخول / إنشاء الحساب -->
@@ -186,10 +189,10 @@
             <section id="tab-explore" class="tab-content hidden flex-1 p-4 w-full space-y-5">
                 <div class="relative">
                     <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-slate-500 text-sm"></i>
-                    <input type="text" id="global-search-input" placeholder="ابحث عن مستخدمين بالاسم أو @username..." class="w-full pr-11 pl-4 py-3 bg-ig-card border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
+                    <input type="text" id="global-search-input" placeholder="ابحث عن أي مستخدم بالاسم أو @username..." class="w-full pr-11 pl-4 py-3 bg-ig-card border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
                 </div>
 
-                <!-- نتائج البحث عن المستخدمين -->
+                <!-- نتائج البحث المباشرة -->
                 <div id="search-results-box" class="hidden space-y-2 bg-ig-card border border-ig-border rounded-2xl p-3"></div>
 
                 <!-- بطاقة المؤسس الموثقة -->
@@ -236,7 +239,7 @@
                     
                     <textarea id="create-post-caption" rows="4" placeholder="اكتب ما يدور في ذهنك... #yamangram" class="w-full bg-ig-black border border-ig-border rounded-2xl p-3.5 text-xs outline-none focus:border-slate-500 text-white resize-none"></textarea>
                     
-                    <!-- رفع صورة من الجهاز أو رابط -->
+                    <!-- رفع صورة من الجهاز أو رابط مباشر -->
                     <div class="space-y-2">
                         <label class="text-xs text-slate-400 font-semibold block">إرفاق صورة للمنشور:</label>
                         
@@ -250,7 +253,7 @@
 
                         <div class="relative flex py-1 items-center">
                             <div class="flex-grow border-t border-ig-border"></div>
-                            <span class="flex-shrink mx-2 text-[10px] text-slate-500">أو عبر رابط مباشر</span>
+                            <span class="flex-shrink mx-2 text-[10px] text-slate-500">أو عبر رابط صورة مباشر</span>
                             <div class="flex-grow border-t border-ig-border"></div>
                         </div>
 
@@ -380,7 +383,7 @@
                     </div>
                 </div>
 
-                <!-- شبكة المنشورات والمحفوظات -->
+                <!-- شبكة المنشورات -->
                 <div class="space-y-3">
                     <div class="border-t border-ig-border pt-3 flex justify-center text-xs font-bold text-white gap-6">
                         <button class="text-white flex items-center gap-2 border-b-2 border-white pb-1"><i class="fa-solid fa-table-cells"></i> المنشورات</button>
@@ -452,7 +455,7 @@
         </div>
     </div>
 
-    <!-- نافذة المكالمة المباشرة الأصلية WebRTC (محدثة بالكامل) -->
+    <!-- نافذة المكالمة المباشرة المتوافقة كلياً مع Safari وChrome -->
     <div id="call-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden flex flex-col items-center justify-between p-4 md:p-8">
         
         <!-- الهيدر الخاص بالمكالمة -->
@@ -467,18 +470,18 @@
 
         <!-- مساحة عرض الفيديو -->
         <div class="w-full max-w-xl h-[480px] bg-ig-card rounded-3xl overflow-hidden relative border border-ig-border flex items-center justify-center shadow-2xl">
-            <!-- فيديو الطرف الآخر -->
+            <!-- فيديو الطرف الآخر (Playsinline مخصص لسفاري وiOS) -->
             <video id="remote-video" autoplay playsinline class="w-full h-full object-cover"></video>
             
             <!-- فيديو الكاميرا المحلية -->
             <video id="local-video" autoplay playsinline muted class="w-32 h-44 object-cover rounded-2xl border-2 border-white/30 absolute bottom-4 right-4 shadow-2xl bg-black transition-all"></video>
             
-            <!-- عنصر الصوت للمكالمات الصوتية فقط -->
-            <audio id="remote-audio" autoplay></audio>
+            <!-- عنصر الصوت -->
+            <audio id="remote-audio" autoplay playsinline></audio>
 
             <!-- واجهة المكالمة الصوتية بدون كاميرا -->
             <div id="audio-call-placeholder" class="hidden flex flex-col items-center gap-4">
-                <div class="w-28 h-28 rounded-full insta-gradient flex items-center justify-center text-4xl text-white font-black shadow-2xl animate-calling">
+                <div class="w-28 h-28 rounded-full insta-gradient flex items-center justify-center text-4xl text-white font-black shadow-2xl animate-ring-pulse">
                     <i class="fa-solid fa-microphone"></i>
                 </div>
                 <span class="text-sm text-slate-200 font-bold">مكالمة صوتية مشفرة HD</span>
@@ -523,7 +526,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK v10 & WebRTC Core Logic -->
+    <!-- Firebase SDK v10 & WebRTC Core Engine -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -543,7 +546,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // STUN Servers عالمية ومستقرة للاتصال المباشر
+        // خوادم STUN الموثوقة عالمياً
         const rtcConfig = {
             iceServers: [
                 { urls: 'stun:stun.l.google.com:19302' },
@@ -584,43 +587,91 @@
         let pendingCandidatesQueue = [];
 
         // -------------------------------------------------------------
-        // محرك المؤثرات الصوتية (Web Audio API Synthesizer)
+        // محرك المؤثرات الصوتية والرنين المتواصل (Web Audio API)
         // -------------------------------------------------------------
         const AudioFX = {
             ctx: null,
+            ringInterval: null,
             init() {
-                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (!this.ctx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) this.ctx = new AudioContextClass();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
             },
-            playRingtone() {
+            startIncomingRingtone() {
+                this.stopRingtone();
                 this.init();
-                if (this.ctx.state === 'suspended') this.ctx.resume();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-                osc.frequency.setValueAtTime(480, this.ctx.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.6);
+                const playTone = () => {
+                    if (!this.ctx) return;
+                    try {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+                        osc.frequency.setValueAtTime(480, this.ctx.currentTime + 0.1);
+                        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.8);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.8);
+                    } catch(e) {}
+                };
+                playTone();
+                this.ringInterval = setInterval(playTone, 1500);
+            },
+            startOutgoingRingback() {
+                this.stopRingtone();
+                this.init();
+                const playBeep = () => {
+                    if (!this.ctx) return;
+                    try {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(425, this.ctx.currentTime);
+                        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.2);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 1.2);
+                    } catch(e) {}
+                };
+                playBeep();
+                this.ringInterval = setInterval(playBeep, 3000);
             },
             playHangupTone() {
+                this.stopRingtone();
                 this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-                osc.frequency.setValueAtTime(150, this.ctx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.3);
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                    osc.frequency.setValueAtTime(150, this.ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.3);
+                } catch(e) {}
+            },
+            stopRingtone() {
+                if (this.ringInterval) {
+                    clearInterval(this.ringInterval);
+                    this.ringInterval = null;
+                }
             }
         };
+
+        // تفعيل الصوت عند أول نقرة لمطابقة شروط متصفح Safari
+        window.addEventListener('click', () => AudioFX.init(), { once: true });
+        window.addEventListener('touchstart', () => AudioFX.init(), { once: true });
 
         // نظام Toast
         function showToast(msg, type = 'info') {
@@ -770,7 +821,7 @@
                 }
             });
 
-            // تحديث بطاقة المؤسس
+            // ربط أزرار بطاقة المؤسس
             if (founderActualUid) {
                 document.getElementById('founder-chat-btn').onclick = () => startDirectChat(founderActualUid, 'Yaman Gadhat 👑');
                 document.getElementById('founder-call-btn').onclick = () => initiateWebRTCCall(founderActualUid, 'Yaman Gadhat 👑', true);
@@ -778,7 +829,7 @@
         }
 
         // -------------------------------------------------------------
-        // نظام مكالمات WebRTC الشامل والمُصلح بالكامل
+        // نظام مكالمات WebRTC المتكامل (متوافق مع Safari & Chrome)
         // -------------------------------------------------------------
         function startCallTimer() {
             clearInterval(callTimerInterval);
@@ -805,7 +856,7 @@
             pendingCandidatesQueue = [];
             peerConnection = new RTCPeerConnection(rtcConfig);
 
-            // عند استقبال التراك من الطرف الآخر
+            // استقبال التراكات
             peerConnection.ontrack = (event) => {
                 if (!remoteStream) remoteStream = new MediaStream();
                 remoteStream.addTrack(event.track);
@@ -815,6 +866,11 @@
                 
                 remoteVideo.srcObject = remoteStream;
                 remoteAudio.srcObject = remoteStream;
+
+                // تشغيل صريح للتوافق مع سفاري
+                remoteVideo.play().catch(() => {});
+                remoteAudio.play().catch(() => {});
+
                 document.getElementById('call-status').innerText = "المكالمة متصلة الآن بجودة فائقة";
             };
 
@@ -827,9 +883,7 @@
                 const cand = pendingCandidatesQueue.shift();
                 try {
                     await peerConnection.addIceCandidate(new RTCIceCandidate(cand));
-                } catch (e) {
-                    console.warn("Candidate add failed:", e);
-                }
+                } catch (e) {}
             }
         }
 
@@ -839,9 +893,8 @@
             }
 
             try {
-                AudioFX.playRingtone();
+                AudioFX.startOutgoingRingback();
                 
-                // جلب الميديا المحلية
                 localStream = await navigator.mediaDevices.getUserMedia({
                     video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" } : false,
                     audio: true
@@ -858,7 +911,6 @@
 
                 localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-                // إنشاء وثيقة المكالمة في Firestore
                 const callDocRef = await addDoc(collection(db, "calls"), {
                     callerId: currentUser.uid,
                     callerName: currentUserData.name,
@@ -886,7 +938,6 @@
                     offer: { type: offerDescription.type, sdp: offerDescription.sdp }
                 });
 
-                // مراقبة قبول المكالمة
                 callUnsubscribe = onSnapshot(callDocRef, async (snapshot) => {
                     const data = snapshot.data();
                     if (!data) return;
@@ -897,13 +948,13 @@
                     }
 
                     if (!peerConnection.currentRemoteDescription && data.answer) {
+                        AudioFX.stopRingtone();
                         await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
                         await processCandidateQueue();
                         startCallTimer();
                     }
                 });
 
-                // الاستماع لمرشحات الإجابة
                 answerCandidatesUnsub = onSnapshot(answerCandidatesCol, (snapshot) => {
                     snapshot.docChanges().forEach(async (change) => {
                         if (change.type === 'added') {
@@ -920,7 +971,8 @@
                 });
 
             } catch (err) {
-                showToast("تعذر بدء المكالمة: تأكد من أذونات الكاميرا ورابط HTTPS!", "error");
+                AudioFX.stopRingtone();
+                showToast("تعذر بدء المكالمة: تأكد من إذن الكاميرا ورابط HTTPS! (" + err.message + ")", "error");
                 hangupCurrentCall();
             }
         };
@@ -939,13 +991,14 @@
                         document.getElementById('incoming-caller-name').innerText = incomingCallData.callerName;
                         document.getElementById('incoming-call-type').innerText = incomingCallData.isVideo ? "مكالمة فيديو واردة 📹" : "مكالمة صوتية واردة 📞";
                         document.getElementById('incoming-call-modal').classList.remove('hidden');
-                        AudioFX.playRingtone();
+                        AudioFX.startIncomingRingtone();
                     }
                 });
             });
         }
 
         window.acceptIncomingCall = async () => {
+            AudioFX.stopRingtone();
             document.getElementById('incoming-call-modal').classList.add('hidden');
             if (!incomingCallData) return;
 
@@ -992,7 +1045,6 @@
 
                 startCallTimer();
 
-                // الاستماع لمرشحات العرض
                 offerCandidatesUnsub = onSnapshot(offerCandidatesCol, (snapshot) => {
                     snapshot.docChanges().forEach(async (change) => {
                         if (change.type === 'added') {
@@ -1018,6 +1070,7 @@
         };
 
         window.rejectIncomingCall = async () => {
+            AudioFX.stopRingtone();
             document.getElementById('incoming-call-modal').classList.add('hidden');
             if (incomingCallData) {
                 await updateDoc(doc(db, "calls", incomingCallData.id), { status: 'rejected' });
@@ -1089,7 +1142,7 @@
                     };
                 }
             } catch (e) {
-                console.warn("Screen share cancelled", e);
+                showToast("مشاركة الشاشة غير مدعومة على هذا الجهاز أو تم إلغاؤها", "info");
             }
         };
 
@@ -1122,7 +1175,7 @@
             const reader = new FileReader();
             reader.onload = (event) => {
                 selectedStoryImageBase64 = event.target.result;
-                showToast("تم إرفاق صورة القصة!", "success");
+                showToast("تم إرفاق صورة القصة بنجاح!", "success");
             };
             reader.readAsDataURL(file);
         });
@@ -1286,7 +1339,7 @@
         };
 
         // -------------------------------------------------------------
-        // المنشورات والإعجابات والتفاعل
+        // المنشورات والتفاعل
         // -------------------------------------------------------------
         window.publishNewPost = async () => {
             const caption = document.getElementById('create-post-caption').value.trim();
@@ -1478,7 +1531,7 @@
         };
 
         // -------------------------------------------------------------
-        // المحادثات والدردشة Direct Messages
+        // المحادثات Direct Messages
         // -------------------------------------------------------------
         let allDmMessages = [];
         window.setDmFilter = (filterName) => {
@@ -1639,7 +1692,7 @@
         });
 
         // -------------------------------------------------------------
-        // الملف الشخصي واستكشاف المستخدمين والبحث
+        // الملف الشخصي واستكشاف المستخدمين
         // -------------------------------------------------------------
         window.openMyProfile = () => viewUserProfile(currentUser.uid);
 
@@ -1715,7 +1768,7 @@
             `).join('');
         }
 
-        // البحث التفاعلي الحي عن المستخدمين
+        // البحث التفاعلي الحي
         document.getElementById('global-search-input').addEventListener('input', (e) => {
             const queryVal = e.target.value.toLowerCase().trim();
             const resultsBox = document.getElementById('search-results-box');

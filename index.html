@@ -1,671 +1,755 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yaman Gadhat | يمان قدحات - Cyber Portfolio</title>
-
-    <!-- Google Fonts & FontAwesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>شبكة يمان قدحات | YAMAN NETWORK VIP</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            gold: '#f59e0b',
+                            goldGlow: '#fbbf24'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(245, 158, 11, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(245, 158, 11, 0.7)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Canvas Confetti للأفراح والتفاعل -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root {
-            --bg: #03050d;
-            --card-bg: rgba(10, 15, 30, 0.75);
-            --border: rgba(0, 243, 255, 0.25);
-            --primary: #00f3ff;
-            --secondary: #8a2be2;
-            --pink: #ff007f;
-            --text: #f8fafc;
-            --muted: #94a3b8;
-            --glow-p: 0 0 25px rgba(0, 243, 255, 0.6);
-            --glow-s: 0 0 25px rgba(138, 43, 226, 0.6);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Glowing Mouse Trail Cursor */
-        .cursor-dot, .cursor-bg {
-            pointer-events: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            border-radius: 50%;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-        }
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            box-shadow: var(--glow-p);
-        }
-        .cursor-bg {
-            width: 35px;
-            height: 35px;
-            border: 2px solid var(--pink);
-            opacity: 0.5;
-            transition: 0.15s ease-out;
-        }
-
-        /* Canvas Background */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        /* Navbar */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 18px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(3, 5, 13, 0.85);
+        body { font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif; }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            z-index: 1000;
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--primary), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: var(--glow-p);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-            text-shadow: var(--glow-p);
-        }
-
-        .btn-admin {
-            background: linear-gradient(45deg, var(--secondary), var(--pink));
-            color: #fff;
-            border: none;
-            padding: 8px 22px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 700;
-            box-shadow: var(--glow-s);
-            transition: 0.3s;
-        }
-
-        .btn-admin:hover {
-            transform: scale(1.05);
-        }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 120px 8% 60px;
-        }
-
-        .hero-text { max-width: 650px; }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 18px;
-            background: rgba(0, 243, 255, 0.08);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.88rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            box-shadow: var(--glow-p);
-        }
-
-        .hero-text h1 {
-            font-size: 3.8rem;
-            font-weight: 900;
-            line-height: 1.15;
-            margin-bottom: 15px;
-        }
-
-        .hero-text h1 span {
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .typing-box {
-            font-size: 1.6rem;
-            color: var(--muted);
-            margin-bottom: 30px;
-            height: 45px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-        }
-
-        .hero-btns { display: flex; gap: 18px; }
-
-        .btn {
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.35s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: #000;
-            box-shadow: var(--glow-p);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.9);
-        }
-
-        .btn-secondary {
-            border: 2px solid var(--secondary);
-            color: #fff;
-            background: rgba(138, 43, 226, 0.15);
-            box-shadow: var(--glow-s);
-        }
-
-        .hero-avatar-box {
-            position: relative;
-            width: 350px;
-            height: 350px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .avatar-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--primary), var(--secondary), var(--pink), var(--primary));
-            animation: rotateRing 8s linear infinite;
-            filter: blur(15px);
-            opacity: 0.75;
-        }
-
-        .avatar-inner {
-            position: relative;
-            width: 92%;
-            height: 92%;
-            border-radius: 50%;
-            background: #090d1a;
-            border: 3px solid var(--primary);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-inner i { font-size: 8rem; color: var(--primary); }
-
-        /* Sections */
-        section { padding: 100px 8%; position: relative; }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.6rem;
-            margin-bottom: 60px;
-            font-weight: 900;
-        }
-
-        .section-title span {
-            color: var(--primary);
-            text-shadow: var(--glow-p);
-        }
-
-        .tilt-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 30px;
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
             backdrop-filter: blur(12px);
-            transition: transform 0.2s ease-out, border-color 0.3s, box-shadow 0.3s;
-            transform-style: preserve-3d;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-
-        .tilt-card:hover {
-            border-color: var(--primary);
-            box-shadow: var(--glow-p);
+        .founder-gradient {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #8b5cf6 100%);
         }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-            gap: 30px;
-        }
-
-        /* Skills */
-        .skill-item { margin-bottom: 20px; }
-        .skill-header { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px; }
-        .progress-bar { height: 12px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 1.2s ease; }
-
-        /* Projects */
-        .project-img { width: 100%; height: 210px; object-fit: cover; border-radius: 14px; margin-bottom: 18px; }
-        .project-tags { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
-        .tag { background: rgba(138, 43, 226, 0.25); color: #d8b4fe; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; }
-
-        /* Timeline */
-        .timeline { position: relative; max-width: 850px; margin: 0 auto; }
-        .timeline::before { content: ''; position: absolute; right: 50%; width: 3px; height: 100%; background: linear-gradient(180deg, var(--primary), var(--pink)); }
-        .timeline-item { margin-bottom: 40px; position: relative; width: 50%; padding-left: 35px; }
-        .timeline-item:nth-child(even) { right: 50%; padding-left: 0; padding-right: 35px; }
-        .timeline-dot { position: absolute; right: -10px; top: 15px; width: 20px; height: 20px; background: var(--primary); border-radius: 50%; box-shadow: var(--glow-p); border: 3px solid #000; }
-        .timeline-item:nth-child(even) .timeline-dot { right: auto; left: -10px; }
-
-        /* Contact & Social */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .social-links { display: flex; gap: 15px; margin-top: 20px; }
-        .social-btn { width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.3rem; text-decoration: none; transition: 0.3s; }
-        .social-btn:hover { background: var(--primary); color: #000; box-shadow: var(--glow-p); }
-
-        /* Inputs */
-        input, textarea { width: 100%; padding: 14px 18px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 12px; color: #fff; margin-bottom: 16px; outline: none; }
-        input:focus, textarea:focus { border-color: var(--primary); box-shadow: var(--glow-p); }
-
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); backdrop-filter: blur(16px); z-index: 3000; justify-content: center; align-items: center; }
-        .admin-modal { background: #080d1a; border: 2px solid var(--primary); border-radius: 24px; width: 90%; max-width: 700px; padding: 30px; max-height: 90vh; overflow-y: auto; }
-
-        @keyframes rotateRing { 100% { transform: rotate(360deg); } }
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        @media (max-width: 850px) {
-            .hero { flex-direction: column; text-align: center; }
-            .hero-text h1 { font-size: 2.6rem; }
-            .hero-btns { justify-content: center; }
-            .timeline::before { right: 15px; }
-            .timeline-item { width: 100%; padding-right: 40px !important; padding-left: 0 !important; right: 0 !important; }
-            .timeline-dot { right: 5px !important; left: auto !important; }
-            .contact-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
 
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-bg" id="cursorBg"></div>
-    <canvas id="bg-canvas"></canvas>
+    <!-- خلفية نيونية متحركة -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute top-1/2 -right-40 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl animate-pulse-slow delay-700"></div>
+    </div>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="logo" id="navLogo">YAMAN GADHAT</div>
-        <ul class="nav-links">
-            <li><a href="#hero">الرئيسية</a></li>
-            <li><a href="#about">من أنا</a></li>
-            <li><a href="#skills">المهارات</a></li>
-            <li><a href="#projects">المشاريع</a></li>
-            <li><a href="#experience">الإنجازات</a></li>
-            <li><a href="#contact">التواصل</a></li>
-        </ul>
-        <button class="btn-admin" onclick="openModal()"><i class="fa-solid fa-user-shield"></i> الأدمن</button>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-        <div class="hero-text reveal">
-            <div class="badge" id="heroBadge"><i class="fa-solid fa-bolt"></i> جاري التحميل...</div>
-            <h1 id="heroTitle">مرحباً، أنا <br><span id="heroName">يمان قدحات</span></h1>
-            <div class="typing-box" id="typewriter"></div>
-            <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> أحدث أعمالي</a>
-                <a href="#contact" class="btn btn-secondary"><i class="fa-solid fa-paper-plane"></i> تواصل معي</a>
+    <!-- شاشة تسجيل الدخول وإنشاء الحساب -->
+    <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl relative border border-white/10 overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1.5 founder-gradient"></div>
+            
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 rounded-2xl founder-gradient mx-auto flex items-center justify-center shadow-lg shadow-amber-500/20 mb-4 animate-float">
+                    <i class="fa-solid fa-crown text-2xl text-white"></i>
+                </div>
+                <h1 class="text-2xl font-black tracking-wide" id="auth-title">شبكة يمان قدحات VIP</h1>
+                <p class="text-xs text-slate-400 mt-1" id="auth-desc">منصة التواصل الاجتماعي المتطورة</p>
+                <div class="mt-2 inline-block px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[11px] text-amber-400 font-semibold">
+                    👑 أدمن المنصة: YamanGadhat
+                </div>
             </div>
-        </div>
-        <div class="hero-avatar-box reveal">
-            <div class="avatar-ring"></div>
-            <div class="avatar-inner" id="avatarBox">
-                <i class="fa-solid fa-user-ninja"></i>
-            </div>
-        </div>
-    </section>
 
-    <!-- About Section -->
-    <section id="about">
-        <h2 class="section-title reveal">نبذة عن <span>يمان قدحات</span></h2>
-        <div class="grid-cards">
-            <div class="tilt-card reveal">
-                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i>
-                <h3>صناعة المحتوى الرقمي</h3>
-                <p id="bioText1">جاري تحميل البيانات...</p>
-            </div>
-            <div class="tilt-card reveal">
-                <i class="fa-solid fa-code" style="font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px;"></i>
-                <h3>التطوير والابتكار البرمجي</h3>
-                <p id="bioText2">جاري تحميل البيانات...</p>
-            </div>
-            <div class="tilt-card reveal">
-                <i class="fa-solid fa-shield-halved" style="font-size: 2.5rem; color: var(--pink); margin-bottom: 15px;"></i>
-                <h3>الأمان والجودة العالية</h3>
-                <p id="bioText3">جاري تحميل البيانات...</p>
-            </div>
-        </div>
-    </section>
+            <form id="auth-form" class="space-y-4">
+                <div id="name-field-wrapper" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" id="lbl-name">الاسم الكامل</label>
+                    <input type="text" id="user-name" placeholder="أدخل اسمك" class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" id="lbl-email">اسم المستخدم أو البريد الإلكتروني</label>
+                    <input type="text" id="user-email" required placeholder="YamanGadhat أو name@example.com" class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1" id="lbl-pass">كلمة المرور</label>
+                    <input type="password" id="user-password" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm transition">
+                </div>
+                
+                <p id="auth-error" class="text-red-400 text-xs bg-red-900/20 p-2.5 rounded-lg border border-red-800/40 hidden"></p>
 
-    <!-- Skills Section -->
-    <section id="skills">
-        <h2 class="section-title reveal">المهارات <span>والقدرات</span></h2>
-        <div class="grid-cards" id="skillsContainer"></div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <h2 class="section-title reveal">المشاريع <span>الأسطورية</span></h2>
-        <div class="grid-cards" id="projectsContainer"></div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience">
-        <h2 class="section-title reveal">مسيرة <span>الإنجازات</span></h2>
-        <div class="timeline" id="timelineContainer"></div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2 class="section-title reveal">تواصل <span>مع يمان</span></h2>
-        <div class="contact-grid">
-            <div class="tilt-card reveal">
-                <h3>معلومات التواصل الرسمية</h3>
-                <p style="margin-top: 15px;" id="contactEmail"><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> البريد: ...</p>
-                <p style="margin-top: 10px;" id="contactLocation"><i class="fa-solid fa-location-dot" style="color: var(--pink);"></i> الموقع: ...</p>
-                <div class="social-links" id="socialContainer"></div>
-            </div>
-            <form class="tilt-card reveal" onsubmit="event.preventDefault(); alert('تم استلام رسالتك بنجاح!');">
-                <h3>أرسل رسالة مباشرة</h3>
-                <input type="text" placeholder="اسمك الكريم" required style="margin-top: 15px;">
-                <input type="email" placeholder="بريدك الإلكتروني" required>
-                <textarea rows="4" placeholder="موضوع الرسالة..." required></textarea>
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">إرسال الرسالة</button>
+                <button type="submit" id="auth-submit-btn" class="w-full py-3.5 rounded-xl founder-gradient text-white font-bold text-sm transition shadow-lg shadow-amber-500/20 hover:opacity-95 transform active:scale-98">
+                    تسجيل الدخول
+                </button>
             </form>
-        </div>
-    </section>
 
-    <!-- Admin Modal -->
-    <div class="modal-overlay" id="adminModal">
-        <div class="admin-modal">
-            <span style="float: left; font-size: 1.5rem; cursor: pointer; color: var(--pink);" onclick="closeModal()">&times;</span>
-            <div id="loginView">
-                <h2 style="color: var(--primary); margin-bottom: 15px;">دخول الأدمن المحمي</h2>
-                <input type="text" id="userInput" placeholder="اسم المستخدم">
-                <input type="password" id="passInput" placeholder="كلمة السر">
-                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="verifyAdmin()">دخول</button>
-            </div>
-            <div id="dashView" style="display: none;">
-                <h2 style="color: var(--primary); margin-bottom: 10px;">مولد كود data.json المحدث 🔥</h2>
-                <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 15px;">يمكنك هنا توليد الكود المحدث لنسخه ولصقه في GitHub مباشرة من أي جهاز!</p>
-                <textarea id="jsonOutput" rows="12" style="font-family: monospace; font-size: 0.85rem; direction: ltr;"></textarea>
-                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="copyJsonCode()"><i class="fa-solid fa-copy"></i> نسخ كود JSON إلى الحافظة</button>
+            <div class="text-center mt-6">
+                <button id="toggle-auth-mode" class="text-xs text-slate-400 hover:text-amber-400 transition font-semibold">
+                    ليس لديك حساب؟ أنشئ حساباً جديداً
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Main Logic Fetch Engine -->
-    <script>
-        let siteData = {};
-        let typingWords = ["صانع محتوى", "مطور ويب"];
+    <!-- التطبيق الرئيسي -->
+    <div id="main-app" class="hidden min-h-screen flex flex-col relative z-10">
+        
+        <!-- الشريط العلوي الفاخر (Navbar) -->
+        <header class="sticky top-0 z-40 glass-panel border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between gap-4">
+                
+                <!-- الشعار -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="w-11 h-11 rounded-2xl founder-gradient flex items-center justify-center text-white font-black text-lg shadow-md shadow-amber-500/20">
+                        YG
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-black text-lg tracking-wider text-white">YAMAN</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 font-bold">VIP</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 tracking-wider">OFFICIAL PLATFORM</p>
+                    </div>
+                </div>
 
-        // 1. Fetching data.json dynamically
-        fetch('data.json')
-            .then(res => res.json())
-            .then(data => {
-                siteData = data;
-                renderPage(data);
-            })
-            .catch(err => {
-                console.warn("لم يتم العثور على data.json المحلي، يتم تشغيل البيانات الاحتياطية.");
-            });
+                <!-- شريط البحث الذكي الذاتي -->
+                <div class="flex-1 max-w-lg relative">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-slate-400 text-sm"></i>
+                    <input type="text" id="search-input" placeholder="ابحث عن أشخاص، منشورات، أو Yaman Gadhat..." class="w-full pr-11 pl-4 py-2.5 text-sm bg-slate-900/90 border border-slate-700/70 rounded-full focus:bg-slate-900 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition text-white">
+                </div>
 
-        function renderPage(data) {
-            // Navbar & Hero
-            document.getElementById('navLogo').innerText = data.hero.logo;
-            document.getElementById('heroBadge').innerHTML = `<i class="fa-solid fa-bolt"></i> ${data.hero.badge}`;
-            document.getElementById('heroName').innerText = data.hero.name;
-            if(data.hero.avatar) document.getElementById('avatarBox').innerHTML = `<img src="${data.hero.avatar}">`;
+                <!-- الإعدادات، اللغة، زر الخروج -->
+                <div class="flex items-center gap-3">
+                    <!-- محول اللغة -->
+                    <button id="lang-toggle-btn" class="px-3 py-1.5 rounded-full glass-card border border-white/10 hover:border-amber-400 text-xs font-bold text-amber-400 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="current-lang-text">EN</span>
+                    </button>
+
+                    <!-- بروفايل المستخدم الحالي -->
+                    <div class="hidden sm:flex items-center gap-2.5 glass-card px-3.5 py-1.5 rounded-full border border-white/10">
+                        <div id="user-avatar" class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs">U</div>
+                        <div class="flex flex-col text-right">
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs font-bold text-white max-w-[100px] truncate" id="current-user-name">مستخدم</span>
+                                <span id="admin-badge-icon" class="hidden text-amber-400 text-xs" title="مدير المنصة"><i class="fa-solid fa-crown"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- زر تسجيل الخروج -->
+                    <button id="logout-btn" class="w-10 h-10 rounded-full glass-card border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition" title="تسجيل الخروج">
+                        <i class="fa-solid fa-power-off text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            typingWords = data.hero.typing;
-
-            // Bio
-            document.getElementById('bioText1').innerText = data.bio.t1;
-            document.getElementById('bioText2').innerText = data.bio.t2;
-            document.getElementById('bioText3').innerText = data.bio.t3;
-
-            // Skills
-            document.getElementById('skillsContainer').innerHTML = data.skills.map(s => `
-                <div class="tilt-card skill-item">
-                    <div class="skill-header">
-                        <span>${s.name}</span>
-                        <span style="color: var(--primary);">${s.level}%</span>
+            <!-- العمود الأيسر / الرئيسي: القصص، صندوق النشر، والمنشورات (8 أعمدة) -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <!-- شريط القصص والأعضاء المميزين (Stories Reel) -->
+                <div class="glass-panel p-4 rounded-3xl border border-white/10 overflow-x-auto custom-scrollbar flex items-center gap-4">
+                    <!-- قصة يمان قدحات (المؤسس) -->
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer group flex-shrink-0" onclick="showFounderModal()">
+                        <div class="w-16 h-16 rounded-full p-0.5 founder-gradient animate-glow group-hover:scale-105 transition">
+                            <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-amber-400 font-black text-xl border-2 border-slate-950">
+                                👑
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-bold text-amber-400 flex items-center gap-0.5">يمان قدحات <i class="fa-solid fa-circle-check text-[9px] text-blue-400"></i></span>
                     </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${s.level}%"></div>
-                    </div>
-                </div>
-            `).join('');
 
-            // Projects
-            document.getElementById('projectsContainer').innerHTML = data.projects.map(p => `
-                <div class="tilt-card">
-                    <img src="${p.img}" class="project-img" alt="${p.title}">
-                    <h3>${p.title}</h3>
-                    <p style="color: var(--muted); font-size: 0.9rem; margin-top: 8px;">${p.desc}</p>
-                    <div class="project-tags">
-                        ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                    <!-- قصص أخرى تفاعلية -->
+                    <div class="flex flex-col items-center gap-1.5 opacity-80 hover:opacity-100 transition cursor-pointer flex-shrink-0">
+                        <div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-tr from-blue-500 to-cyan-400">
+                            <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-blue-400 font-bold text-lg border-2 border-slate-950">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-medium text-slate-300" id="story-dev">المطورين</span>
                     </div>
-                </div>
-            `).join('');
 
-            // Timeline
-            document.getElementById('timelineContainer').innerHTML = data.timeline.map(t => `
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="tilt-card">
-                        <h4>${t.title}</h4>
-                        <span style="color: var(--primary); font-size: 0.85rem; font-weight: bold;">${t.date}</span>
-                        <p style="margin-top: 10px; color: var(--muted);">${t.desc}</p>
+                    <div class="flex flex-col items-center gap-1.5 opacity-80 hover:opacity-100 transition cursor-pointer flex-shrink-0">
+                        <div class="w-16 h-16 rounded-full p-0.5 bg-gradient-to-tr from-purple-500 to-pink-500">
+                            <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-pink-400 font-bold text-lg border-2 border-slate-950">
+                                <i class="fa-solid fa-fire"></i>
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-medium text-slate-300" id="story-trends">الترند اليوم</span>
                     </div>
                 </div>
-            `).join('');
 
-            // Contact
-            document.getElementById('contactEmail').innerHTML = `<i class="fa-solid fa-envelope" style="color: var(--primary);"></i> البريد: ${data.contact.email}`;
-            document.getElementById('contactLocation').innerHTML = `<i class="fa-solid fa-location-dot" style="color: var(--pink);"></i> الموقع: ${data.contact.location}`;
-            document.getElementById('socialContainer').innerHTML = `
-                ${data.contact.youtube ? `<a href="${data.contact.youtube}" target="_blank" class="social-btn"><i class="fa-brands fa-youtube"></i></a>` : ''}
-                ${data.contact.github ? `<a href="${data.contact.github}" target="_blank" class="social-btn"><i class="fa-brands fa-github"></i></a>` : ''}
-                ${data.contact.instagram ? `<a href="${data.contact.instagram}" target="_blank" class="social-btn"><i class="fa-brands fa-instagram"></i></a>` : ''}
-            `;
-        }
+                <!-- بطاقة البحث الخاصة بالمؤسس (تظهر فور البحث عن يمان قدحات) -->
+                <div id="founder-search-card" class="hidden glass-panel p-6 rounded-3xl border-2 border-amber-500/50 bg-gradient-to-r from-amber-500/10 via-slate-900/80 to-purple-600/10 shadow-2xl relative overflow-hidden animate-glow">
+                    <div class="flex flex-col sm:flex-row items-center gap-5">
+                        <div class="w-20 h-20 rounded-2xl founder-gradient flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-amber-500/30">
+                            👑
+                        </div>
+                        <div class="flex-1 text-center sm:text-right space-y-1">
+                            <div class="flex items-center justify-center sm:justify-start gap-2">
+                                <h3 class="text-xl font-black text-white">Yaman Gadhat | يمان قدحات</h3>
+                                <span class="text-blue-400 text-base" title="حساب موثق ورسمي"><i class="fa-solid fa-circle-check"></i></span>
+                            </div>
+                            <p class="text-xs text-amber-400 font-bold">مؤسس ومدير منصة Yaman Social Network (Founder & CEO)</p>
+                            <p class="text-xs text-slate-300 leading-relaxed">مطور ومبتكر المنصة، الحساب الإداري الرسمي والرئيسي للشبكة.</p>
+                        </div>
+                        <button onclick="sendFounderMessage()" class="px-5 py-2.5 rounded-xl founder-gradient text-white font-bold text-xs shadow-lg shadow-amber-500/20 hover:scale-105 transition">
+                            <i class="fa-solid fa-paper-plane mr-1"></i> مراسلة المؤسس
+                        </button>
+                    </div>
+                </div>
 
-        /* --- Obfuscated Security Login --- */
-        function verifyAdmin() {
-            const u = document.getElementById('userInput').value;
-            const p = document.getElementById('passInput').value;
+                <!-- صندوق إنشاء منشور جديد -->
+                <div class="glass-panel rounded-3xl p-5 border border-white/10 shadow-xl space-y-4">
+                    <div class="flex gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-blue-600/30 border border-blue-500/30 text-blue-400 flex items-center justify-center font-black text-sm" id="publisher-avatar">
+                            U
+                        </div>
+                        <textarea id="post-text" rows="3" placeholder="شارك أفكارك مع مجتمع يمان قدحات..." class="w-full p-3.5 bg-slate-900/80 border border-slate-700/60 rounded-2xl focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none text-sm text-slate-100 placeholder-slate-500 resize-none transition"></textarea>
+                    </div>
 
-            if (btoa(u) === 'WWFtYW4=' && btoa(p) === 'WWFtYW5AMjAwOA==') {
-                document.getElementById('loginView').style.display = 'none';
-                document.getElementById('dashView').style.display = 'block';
-                document.getElementById('jsonOutput').value = JSON.stringify(siteData, null, 2);
-            } else {
-                alert('⚠️ خطأ في بيانات الدخول!');
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/5 pt-3">
+                        <div class="flex items-center gap-2 flex-1">
+                            <div class="relative flex-1 max-w-sm">
+                                <i class="fa-solid fa-image absolute right-3 top-2.5 text-slate-500 text-xs"></i>
+                                <input type="url" id="post-image-url" placeholder="رابط صورة (اختياري)..." class="w-full pr-8 pl-3 py-2 text-xs bg-slate-900 border border-slate-700 rounded-xl focus:border-blue-500 outline-none text-slate-200">
+                            </div>
+                        </div>
+
+                        <button id="submit-post-btn" class="px-6 py-2.5 rounded-xl founder-gradient text-white text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-amber-500/20 hover:scale-105">
+                            <span id="btn-publish-text">نشر المنشور</span>
+                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- تغذية المنشورات الحية (Feed) -->
+                <div id="posts-container" class="space-y-6">
+                    <div class="text-center py-16 glass-panel rounded-3xl border border-white/5 text-slate-400 flex flex-col items-center gap-3">
+                        <i class="fa-solid fa-circle-notch fa-spin text-2xl text-amber-500"></i>
+                        <span id="lbl-loading">جاري تحميل المنشورات المباشرة...</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- العمود الأيمن / الجانبي: الملف الشخصي للمؤسس + الدردشة المباشرة (4 أعمدة) -->
+            <div class="lg:col-span-4 space-y-6">
+                
+                <!-- كرت المؤسس الجانبي الدائم -->
+                <div class="glass-panel p-6 rounded-3xl border border-amber-500/30 relative overflow-hidden group">
+                    <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl founder-gradient p-0.5 flex items-center justify-center font-black text-2xl text-white shadow-lg shadow-amber-500/30">
+                            YG
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1">
+                                <h4 class="font-black text-white text-base">Yaman Gadhat</h4>
+                                <i class="fa-solid fa-circle-check text-blue-400 text-xs"></i>
+                            </div>
+                            <p class="text-xs text-amber-400 font-bold">المؤسس والمدير التنفيذي</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        مرحباً بكم في شبكتي الخاصة. تم تصميم وتطوير هذه المنصة لتوفر أفضل تجربة تواصل حي وفوري.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                        <div class="p-2.5 rounded-xl bg-slate-900/60 border border-white/5">
+                            <span class="block font-black text-amber-400">100%</span>
+                            <span class="text-[10px] text-slate-400">أداء فوري</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/60 border border-white/5">
+                            <span class="block font-black text-blue-400">VIP</span>
+                            <span class="text-[10px] text-slate-400">عضوية ذهبية</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- صندوق الدردشة الحية الفورية (Live Chat) -->
+                <div id="chat-box" class="glass-panel rounded-3xl border border-white/10 flex flex-col h-[520px] shadow-2xl overflow-hidden">
+                    <div class="p-4 border-b border-white/10 bg-slate-900/70 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></span>
+                            <h3 class="font-black text-xs tracking-wide text-white uppercase" id="chat-title">غرفة الدردشة الحية</h3>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-bold">Realtime</span>
+                    </div>
+
+                    <!-- نافذة رسائل الدردشة -->
+                    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 custom-scrollbar text-xs"></div>
+
+                    <!-- إرسال رسالة شات -->
+                    <form id="chat-form" class="p-3 border-t border-white/10 bg-slate-900/80 flex gap-2">
+                        <input type="text" id="chat-input" placeholder="اكتب رسالة فورية..." required class="flex-1 px-3.5 py-2.5 text-xs bg-slate-950 border border-slate-700/80 rounded-xl focus:border-amber-500 outline-none text-white transition">
+                        <button type="submit" class="w-10 h-10 founder-gradient text-white rounded-xl flex items-center justify-center hover:scale-105 transition shadow-md shadow-amber-500/20">
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- نافذة منبثقة للمؤسس (Founder Modal) -->
+    <div id="founder-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+        <div class="glass-panel max-w-md w-full p-6 rounded-3xl border-2 border-amber-500/50 shadow-2xl text-center space-y-4 relative">
+            <button onclick="closeFounderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="w-20 h-20 rounded-2xl founder-gradient mx-auto flex items-center justify-center text-4xl shadow-xl shadow-amber-500/40">
+                👑
+            </div>
+            <h3 class="text-xl font-black text-white">Yaman Gadhat (يمان قدحات)</h3>
+            <p class="text-xs text-amber-400 font-bold">المطور والمؤسس والمدير العام للشبكة</p>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                شكراً لزيارتك للمنصة الرسمية! يمكنك التواصل مباشرة والمشاركة في المنشورات والدردشة العامة.
+            </p>
+            <div class="pt-2">
+                <button onclick="closeFounderModal()" class="w-full py-2.5 rounded-xl founder-gradient text-white font-bold text-xs">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript & Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // إعدادات Firebase الخاصة بمشروعك
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZWCgDTUHuyBWIT0kS6hGdsjxyYRuWHxc",
+            authDomain: "yaman-be0f8.firebaseapp.com",
+            projectId: "yaman-be0f8",
+            storageBucket: "yaman-be0f8.firebasestorage.app",
+            messagingSenderId: "466080305690",
+            appId: "1:466080305690:web:c618c2e32226ec2b2b37a3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let isSignUpMode = false;
+        let allPostsData = [];
+        let currentLang = 'ar';
+        let isAdminUser = false;
+
+        // القاموس متعدد اللغات
+        const i18n = {
+            ar: {
+                title: "شبكة يمان قدحات VIP",
+                desc: "منصة التواصل الاجتماعي المتطورة",
+                signIn: "تسجيل الدخول",
+                signUp: "إنشاء حساب جديد",
+                haveAcc: "لديك حساب بالفعل؟ سجل دخولك",
+                noAcc: "ليس لديك حساب؟ أنشئ حساباً جديداً",
+                publish: "نشر المنشور",
+                publishing: "جاري النشر...",
+                loading: "جاري تحميل المنشورات المباشرة...",
+                noPosts: "لا توجد منشورات بعد، كن أول من يشارك!",
+                chatTitle: "غرفة الدردشة الحية",
+                storyDev: "المطورين",
+                storyTrends: "الترند اليوم"
+            },
+            en: {
+                title: "YAMAN GADHAT NETWORK VIP",
+                desc: "Next-Generation Social Experience",
+                signIn: "Sign In",
+                signUp: "Create New Account",
+                haveAcc: "Already have an account? Sign In",
+                noAcc: "Don't have an account? Create One",
+                publish: "Publish Post",
+                publishing: "Publishing...",
+                loading: "Loading realtime feeds...",
+                noPosts: "No posts yet. Be the first to share!",
+                chatTitle: "Live Community Chat",
+                storyDev: "Developers",
+                storyTrends: "Trends Today"
             }
-        }
+        };
 
-        function copyJsonCode() {
-            const copyText = document.getElementById("jsonOutput");
-            copyText.select();
-            document.execCommand("copy");
-            alert("✅ تم نسخ كود JSON المحدث! يمكنك الآن الذهاب إلى GitHub ولصقه داخل ملف data.json ليتحدث الموقع لجميع الناس.");
-        }
-
-        function openModal() { document.getElementById('adminModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('adminModal').style.display = 'none'; }
-
-        /* --- Typewriter --- */
-        let twIndex = 0, twCharIndex = 0, isDeleting = false;
-        function typeWriter() {
-            const currentWord = typingWords[twIndex % typingWords.length];
-            const el = document.getElementById("typewriter");
-
-            if (isDeleting) {
-                el.textContent = currentWord.substring(0, twCharIndex - 1);
-                twCharIndex--;
-            } else {
-                el.textContent = currentWord.substring(0, twCharIndex + 1);
-                twCharIndex++;
-            }
-
-            if (!isDeleting && twCharIndex === currentWord.length) {
-                isDeleting = true;
-                setTimeout(typeWriter, 1800);
-            } else if (isDeleting && twCharIndex === 0) {
-                isDeleting = false;
-                twIndex++;
-                setTimeout(typeWriter, 400);
-            } else {
-                setTimeout(typeWriter, isDeleting ? 40 : 80);
-            }
-        }
-        typeWriter();
-
-        /* --- Cursor & 3D Tilt --- */
-        const cursorDot = document.getElementById('cursorDot');
-        const cursorBg = document.getElementById('cursorBg');
-        window.addEventListener('mousemove', (e) => {
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-            cursorBg.style.left = e.clientX + 'px';
-            cursorBg.style.top = e.clientY + 'px';
+        // تبديل اللغة
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+        langToggleBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = currentLang;
+            document.getElementById('current-lang-text').innerText = currentLang === 'ar' ? 'EN' : 'عربي';
+            applyTranslations();
+            renderPosts(allPostsData);
         });
 
-        document.addEventListener('mousemove', (e) => {
-            document.querySelectorAll('.tilt-card').forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                if(x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    card.style.transform = `perspective(1000px) rotateX(${(y - centerY) / 15}deg) rotateY(${(centerX - x) / 15}deg) translateY(-5px)`;
+        function applyTranslations() {
+            const t = i18n[currentLang];
+            document.getElementById('auth-title').innerText = isSignUpMode ? t.signUp : t.title;
+            document.getElementById('auth-desc').innerText = t.desc;
+            document.getElementById('auth-submit-btn').innerText = isSignUpMode ? t.signUp : t.signIn;
+            document.getElementById('toggle-auth-mode').innerText = isSignUpMode ? t.haveAcc : t.noAcc;
+            document.getElementById('btn-publish-text').innerText = t.publish;
+            document.getElementById('lbl-loading').innerText = t.loading;
+            document.getElementById('chat-title').innerText = t.chatTitle;
+            document.getElementById('story-dev').innerText = t.storyDev;
+            document.getElementById('story-trends').innerText = t.storyTrends;
+        }
+
+        // عناصر المصادقة
+        const authScreen = document.getElementById('auth-screen');
+        const mainApp = document.getElementById('main-app');
+        const authForm = document.getElementById('auth-form');
+        const toggleAuthModeBtn = document.getElementById('toggle-auth-mode');
+        const nameFieldWrapper = document.getElementById('name-field-wrapper');
+        const authError = document.getElementById('auth-error');
+
+        toggleAuthModeBtn.addEventListener('click', () => {
+            isSignUpMode = !isSignUpMode;
+            nameFieldWrapper.classList.toggle('hidden', !isSignUpMode);
+            applyTranslations();
+            authError.classList.add('hidden');
+        });
+
+        // تسجيل الدخول مع معالجة حساب الأدمن YamanGadhat
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authError.classList.add('hidden');
+            let emailInput = document.getElementById('user-email').value.trim();
+            const passwordInput = document.getElementById('user-password').value.trim();
+            const nameInput = document.getElementById('user-name').value.trim();
+
+            // فحص إذا كان الداخل هو الأدمن
+            if (emailInput.toLowerCase() === 'yamangadhat' || emailInput.toLowerCase() === 'yaman gadhat') {
+                emailInput = "yamangadhat@vip.admin";
+            }
+
+            try {
+                if (isSignUpMode) {
+                    const cred = await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
+                    const displayName = nameInput || (emailInput.includes('admin') ? "Yaman Gadhat 👑" : emailInput.split('@')[0]);
+                    await updateProfile(cred.user, { displayName });
                 } else {
-                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+                    await signInWithEmailAndPassword(auth, emailInput, passwordInput);
                 }
-            });
-        });
-
-        /* --- Canvas Background Particles --- */
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = (Math.random() - 0.5) * 1.2;
-                this.speedY = (Math.random() - 0.5) * 1.2;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = '#00f3ff';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        for (let i = 0; i < 70; i++) particles.push(new Particle());
-
-        function animateCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    let dx = particles[a].x - particles[b].x;
-                    let dy = particles[a].y - particles[b].y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 110) {
-                        ctx.strokeStyle = `rgba(0, 243, 255, ${1 - dist / 110})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
+            } catch (err) {
+                // إذا كان الأدمن يسجل لأول مرة ولم يكن الحساب موجوداً
+                if (emailInput === "yamangadhat@vip.admin" && passwordInput === "Yaman@2008") {
+                    try {
+                        const newAdmin = await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
+                        await updateProfile(newAdmin.user, { displayName: "Yaman Gadhat 👑" });
+                        return;
+                    } catch (e2) {
+                        authError.innerText = e2.message;
+                        authError.classList.remove('hidden');
+                        return;
                     }
                 }
+                authError.innerText = "خطأ: " + err.message;
+                authError.classList.remove('hidden');
             }
-            requestAnimationFrame(animateCanvas);
-        }
-        animateCanvas();
+        });
 
-        /* --- Scroll Reveal --- */
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+        // تسجيل الخروج
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+
+        // مراقبة حالة المستخدم
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                isAdminUser = user.email === "yamangadhat@vip.admin" || (user.displayName && user.displayName.includes("Yaman Gadhat"));
+                
+                authScreen.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                
+                const name = user.displayName || user.email;
+                document.getElementById('current-user-name').innerText = name;
+                document.getElementById('user-avatar').innerText = name[0].toUpperCase();
+                document.getElementById('publisher-avatar').innerText = name[0].toUpperCase();
+                
+                if (isAdminUser) {
+                    document.getElementById('admin-badge-icon').classList.remove('hidden');
+                }
+
+                // إطلاق احتفال خفيف عند الدخول
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+
+                initRealtimePosts();
+                initRealtimeChat();
+            } else {
+                currentUser = null;
+                isAdminUser = false;
+                authScreen.classList.remove('hidden');
+                mainApp.classList.add('hidden');
+            }
+        });
+
+        // نشر منشور جديد
+        document.getElementById('submit-post-btn').addEventListener('click', async () => {
+            const text = document.getElementById('post-text').value.trim();
+            const imageUrl = document.getElementById('post-image-url').value.trim();
+
+            if (!text && !imageUrl) return alert("يرجى كتابة نص أو إرفاق صورة!");
+
+            const btn = document.getElementById('submit-post-btn');
+            btn.disabled = true;
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    userId: currentUser.uid,
+                    authorName: currentUser.displayName || currentUser.email.split('@')[0],
+                    isFounder: isAdminUser,
+                    text: text,
+                    imageUrl: imageUrl || null,
+                    likes: [],
+                    comments: [],
+                    createdAt: serverTimestamp()
+                });
+                
+                document.getElementById('post-text').value = '';
+                document.getElementById('post-image-url').value = '';
+                
+                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+            } catch (err) {
+                alert("حدث خطأ أثناء النشر: " + err.message);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // الاستماع للمنشورات
+        const postsContainer = document.getElementById('posts-container');
+        function initRealtimePosts() {
+            const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snapshot) => {
+                allPostsData = [];
+                snapshot.forEach(doc => {
+                    allPostsData.push({ id: doc.id, ...doc.data() });
+                });
+                renderPosts(allPostsData);
             });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // رسم المنشورات
+        function renderPosts(posts) {
+            if (posts.length === 0) {
+                postsContainer.innerHTML = `<div class="text-center py-16 glass-panel rounded-3xl border border-white/5 text-slate-400">${i18n[currentLang].noPosts}</div>`;
+                return;
+            }
+
+            postsContainer.innerHTML = posts.map(post => {
+                const isLiked = post.likes && post.likes.includes(currentUser.uid);
+                const isPostOwnerOrAdmin = isAdminUser || (post.userId === currentUser.uid);
+                const isFounderPost = post.isFounder || (post.authorName && post.authorName.includes("Yaman"));
+
+                return `
+                    <div class="glass-panel p-6 rounded-3xl border ${isFounderPost ? 'border-amber-500/40 bg-gradient-to-br from-amber-500/5 via-slate-900 to-slate-900' : 'border-white/10'} shadow-xl space-y-4 transition hover:border-white/20">
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-2xl ${isFounderPost ? 'founder-gradient' : 'bg-gradient-to-tr from-blue-600 to-indigo-600'} text-white font-black flex items-center justify-center text-lg shadow-lg">
+                                    ${isFounderPost ? '👑' : (post.authorName ? post.authorName[0].toUpperCase() : 'U')}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5">
+                                        <h4 class="font-black text-sm text-white">${post.authorName}</h4>
+                                        ${isFounderPost ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30">المؤسس</span>' : ''}
+                                    </div>
+                                    <span class="text-[10px] text-slate-400">منشور رسمي • لحظي</span>
+                                </div>
+                            </div>
+
+                            ${isPostOwnerOrAdmin ? `
+                                <button onclick="deletePost('${post.id}')" class="text-slate-500 hover:text-red-400 p-2 text-xs transition" title="حذف المنشور">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+
+                        ${post.text ? `<p class="text-sm leading-relaxed text-slate-200">${post.text}</p>` : ''}
+                        
+                        ${post.imageUrl ? `
+                            <div class="rounded-2xl overflow-hidden border border-white/10 max-h-[450px] bg-black/40">
+                                <img src="${post.imageUrl}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+                            </div>
+                        ` : ''}
+
+                        <!-- أزرار التفاعل -->
+                        <div class="flex items-center justify-between border-t border-white/5 pt-3 text-xs text-slate-400">
+                            <button onclick="toggleLike('${post.id}', ${isLiked})" class="flex items-center gap-2 px-3 py-1.5 rounded-xl ${isLiked ? 'bg-red-500/10 text-red-400 font-bold' : 'hover:bg-white/5'} transition">
+                                <i class="${isLiked ? 'fa-solid text-red-500 animate-bounce' : 'fa-regular'} fa-heart text-sm"></i>
+                                <span>${post.likes ? post.likes.length : 0}</span>
+                            </button>
+
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-regular fa-comment-dots text-sm"></i>
+                                <span>${post.comments ? post.comments.length : 0} تعليق</span>
+                            </div>
+                        </div>
+
+                        <!-- التعليقات -->
+                        <div class="bg-slate-900/50 p-3.5 rounded-2xl space-y-2 border border-white/5">
+                            <div class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar text-xs">
+                                ${(post.comments || []).map(c => `
+                                    <div class="bg-slate-950/60 p-2.5 rounded-xl border border-white/5 flex flex-col">
+                                        <span class="font-bold text-amber-400 text-[11px]">${c.author}</span>
+                                        <span class="text-slate-300 text-xs mt-0.5">${c.text}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="flex gap-2 pt-1">
+                                <input type="text" id="comment-input-${post.id}" placeholder="اكتب تعليقاً..." class="flex-1 text-xs px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:border-amber-500 outline-none text-white">
+                                <button onclick="addComment('${post.id}')" class="founder-gradient text-white text-xs px-4 py-2 rounded-xl font-bold hover:scale-105 transition">إرسال</button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // تفاعل الإعجاب
+        window.toggleLike = async (postId, currentlyLiked) => {
+            const postRef = doc(db, "posts", postId);
+            if (currentlyLiked) {
+                await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
+            } else {
+                await updateDoc(postRef, { likes: arrayUnion(currentUser.uid) });
+            }
+        };
+
+        // إضافة تعليق
+        window.addComment = async (postId) => {
+            const input = document.getElementById(`comment-input-${postId}`);
+            const commentText = input.value.trim();
+            if (!commentText) return;
+
+            const postRef = doc(db, "posts", postId);
+            await updateDoc(postRef, {
+                comments: arrayUnion({
+                    author: currentUser.displayName || currentUser.email.split('@')[0],
+                    text: commentText,
+                    createdAt: new Date().toISOString()
+                })
+            });
+            input.value = '';
+        };
+
+        // حذف منشور (خاص بالصاحب أو بالأدمن YamanGadhat)
+        window.deletePost = async (postId) => {
+            if (confirm("هل أنت متأكد من حذف هذا المنشور؟")) {
+                await deleteDoc(doc(db, "posts", postId));
+            }
+        };
+
+        // البحث الذكي + إظهار المؤسس عند البحث
+        const searchInput = document.getElementById('search-input');
+        const founderSearchCard = document.getElementById('founder-search-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const queryVal = e.target.value.toLowerCase().trim();
+            
+            // إذا كان البحث عن يمان قدحات
+            if (queryVal.includes('yaman') || queryVal.includes('gadhat') || queryVal.includes('يمان') || queryVal.includes('قدحات')) {
+                founderSearchCard.classList.remove('hidden');
+            } else {
+                founderSearchCard.classList.add('hidden');
+            }
+
+            const filtered = allPostsData.filter(p => 
+                (p.text && p.text.toLowerCase().includes(queryVal)) ||
+                (p.authorName && p.authorName.toLowerCase().includes(queryVal))
+            );
+            renderPosts(filtered);
+        });
+
+        // الشات المباشر
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+
+        function initRealtimeChat() {
+            const q = query(collection(db, "chats"), orderBy("createdAt", "asc"));
+            onSnapshot(q, (snapshot) => {
+                chatMessages.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const msg = doc.data();
+                    const isMe = msg.userId === currentUser.uid;
+                    const isFounderMsg = msg.isFounder || (msg.authorName && msg.authorName.includes("Yaman"));
+
+                    const msgEl = document.createElement('div');
+                    msgEl.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+                    msgEl.innerHTML = `
+                        <span class="text-[10px] ${isFounderMsg ? 'text-amber-400 font-bold' : 'text-slate-400'} mb-1 flex items-center gap-1">
+                            ${msg.authorName} ${isFounderMsg ? '👑' : ''}
+                        </span>
+                        <div class="px-3.5 py-2 rounded-2xl max-w-[85%] text-xs ${isMe ? 'founder-gradient text-white rounded-bl-none shadow-md shadow-amber-500/10' : 'bg-slate-900 border border-white/10 text-slate-200 rounded-br-none'}">
+                            ${msg.text}
+                        </div>
+                    `;
+                    chatMessages.appendChild(msgEl);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            await addDoc(collection(db, "chats"), {
+                userId: currentUser.uid,
+                authorName: currentUser.displayName || currentUser.email.split('@')[0],
+                isFounder: isAdminUser,
+                text: text,
+                createdAt: serverTimestamp()
+            });
+            input.value = '';
+        });
+
+        // المودال الخاص بالمؤسس
+        window.showFounderModal = () => document.getElementById('founder-modal').classList.remove('hidden');
+        window.closeFounderModal = () => document.getElementById('founder-modal').classList.add('hidden');
+        window.sendFounderMessage = () => {
+            document.getElementById('chat-input').value = "@YamanGadhat ";
+            document.getElementById('chat-input').focus();
+        };
+
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YamanGram Pro | منصة التواصل والمكالمات الحية</title>
+    <title>YamanGram Pro | الإصدار المتطور</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,12 +16,13 @@
                         ig: {
                             black: '#000000',
                             card: '#121212',
-                            elevated: '#1c1c1e',
-                            border: '#262626',
+                            elevated: '#1e1e1e',
+                            border: '#2a2a2a',
                             subtle: '#363636',
                             blue: '#0095f6',
                             red: '#ed4956',
-                            gold: '#f59e0b'
+                            gold: '#f59e0b',
+                            online: '#10b981'
                         }
                     }
                 }
@@ -42,22 +43,32 @@
         
         @keyframes heartFade {
             0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 1; }
             100% { transform: scale(1); opacity: 0; }
         }
         .animate-heart-fade { animation: heartFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes ripple {
+            0% { box-shadow: 0 0 0 0 rgba(237, 73, 86, 0.6); }
+            70% { box-shadow: 0 0 0 15px rgba(237, 73, 86, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(237, 73, 86, 0); }
+        }
+        .animate-calling { animation: ripple 1.5s infinite; }
     </style>
 </head>
 <body class="bg-ig-black text-slate-100 min-h-screen selection:bg-ig-blue selection:text-white pb-16 md:pb-0 overflow-x-hidden">
 
+    <!-- نظام التنبيهات المنبثقة Toast Notifications -->
+    <div id="toast-container" class="fixed top-5 right-5 left-5 md:left-auto md:w-96 z-50 pointer-events-none space-y-2"></div>
+
     <!-- شاشة تسجيل الدخول / إنشاء الحساب -->
-    <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ig-black">
+    <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ig-black/95 backdrop-blur-md">
         <div class="w-full max-w-sm p-8 rounded-3xl bg-ig-card border border-ig-border shadow-2xl space-y-6">
             <div class="text-center space-y-2">
                 <h1 class="text-4xl font-black italic tracking-wide insta-gradient bg-clip-text text-transparent">YamanGram</h1>
-                <p class="text-xs text-slate-400 font-medium" id="auth-desc">المنصة الرسمية للتواصل والمكالمات الحية</p>
+                <p class="text-xs text-slate-400 font-medium" id="auth-desc">المنصة الشاملة للتواصل، المنشورات والمكالمات الحية</p>
                 <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[11px] text-amber-400 font-bold">
-                    <span>👑 حساب الأدمن:</span> <span class="tracking-wider">YamanGadhat</span>
+                    <span>👑 حساب الأدمن:</span> <span class="tracking-wider">yamangadhat</span>
                 </div>
             </div>
 
@@ -93,7 +104,7 @@
                 <!-- الشعار -->
                 <div class="cursor-pointer px-2 flex items-center gap-2.5" onclick="switchTab('feed')">
                     <span class="text-2xl font-black italic tracking-wide insta-gradient bg-clip-text text-transparent">YamanGram</span>
-                    <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 font-black border border-amber-500/40">PRO</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 font-black border border-amber-500/40">PRO v2</span>
                 </div>
 
                 <!-- أزرار التنقل الرئيسية -->
@@ -104,16 +115,16 @@
                     </button>
                     <button onclick="switchTab('explore')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white" data-tab="explore">
                         <i class="fa-solid fa-compass text-lg w-6"></i>
-                        <span>استكشاف</span>
+                        <span>استكشاف والبحث</span>
                     </button>
                     <button onclick="switchTab('messages')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white relative" data-tab="messages">
                         <i class="fa-solid fa-paper-plane text-lg w-6"></i>
-                        <span>الرسائل</span>
-                        <span id="unread-requests-dot" class="hidden w-2 h-2 rounded-full bg-ig-red absolute right-7 top-3.5"></span>
+                        <span>الرسائل والمكالمات</span>
+                        <span id="unread-requests-dot" class="hidden w-2.5 h-2.5 rounded-full bg-ig-red absolute right-7 top-3.5 ring-2 ring-ig-black"></span>
                     </button>
                     <button onclick="switchTab('create')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white" data-tab="create">
                         <i class="fa-regular fa-square-plus text-lg w-6"></i>
-                        <span>إنشاء</span>
+                        <span>إنشاء منشور</span>
                     </button>
                     <button onclick="openMyProfile()" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white" data-tab="profile">
                         <div class="w-6 h-6 rounded-full bg-slate-700 overflow-hidden flex items-center justify-center text-xs font-bold text-white" id="nav-user-avatar">U</div>
@@ -175,11 +186,15 @@
             <section id="tab-explore" class="tab-content hidden flex-1 p-4 w-full space-y-5">
                 <div class="relative">
                     <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-slate-500 text-sm"></i>
-                    <input type="text" id="global-search-input" placeholder="ابحث بالاسم، اليوزر @username، أو Yaman Gadhat..." class="w-full pr-11 pl-4 py-3 bg-ig-card border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
+                    <input type="text" id="global-search-input" placeholder="ابحث عن مستخدمين بالاسم أو @username..." class="w-full pr-11 pl-4 py-3 bg-ig-card border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
                 </div>
 
+                <!-- نتائج البحث عن المستخدمين -->
+                <div id="search-results-box" class="hidden space-y-2 bg-ig-card border border-ig-border rounded-2xl p-3"></div>
+
                 <!-- بطاقة المؤسس الموثقة -->
-                <div id="founder-vip-card" class="hidden p-5 rounded-3xl bg-ig-card border border-amber-500/40 space-y-3 shadow-xl">
+                <div id="founder-vip-card" class="p-5 rounded-3xl bg-ig-card border border-amber-500/40 space-y-3 shadow-xl relative overflow-hidden">
+                    <div class="absolute -top-10 -left-10 w-28 h-28 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3.5">
                             <div class="w-14 h-14 rounded-2xl founder-gradient flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-amber-500/20">
@@ -187,17 +202,17 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-white text-sm flex items-center gap-1.5">
-                                    Yaman Gadhat (يمان قدحات)
+                                    <span id="founder-card-name">Yaman Gadhat (يمان قدحات)</span>
                                     <i class="fa-solid fa-circle-check text-blue-400 text-xs"></i>
                                 </h3>
                                 <p class="text-xs text-amber-400 font-bold">@yamangadhat • مؤسس المنصة</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="startDirectChat('yamangadhat_admin', 'Yaman Gadhat 👑')" class="px-3.5 py-2 bg-ig-blue hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition">
+                        <div class="flex items-center gap-2" id="founder-call-actions">
+                            <button id="founder-chat-btn" class="px-3.5 py-2 bg-ig-blue hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition">
                                 مراسلة
                             </button>
-                            <button onclick="initiateWebRTCCall('yamangadhat_admin', 'Yaman Gadhat 👑', true)" class="p-2 bg-ig-elevated border border-ig-border hover:border-amber-400 text-amber-400 rounded-xl text-xs" title="اتصال مرئي">
+                            <button id="founder-call-btn" class="p-2 bg-ig-elevated border border-ig-border hover:border-amber-400 text-amber-400 rounded-xl text-xs" title="اتصال مرئي مباشر">
                                 <i class="fa-solid fa-video"></i>
                             </button>
                         </div>
@@ -213,32 +228,61 @@
 
             <!-- 3. تبويب إنشاء منشور جديد (Create Post) -->
             <section id="tab-create" class="tab-content hidden flex-1 p-4 max-w-lg mx-auto w-full space-y-5">
-                <div class="bg-ig-card border border-ig-border rounded-3xl p-6 space-y-4">
-                    <h3 class="font-bold text-sm text-white border-b border-ig-border pb-3">إنشاء منشور جديد</h3>
+                <div class="bg-ig-card border border-ig-border rounded-3xl p-6 space-y-4 shadow-2xl">
+                    <h3 class="font-bold text-sm text-white border-b border-ig-border pb-3 flex items-center gap-2">
+                        <i class="fa-regular fa-square-plus text-ig-blue"></i>
+                        <span>إنشاء منشور جديد</span>
+                    </h3>
+                    
                     <textarea id="create-post-caption" rows="4" placeholder="اكتب ما يدور في ذهنك... #yamangram" class="w-full bg-ig-black border border-ig-border rounded-2xl p-3.5 text-xs outline-none focus:border-slate-500 text-white resize-none"></textarea>
                     
-                    <div class="space-y-1.5">
-                        <label class="text-xs text-slate-400 font-semibold">رابط الصورة (Image URL)</label>
+                    <!-- رفع صورة من الجهاز أو رابط -->
+                    <div class="space-y-2">
+                        <label class="text-xs text-slate-400 font-semibold block">إرفاق صورة للمنشور:</label>
+                        
+                        <div class="flex items-center gap-2">
+                            <label class="flex-1 cursor-pointer py-3 bg-ig-elevated border border-dashed border-ig-border hover:border-slate-400 rounded-2xl flex items-center justify-center gap-2 text-xs text-slate-300 transition">
+                                <i class="fa-solid fa-cloud-arrow-up text-ig-blue"></i>
+                                <span id="file-upload-label">اختر صورة من جهازك</span>
+                                <input type="file" id="create-post-file" accept="image/*" class="hidden">
+                            </label>
+                        </div>
+
+                        <div class="relative flex py-1 items-center">
+                            <div class="flex-grow border-t border-ig-border"></div>
+                            <span class="flex-shrink mx-2 text-[10px] text-slate-500">أو عبر رابط مباشر</span>
+                            <div class="flex-grow border-t border-ig-border"></div>
+                        </div>
+
                         <input type="url" id="create-post-image" placeholder="https://example.com/photo.jpg" class="w-full bg-ig-black border border-ig-border rounded-xl px-3.5 py-2.5 text-xs outline-none focus:border-slate-500 text-white">
                     </div>
 
-                    <button onclick="publishNewPost()" id="btn-publish-post" class="w-full py-3.5 bg-ig-blue hover:bg-blue-600 text-white font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2">
-                        <span>نشر المنشور</span>
+                    <!-- معاينة الصورة -->
+                    <div id="post-image-preview-box" class="hidden relative rounded-2xl overflow-hidden max-h-48 border border-ig-border">
+                        <img id="post-image-preview" class="w-full h-full object-cover">
+                        <button onclick="clearPostImagePreview()" class="absolute top-2 right-2 w-7 h-7 bg-black/70 rounded-full text-white flex items-center justify-center text-xs"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+
+                    <button onclick="publishNewPost()" id="btn-publish-post" class="w-full py-3.5 bg-ig-blue hover:bg-blue-600 text-white font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20">
+                        <span>نشر المنشور الآن</span>
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </div>
             </section>
 
-            <!-- 4. تبويب الرسائل الخاصة (Direct Messages + Calls) -->
+            <!-- 4. تبويب الرسائل والمحادثات (Direct Messages) -->
             <section id="tab-messages" class="tab-content hidden flex-1 flex flex-col h-[calc(100vh-4rem)] md:h-screen p-2 md:p-4 w-full">
-                <div class="bg-ig-card border border-ig-border rounded-3xl flex-1 flex overflow-hidden">
+                <div class="bg-ig-card border border-ig-border rounded-3xl flex-1 flex overflow-hidden shadow-2xl">
                     
                     <!-- قائمة المحادثات -->
                     <div id="dm-conversations-list" class="w-full md:w-80 border-l border-ig-border flex flex-col">
                         <div class="p-4 border-b border-ig-border space-y-3">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-sm text-white">الرسائل Direct</h3>
-                                <span class="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full font-bold">VIP Chat</span>
+                                <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                                    <span>المحادثات</span>
+                                    <span class="w-2 h-2 rounded-full bg-ig-online animate-ping"></span>
+                                </h3>
+                                <span class="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full font-bold">مباشر HD</span>
                             </div>
                             
                             <div class="grid grid-cols-3 gap-1 bg-ig-black p-1 rounded-xl text-xs font-semibold text-center">
@@ -259,19 +303,21 @@
                         <div class="p-3.5 px-4 border-b border-ig-border flex items-center justify-between bg-ig-card">
                             <div class="flex items-center gap-3">
                                 <button onclick="closeActiveChatMobile()" class="md:hidden text-slate-400 p-1"><i class="fa-solid fa-arrow-right"></i></button>
-                                <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white" id="active-chat-avatar">U</div>
+                                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white" id="active-chat-avatar">U</div>
                                 <div>
                                     <h4 class="font-bold text-xs text-white" id="active-chat-title">المحادثة</h4>
-                                    <span class="text-[10px] text-green-400">متصل الآن</span>
+                                    <span class="text-[10px] text-green-400 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> متصل الآن
+                                    </span>
                                 </div>
                             </div>
 
-                            <!-- أزرار المكالمات -->
+                            <!-- أزرار المكالمات الحية -->
                             <div class="flex items-center gap-2" id="chat-call-actions">
-                                <button onclick="initiateWebRTCCall(activeChatTargetId, activeChatTargetName, false)" class="w-8 h-8 rounded-full bg-ig-elevated text-slate-300 hover:text-white flex items-center justify-center transition" title="مكالمة صوتية">
+                                <button onclick="initiateWebRTCCall(activeChatTargetId, activeChatTargetName, false)" class="w-9 h-9 rounded-full bg-ig-elevated text-slate-200 hover:text-white hover:bg-slate-700 flex items-center justify-center transition" title="مكالمة صوتية عالية النقاء">
                                     <i class="fa-solid fa-phone text-xs"></i>
                                 </button>
-                                <button onclick="initiateWebRTCCall(activeChatTargetId, activeChatTargetName, true)" class="w-8 h-8 rounded-full bg-ig-elevated text-slate-300 hover:text-white flex items-center justify-center transition" title="مكالمة فيديو">
+                                <button onclick="initiateWebRTCCall(activeChatTargetId, activeChatTargetName, true)" class="w-9 h-9 rounded-full bg-ig-elevated text-amber-400 hover:text-white hover:bg-amber-600 flex items-center justify-center transition" title="مكالمة فيديو HD">
                                     <i class="fa-solid fa-video text-xs"></i>
                                 </button>
                             </div>
@@ -279,15 +325,18 @@
 
                         <!-- إشعار طلب المراسلة -->
                         <div id="dm-request-notice" class="hidden p-3 bg-amber-950/40 border-b border-amber-800/40 text-center text-xs text-amber-300">
-                            هذا المستخدم لا تتابعه. الرسالة في قسم <b>طلبات المراسلة</b>.
+                            هذا المستخدم لا يتابعك. الرسالة في قسم <b>طلبات المراسلة</b>.
                             <button onclick="acceptMessageRequest()" class="mr-2 px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-black font-bold rounded-lg text-[11px]">قبول ومتابعة</button>
                         </div>
 
                         <!-- تدفق الرسائل -->
                         <div id="dm-messages-stream" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs no-scrollbar"></div>
 
-                        <!-- صندوق إرسال الرسالة -->
-                        <form id="dm-send-form" class="p-3 border-t border-ig-border bg-ig-card flex gap-2">
+                        <!-- صندوق إرسال الرسالة وتسجيل الصوت -->
+                        <form id="dm-send-form" class="p-3 border-t border-ig-border bg-ig-card flex items-center gap-2">
+                            <button type="button" id="btn-record-voice" onclick="toggleVoiceRecording()" class="p-2.5 rounded-xl bg-ig-elevated text-slate-300 hover:text-red-400 transition" title="تسجيل رسالة صوتية">
+                                <i class="fa-solid fa-microphone"></i>
+                            </button>
                             <input type="text" id="dm-text-input" placeholder="اكتب رسالة..." required class="flex-1 bg-ig-black border border-ig-border rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-slate-500">
                             <button type="submit" class="px-4 py-2.5 bg-ig-blue hover:bg-blue-600 text-white rounded-xl font-bold text-xs transition">
                                 <i class="fa-solid fa-paper-plane"></i>
@@ -331,10 +380,10 @@
                     </div>
                 </div>
 
-                <!-- شبكة المنشورات -->
+                <!-- شبكة المنشورات والمحفوظات -->
                 <div class="space-y-3">
-                    <div class="border-t border-ig-border pt-3 flex justify-center text-xs font-bold text-white gap-2">
-                        <i class="fa-solid fa-table-cells text-sm"></i> المنشورات
+                    <div class="border-t border-ig-border pt-3 flex justify-center text-xs font-bold text-white gap-6">
+                        <button class="text-white flex items-center gap-2 border-b-2 border-white pb-1"><i class="fa-solid fa-table-cells"></i> المنشورات</button>
                     </div>
                     <div id="prof-posts-grid" class="grid grid-cols-3 gap-1.5 rounded-2xl overflow-hidden"></div>
                 </div>
@@ -361,9 +410,13 @@
             </div>
             
             <textarea id="story-caption-input" rows="3" placeholder="اكتب نصاً لقصتك..." class="w-full bg-ig-black border border-ig-border rounded-xl p-3 text-xs outline-none focus:border-slate-500 text-white resize-none"></textarea>
-            <input type="url" id="story-image-input" placeholder="رابط صورة للقصة (اختياري)..." class="w-full bg-ig-black border border-ig-border rounded-xl px-3 py-2 text-xs outline-none focus:border-slate-500 text-white">
+            
+            <label class="block cursor-pointer py-2.5 bg-ig-elevated border border-dashed border-ig-border hover:border-slate-400 rounded-xl text-center text-xs text-slate-300">
+                <i class="fa-solid fa-image text-amber-400 mr-1"></i> رفع صورة القصة
+                <input type="file" id="story-file-input" accept="image/*" class="hidden">
+            </label>
 
-            <button onclick="publishNewStory()" class="w-full py-3 bg-ig-blue hover:bg-blue-600 text-white font-bold rounded-xl text-xs transition">
+            <button onclick="publishNewStory()" class="w-full py-3 bg-ig-blue hover:bg-blue-600 text-white font-bold rounded-xl text-xs transition shadow-lg">
                 مشاركة في القصة
             </button>
         </div>
@@ -381,7 +434,7 @@
                     <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white" id="story-user-avatar">U</div>
                     <div>
                         <h4 class="font-bold text-xs" id="story-user-name">User</h4>
-                        <span class="text-[10px] text-slate-400">قصة مباشرة</span>
+                        <span class="text-[10px] text-slate-400">قصة حصرية</span>
                     </div>
                 </div>
                 <button onclick="closeStoryViewer()" class="text-slate-400 hover:text-white text-lg p-2"><i class="fa-solid fa-xmark"></i></button>
@@ -389,74 +442,92 @@
 
             <div class="flex-1 flex items-center justify-center text-center p-4 relative overflow-hidden">
                 <img id="story-viewer-image" class="hidden absolute inset-0 w-full h-full object-cover rounded-2xl">
-                <p id="story-viewer-text" class="text-base font-bold text-white leading-relaxed z-10 px-4"></p>
+                <p id="story-viewer-text" class="text-base font-bold text-white leading-relaxed z-10 px-4 drop-shadow-md"></p>
             </div>
 
             <div class="pt-3 border-t border-white/10 flex items-center gap-2 z-10">
-                <input type="text" id="story-reply-input" placeholder="أرسل رسالة إلى القصة..." class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none">
+                <input type="text" id="story-reply-input" placeholder="أرسل رداً إلى القصة..." class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none">
                 <button onclick="sendStoryReply()" class="px-3.5 py-2 bg-ig-blue text-white rounded-xl text-xs font-bold">إرسال</button>
             </div>
         </div>
     </div>
 
-    <!-- نافذة المكالمة المباشرة الأصلية WebRTC -->
-    <div id="call-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl hidden flex flex-col items-center justify-between p-6">
-        <div class="text-center space-y-1">
-            <h3 class="font-black text-base text-white" id="call-partner-name">المكالمة المباشرة</h3>
-            <p class="text-xs text-slate-400" id="call-status">جاري الاتصال...</p>
+    <!-- نافذة المكالمة المباشرة الأصلية WebRTC (محدثة بالكامل) -->
+    <div id="call-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden flex flex-col items-center justify-between p-4 md:p-8">
+        
+        <!-- الهيدر الخاص بالمكالمة -->
+        <div class="text-center space-y-1.5 z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-[11px] text-slate-300">
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span id="call-timer">00:00</span>
+            </div>
+            <h3 class="font-black text-lg text-white" id="call-partner-name">مكالمة مباشرة</h3>
+            <p class="text-xs text-slate-400" id="call-status">جاري إنشاء الاتصال الآمن...</p>
         </div>
 
-        <div class="w-full max-w-md h-[440px] bg-ig-card rounded-3xl overflow-hidden relative border border-ig-border flex items-center justify-center shadow-2xl">
+        <!-- مساحة عرض الفيديو -->
+        <div class="w-full max-w-xl h-[480px] bg-ig-card rounded-3xl overflow-hidden relative border border-ig-border flex items-center justify-center shadow-2xl">
+            <!-- فيديو الطرف الآخر -->
             <video id="remote-video" autoplay playsinline class="w-full h-full object-cover"></video>
-            <video id="local-video" autoplay playsinline muted class="w-28 h-36 object-cover rounded-2xl border-2 border-white/20 absolute bottom-3 right-3 shadow-lg bg-black"></video>
             
-            <div id="audio-call-placeholder" class="hidden flex flex-col items-center gap-3">
-                <div class="w-24 h-24 rounded-full insta-gradient flex items-center justify-center text-3xl text-white font-black animate-pulse">
+            <!-- فيديو الكاميرا المحلية -->
+            <video id="local-video" autoplay playsinline muted class="w-32 h-44 object-cover rounded-2xl border-2 border-white/30 absolute bottom-4 right-4 shadow-2xl bg-black transition-all"></video>
+            
+            <!-- عنصر الصوت للمكالمات الصوتية فقط -->
+            <audio id="remote-audio" autoplay></audio>
+
+            <!-- واجهة المكالمة الصوتية بدون كاميرا -->
+            <div id="audio-call-placeholder" class="hidden flex flex-col items-center gap-4">
+                <div class="w-28 h-28 rounded-full insta-gradient flex items-center justify-center text-4xl text-white font-black shadow-2xl animate-calling">
                     <i class="fa-solid fa-microphone"></i>
                 </div>
-                <span class="text-xs text-slate-300 font-semibold">مكالمة صوتية عالية النقاء</span>
+                <span class="text-sm text-slate-200 font-bold">مكالمة صوتية مشفرة HD</span>
             </div>
         </div>
 
-        <div class="flex items-center gap-4">
-            <button onclick="toggleMuteMic()" id="btn-toggle-mic" class="w-12 h-12 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition">
-                <i class="fa-solid fa-microphone"></i>
+        <!-- أزرار التحكم بالمكالمة -->
+        <div class="flex items-center gap-4 z-10">
+            <button onclick="toggleMuteMic()" id="btn-toggle-mic" class="w-13 h-13 p-3.5 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="كتم الميكروفون">
+                <i class="fa-solid fa-microphone text-base"></i>
             </button>
-            <button onclick="hangupCurrentCall()" class="w-14 h-14 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-lg transition">
-                <i class="fa-solid fa-phone-slash text-lg"></i>
+            <button onclick="toggleCamera()" id="btn-toggle-cam" class="w-13 h-13 p-3.5 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="تشغيل/إيقاف الكاميرا">
+                <i class="fa-solid fa-video text-base"></i>
             </button>
-            <button onclick="toggleCamera()" id="btn-toggle-cam" class="w-12 h-12 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition">
-                <i class="fa-solid fa-video"></i>
+            <button onclick="toggleScreenShare()" id="btn-share-screen" class="w-13 h-13 p-3.5 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition shadow-lg" title="مشاركة الشاشة">
+                <i class="fa-solid fa-display text-base"></i>
+            </button>
+            <button onclick="hangupCurrentCall()" class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-2xl shadow-red-600/50 transition active:scale-95" title="إنهاء المكالمة">
+                <i class="fa-solid fa-phone-slash text-xl"></i>
             </button>
         </div>
     </div>
 
     <!-- نافذة استقبال مكالمة واردة -->
-    <div id="incoming-call-modal" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md bg-ig-card border-2 border-ig-blue rounded-3xl p-4 shadow-2xl hidden flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full insta-gradient flex items-center justify-center text-white font-bold animate-bounce">
+    <div id="incoming-call-modal" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md bg-ig-card border-2 border-ig-blue rounded-3xl p-4 shadow-2xl hidden flex items-center justify-between backdrop-blur-xl animate-bounce">
+        <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-full insta-gradient flex items-center justify-center text-white font-bold text-lg animate-pulse">
                 <i class="fa-solid fa-phone"></i>
             </div>
             <div>
                 <h4 class="font-bold text-xs text-white" id="incoming-caller-name">مكالمة واردة...</h4>
-                <p class="text-[10px] text-slate-400">يريد بدء مكالمة معك الآن</p>
+                <p class="text-[10px] text-slate-400" id="incoming-call-type">يريد بدء مكالمة معك الآن</p>
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button onclick="acceptIncomingCall()" class="w-10 h-10 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-md">
+            <button onclick="acceptIncomingCall()" class="w-11 h-11 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-lg transition">
                 <i class="fa-solid fa-phone"></i>
             </button>
-            <button onclick="rejectIncomingCall()" class="w-10 h-10 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-md">
+            <button onclick="rejectIncomingCall()" class="w-11 h-11 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-lg transition">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
     </div>
 
-    <!-- Firebase v10 SDK & WebRTC Logic -->
+    <!-- Firebase SDK v10 & WebRTC Core Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, setDoc, getDoc, arrayUnion, arrayRemove, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, setDoc, getDoc, getDocs, arrayUnion, arrayRemove, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // إعدادات Firebase
         const firebaseConfig = {
@@ -472,24 +543,32 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // STUN Servers من Google للاتصال المباشر
+        // STUN Servers عالمية ومستقرة للاتصال المباشر
         const rtcConfig = {
             iceServers: [
                 { urls: 'stun:stun.l.google.com:19302' },
                 { urls: 'stun:stun1.l.google.com:19302' },
-                { urls: 'stun:stun2.l.google.com:19302' }
-            ]
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun3.l.google.com:19302' },
+                { urls: 'stun:stun4.l.google.com:19302' }
+            ],
+            iceCandidatePoolSize: 10
         };
 
+        // المتغيرات العامة
         let currentUser = null;
         let currentUserData = { followers: [], following: [], username: '', name: '' };
         let isSignUp = false;
         let allPosts = [];
         let allStories = [];
+        let allUsersCache = [];
+        let founderActualUid = null;
         let activeChatTargetId = 'public';
-        let activeChatTargetName = 'الدردشة العامة VIP';
+        let activeChatTargetName = 'غرفة الدردشة العامة VIP';
         let dmActiveFilter = 'primary';
         let currentViewingProfileUid = null;
+        let selectedPostImageBase64 = null;
+        let selectedStoryImageBase64 = null;
 
         // متغيرات المكالمات
         let peerConnection = null;
@@ -498,6 +577,60 @@
         let currentCallDocId = null;
         let incomingCallData = null;
         let callUnsubscribe = null;
+        let offerCandidatesUnsub = null;
+        let answerCandidatesUnsub = null;
+        let callTimerInterval = null;
+        let callSeconds = 0;
+        let pendingCandidatesQueue = [];
+
+        // -------------------------------------------------------------
+        // محرك المؤثرات الصوتية (Web Audio API Synthesizer)
+        // -------------------------------------------------------------
+        const AudioFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            },
+            playRingtone() {
+                this.init();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(480, this.ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.6);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.6);
+            },
+            playHangupTone() {
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(150, this.ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.3);
+            }
+        };
+
+        // نظام Toast
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const el = document.createElement('div');
+            el.className = `p-3.5 rounded-2xl text-xs font-bold text-white shadow-2xl transition-all duration-300 transform translate-y-2 flex items-center gap-2 pointer-events-auto ${type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-green-600' : 'bg-ig-elevated border border-ig-border'}`;
+            el.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation' : type === 'success' ? 'fa-check' : 'fa-info-circle'}"></i> <span>${msg}</span>`;
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 4000);
+        }
 
         // تبديل التبويبات
         window.switchTab = (tabName) => {
@@ -511,7 +644,7 @@
             });
         };
 
-        // مصادقة الدخول
+        // المصادقة
         const authForm = document.getElementById('auth-form');
         const toggleAuthBtn = document.getElementById('toggle-auth-btn');
         const signupExtraFields = document.getElementById('signup-extra-fields');
@@ -549,7 +682,7 @@
                         name: finalName,
                         username: finalUsername,
                         email: emailInput,
-                        bio: "مرحباً بكم في حسابي على YamanGram!",
+                        bio: "مرحباً بكم في حسابي على YamanGram Pro!",
                         followers: [],
                         following: [],
                         isFounder: emailInput === "yamangadhat@vip.admin",
@@ -568,7 +701,7 @@
                             name: "Yaman Gadhat 👑",
                             username: "yamangadhat",
                             email: emailInput,
-                            bio: "المؤسس والمدير العام التنفيذي لمنصة YamanGram Pro.",
+                            bio: "المؤسس والمدير العام لمنصة YamanGram Pro.",
                             followers: [],
                             following: [],
                             isFounder: true,
@@ -611,8 +744,9 @@
                     await setDoc(userDocRef, currentUserData);
                 }
 
-                document.getElementById('nav-user-avatar').innerText = currentUserData.name[0].toUpperCase();
+                document.getElementById('nav-user-avatar').innerText = (currentUserData.name || 'U')[0].toUpperCase();
 
+                loadFounderAndUsersCache();
                 listenForIncomingCalls();
                 listenToPosts();
                 listenToStories();
@@ -624,36 +758,107 @@
             }
         });
 
+        // جلب قائمة المستخدمين وتحديد UID الحقيقي للمؤسس
+        async function loadFounderAndUsersCache() {
+            const snap = await getDocs(collection(db, "users"));
+            allUsersCache = [];
+            snap.forEach(d => {
+                const u = d.data();
+                allUsersCache.push(u);
+                if (u.isFounder || u.username === 'yamangadhat') {
+                    founderActualUid = u.uid;
+                }
+            });
+
+            // تحديث بطاقة المؤسس
+            if (founderActualUid) {
+                document.getElementById('founder-chat-btn').onclick = () => startDirectChat(founderActualUid, 'Yaman Gadhat 👑');
+                document.getElementById('founder-call-btn').onclick = () => initiateWebRTCCall(founderActualUid, 'Yaman Gadhat 👑', true);
+            }
+        }
+
         // -------------------------------------------------------------
-        // نظام المكالمات Native WebRTC
+        // نظام مكالمات WebRTC الشامل والمُصلح بالكامل
         // -------------------------------------------------------------
+        function startCallTimer() {
+            clearInterval(callTimerInterval);
+            callSeconds = 0;
+            const timerEl = document.getElementById('call-timer');
+            callTimerInterval = setInterval(() => {
+                callSeconds++;
+                const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+                const secs = String(callSeconds % 60).padStart(2, '0');
+                timerEl.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopCallTimer() {
+            clearInterval(callTimerInterval);
+            document.getElementById('call-timer').innerText = "00:00";
+        }
+
+        async function createSafePeerConnection() {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            pendingCandidatesQueue = [];
+            peerConnection = new RTCPeerConnection(rtcConfig);
+
+            // عند استقبال التراك من الطرف الآخر
+            peerConnection.ontrack = (event) => {
+                if (!remoteStream) remoteStream = new MediaStream();
+                remoteStream.addTrack(event.track);
+
+                const remoteVideo = document.getElementById('remote-video');
+                const remoteAudio = document.getElementById('remote-audio');
+                
+                remoteVideo.srcObject = remoteStream;
+                remoteAudio.srcObject = remoteStream;
+                document.getElementById('call-status').innerText = "المكالمة متصلة الآن بجودة فائقة";
+            };
+
+            return peerConnection;
+        }
+
+        async function processCandidateQueue() {
+            if (!peerConnection || !peerConnection.remoteDescription) return;
+            while (pendingCandidatesQueue.length > 0) {
+                const cand = pendingCandidatesQueue.shift();
+                try {
+                    await peerConnection.addIceCandidate(new RTCIceCandidate(cand));
+                } catch (e) {
+                    console.warn("Candidate add failed:", e);
+                }
+            }
+        }
+
         window.initiateWebRTCCall = async (targetUid, targetName, isVideo) => {
-            if (targetUid === currentUser.uid || targetUid === 'public') {
-                return alert("يرجى اختيار مستخدم صالح للاتصال به!");
+            if (!targetUid || targetUid === currentUser.uid || targetUid === 'public') {
+                return showToast("يرجى اختيار مستخدم صالح للاتصال به!", "error");
             }
 
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: isVideo, audio: true });
-                document.getElementById('local-video').srcObject = localStream;
+                AudioFX.playRingtone();
                 
-                remoteStream = new MediaStream();
-                document.getElementById('remote-video').srcObject = remoteStream;
+                // جلب الميديا المحلية
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" } : false,
+                    audio: true
+                });
 
+                document.getElementById('local-video').srcObject = localStream;
                 document.getElementById('call-partner-name').innerText = targetName;
-                document.getElementById('call-status').innerText = "جاري الاتصال...";
+                document.getElementById('call-status').innerText = "جاري الاتصال والانتظار...";
                 document.getElementById('call-modal').classList.remove('hidden');
                 document.getElementById('audio-call-placeholder').classList.toggle('hidden', isVideo);
                 document.getElementById('remote-video').classList.toggle('hidden', !isVideo);
 
-                peerConnection = new RTCPeerConnection(rtcConfig);
+                await createSafePeerConnection();
 
                 localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-                peerConnection.ontrack = (event) => {
-                    event.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
-                    document.getElementById('call-status').innerText = "متصل الآن بجودة عالية";
-                };
-
+                // إنشاء وثيقة المكالمة في Firestore
                 const callDocRef = await addDoc(collection(db, "calls"), {
                     callerId: currentUser.uid,
                     callerName: currentUserData.name,
@@ -665,11 +870,13 @@
                 });
                 currentCallDocId = callDocRef.id;
 
-                const offerCandidates = collection(db, `calls/${currentCallDocId}/offerCandidates`);
-                const answerCandidates = collection(db, `calls/${currentCallDocId}/answerCandidates`);
+                const offerCandidatesCol = collection(db, `calls/${currentCallDocId}/offerCandidates`);
+                const answerCandidatesCol = collection(db, `calls/${currentCallDocId}/answerCandidates`);
 
                 peerConnection.onicecandidate = (event) => {
-                    if (event.candidate) addDoc(offerCandidates, event.candidate.toJSON());
+                    if (event.candidate) {
+                        addDoc(offerCandidatesCol, event.candidate.toJSON());
+                    }
                 };
 
                 const offerDescription = await peerConnection.createOffer();
@@ -679,28 +886,41 @@
                     offer: { type: offerDescription.type, sdp: offerDescription.sdp }
                 });
 
-                callUnsubscribe = onSnapshot(callDocRef, (snapshot) => {
+                // مراقبة قبول المكالمة
+                callUnsubscribe = onSnapshot(callDocRef, async (snapshot) => {
                     const data = snapshot.data();
                     if (!data) return;
+
                     if (data.status === 'rejected' || data.status === 'ended') {
-                        alert("تم إنهاء المكالمة أو رفضها.");
+                        showToast("تم إنهاء المكالمة أو رفضها.", "info");
                         hangupCurrentCall();
                     }
+
                     if (!peerConnection.currentRemoteDescription && data.answer) {
-                        peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+                        await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+                        await processCandidateQueue();
+                        startCallTimer();
                     }
                 });
 
-                onSnapshot(answerCandidates, (snapshot) => {
-                    snapshot.docChanges().forEach((change) => {
+                // الاستماع لمرشحات الإجابة
+                answerCandidatesUnsub = onSnapshot(answerCandidatesCol, (snapshot) => {
+                    snapshot.docChanges().forEach(async (change) => {
                         if (change.type === 'added') {
-                            peerConnection.addIceCandidate(new RTCIceCandidate(change.doc.data()));
+                            const candidateData = change.doc.data();
+                            if (peerConnection.remoteDescription) {
+                                try {
+                                    await peerConnection.addIceCandidate(new RTCIceCandidate(candidateData));
+                                } catch (e) {}
+                            } else {
+                                pendingCandidatesQueue.push(candidateData);
+                            }
                         }
                     });
                 });
 
             } catch (err) {
-                alert("خطأ: تأكد من إذن الكاميرا ورابط HTTPS! (" + err.message + ")");
+                showToast("تعذر بدء المكالمة: تأكد من أذونات الكاميرا ورابط HTTPS!", "error");
                 hangupCurrentCall();
             }
         };
@@ -717,7 +937,9 @@
                     if (change.type === 'added') {
                         incomingCallData = { id: change.doc.id, ...change.doc.data() };
                         document.getElementById('incoming-caller-name').innerText = incomingCallData.callerName;
+                        document.getElementById('incoming-call-type').innerText = incomingCallData.isVideo ? "مكالمة فيديو واردة 📹" : "مكالمة صوتية واردة 📞";
                         document.getElementById('incoming-call-modal').classList.remove('hidden');
+                        AudioFX.playRingtone();
                     }
                 });
             });
@@ -731,32 +953,30 @@
                 currentCallDocId = incomingCallData.id;
                 const isVideo = incomingCallData.isVideo;
 
-                localStream = await navigator.mediaDevices.getUserMedia({ video: isVideo, audio: true });
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: isVideo ? { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" } : false,
+                    audio: true
+                });
+
                 document.getElementById('local-video').srcObject = localStream;
-
-                remoteStream = new MediaStream();
-                document.getElementById('remote-video').srcObject = remoteStream;
-
                 document.getElementById('call-partner-name').innerText = incomingCallData.callerName;
-                document.getElementById('call-status').innerText = "متصل الآن";
+                document.getElementById('call-status').innerText = "جاري الاتصال...";
                 document.getElementById('call-modal').classList.remove('hidden');
                 document.getElementById('audio-call-placeholder').classList.toggle('hidden', isVideo);
                 document.getElementById('remote-video').classList.toggle('hidden', !isVideo);
 
-                peerConnection = new RTCPeerConnection(rtcConfig);
+                await createSafePeerConnection();
 
                 localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-                peerConnection.ontrack = (event) => {
-                    event.streams[0].getTracks().forEach(track => remoteStream.addTrack(track));
-                };
-
                 const callDocRef = doc(db, "calls", currentCallDocId);
-                const offerCandidates = collection(db, `calls/${currentCallDocId}/offerCandidates`);
-                const answerCandidates = collection(db, `calls/${currentCallDocId}/answerCandidates`);
+                const offerCandidatesCol = collection(db, `calls/${currentCallDocId}/offerCandidates`);
+                const answerCandidatesCol = collection(db, `calls/${currentCallDocId}/answerCandidates`);
 
                 peerConnection.onicecandidate = (event) => {
-                    if (event.candidate) addDoc(answerCandidates, event.candidate.toJSON());
+                    if (event.candidate) {
+                        addDoc(answerCandidatesCol, event.candidate.toJSON());
+                    }
                 };
 
                 const callData = (await getDoc(callDocRef)).data();
@@ -770,10 +990,16 @@
                     status: 'connected'
                 });
 
-                onSnapshot(offerCandidates, (snapshot) => {
-                    snapshot.docChanges().forEach((change) => {
+                startCallTimer();
+
+                // الاستماع لمرشحات العرض
+                offerCandidatesUnsub = onSnapshot(offerCandidatesCol, (snapshot) => {
+                    snapshot.docChanges().forEach(async (change) => {
                         if (change.type === 'added') {
-                            peerConnection.addIceCandidate(new RTCIceCandidate(change.doc.data()));
+                            const candData = change.doc.data();
+                            try {
+                                await peerConnection.addIceCandidate(new RTCIceCandidate(candData));
+                            } catch (e) {}
                         }
                     });
                 });
@@ -786,7 +1012,7 @@
                 });
 
             } catch (err) {
-                alert("تعذر فتح الكاميرا: " + err.message);
+                showToast("تعذر قبول المكالمة: " + err.message, "error");
                 hangupCurrentCall();
             }
         };
@@ -800,14 +1026,32 @@
         };
 
         window.hangupCurrentCall = async () => {
+            AudioFX.playHangupTone();
+            stopCallTimer();
+
             if (currentCallDocId) {
                 try { await updateDoc(doc(db, "calls", currentCallDocId), { status: 'ended' }); } catch(e) {}
             }
-            if (callUnsubscribe) callUnsubscribe();
-            if (peerConnection) { peerConnection.close(); peerConnection = null; }
-            if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
 
+            if (callUnsubscribe) callUnsubscribe();
+            if (offerCandidatesUnsub) offerCandidatesUnsub();
+            if (answerCandidatesUnsub) answerCandidatesUnsub();
+
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+
+            if (localStream) {
+                localStream.getTracks().forEach(t => t.stop());
+                localStream = null;
+            }
+
+            document.getElementById('local-video').srcObject = null;
+            document.getElementById('remote-video').srcObject = null;
+            document.getElementById('remote-audio').srcObject = null;
             document.getElementById('call-modal').classList.add('hidden');
+            
             currentCallDocId = null;
             incomingCallData = null;
         };
@@ -832,17 +1076,118 @@
             }
         };
 
+        window.toggleScreenShare = async () => {
+            if (!peerConnection) return;
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                const screenTrack = screenStream.getVideoTracks()[0];
+                const sender = peerConnection.getSenders().find(s => s.track.kind === 'video');
+                if (sender) {
+                    sender.replaceTrack(screenTrack);
+                    screenTrack.onended = () => {
+                        if (localStream) sender.replaceTrack(localStream.getVideoTracks()[0]);
+                    };
+                }
+            } catch (e) {
+                console.warn("Screen share cancelled", e);
+            }
+        };
+
         // -------------------------------------------------------------
-        // القصص الحقيقية
+        // رفع الصور وملفات الوسائط مباشرة Base64
+        // -------------------------------------------------------------
+        document.getElementById('create-post-file').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                selectedPostImageBase64 = event.target.result;
+                document.getElementById('post-image-preview').src = selectedPostImageBase64;
+                document.getElementById('post-image-preview-box').classList.remove('hidden');
+                document.getElementById('file-upload-label').innerText = "تم اختيار الصورة بنجاح!";
+            };
+            reader.readAsDataURL(file);
+        });
+
+        window.clearPostImagePreview = () => {
+            selectedPostImageBase64 = null;
+            document.getElementById('post-image-preview-box').classList.add('hidden');
+            document.getElementById('create-post-file').value = '';
+            document.getElementById('file-upload-label').innerText = "اختر صورة من جهازك";
+        };
+
+        document.getElementById('story-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                selectedStoryImageBase64 = event.target.result;
+                showToast("تم إرفاق صورة القصة!", "success");
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // -------------------------------------------------------------
+        // تسجيل الرسائل الصوتية (Voice Notes)
+        // -------------------------------------------------------------
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecordingVoice = false;
+
+        window.toggleVoiceRecording = async () => {
+            const btn = document.getElementById('btn-record-voice');
+            if (!isRecordingVoice) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                    mediaRecorder.onstop = async () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const reader = new FileReader();
+                        reader.readAsDataURL(audioBlob);
+                        reader.onloadend = async () => {
+                            const base64Audio = reader.result;
+                            await addDoc(collection(db, "direct_messages"), {
+                                targetId: activeChatTargetId,
+                                senderId: currentUser.uid,
+                                senderName: currentUserData.name,
+                                receiverId: activeChatTargetId,
+                                receiverName: activeChatTargetName,
+                                audioUrl: base64Audio,
+                                text: '🎤 رسالة صوتية',
+                                createdAt: serverTimestamp()
+                            });
+                        };
+                    };
+
+                    mediaRecorder.start();
+                    isRecordingVoice = true;
+                    btn.classList.add('bg-red-600', 'animate-pulse');
+                    showToast("جاري تسجيل الصوت... اضغط مجدداً للإرسال", "info");
+                } catch (e) {
+                    showToast("تعذر الوصول للميكروفون!", "error");
+                }
+            } else {
+                if (mediaRecorder) mediaRecorder.stop();
+                isRecordingVoice = false;
+                btn.classList.remove('bg-red-600', 'animate-pulse');
+                showToast("تم إرسال الرسالة الصوتية بنجاح!", "success");
+            }
+        };
+
+        // -------------------------------------------------------------
+        // القصص الحية Stories
         // -------------------------------------------------------------
         window.openCreateStoryModal = () => document.getElementById('create-story-modal').classList.remove('hidden');
         window.closeCreateStoryModal = () => document.getElementById('create-story-modal').classList.add('hidden');
 
         window.publishNewStory = async () => {
             const caption = document.getElementById('story-caption-input').value.trim();
-            const imageUrl = document.getElementById('story-image-input').value.trim();
+            const img = selectedStoryImageBase64;
 
-            if (!caption && !imageUrl) return alert("يرجى كتابة نص أو وضع رابط صورة!");
+            if (!caption && !img) return showToast("يرجى كتابة نص أو اختيار صورة!", "error");
 
             try {
                 await addDoc(collection(db, "stories"), {
@@ -851,15 +1196,16 @@
                     username: currentUserData.username,
                     isFounder: currentUserData.isFounder || false,
                     caption: caption,
-                    imageUrl: imageUrl || null,
+                    imageUrl: img || null,
                     createdAt: serverTimestamp()
                 });
 
                 document.getElementById('story-caption-input').value = '';
-                document.getElementById('story-image-input').value = '';
+                selectedStoryImageBase64 = null;
                 closeCreateStoryModal();
+                showToast("تم نشر القصة بنجاح!", "success");
             } catch (err) {
-                alert("خطأ أثناء نشر القصة: " + err.message);
+                showToast("خطأ أثناء نشر القصة: " + err.message, "error");
             }
         };
 
@@ -883,9 +1229,9 @@
                 const isFounder = story.isFounder || (story.username === 'yamangadhat');
                 return `
                     <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer" onclick="viewUserStory('${story.id}')">
-                        <div class="w-16 h-16 rounded-full p-[2px] ${isFounder ? 'founder-gradient' : 'insta-gradient'}">
+                        <div class="w-16 h-16 rounded-full p-[2px] ${isFounder ? 'founder-gradient' : 'insta-gradient'} hover:scale-105 transition">
                             <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center text-xs font-bold text-white border-2 border-ig-black">
-                                ${isFounder ? '👑' : story.authorName[0].toUpperCase()}
+                                ${isFounder ? '👑' : (story.authorName || 'U')[0].toUpperCase()}
                             </div>
                         </div>
                         <span class="text-[11px] font-semibold text-slate-300 max-w-[65px] truncate">${story.authorName}</span>
@@ -933,20 +1279,20 @@
         window.sendStoryReply = () => {
             const val = document.getElementById('story-reply-input').value.trim();
             if (val) {
-                alert("تم إرسال الرد بنجاح!");
+                showToast("تم إرسال الرد بنجاح!", "success");
                 document.getElementById('story-reply-input').value = '';
                 closeStoryViewer();
             }
         };
 
         // -------------------------------------------------------------
-        // المنشورات
+        // المنشورات والإعجابات والتفاعل
         // -------------------------------------------------------------
         window.publishNewPost = async () => {
             const caption = document.getElementById('create-post-caption').value.trim();
-            const imageUrl = document.getElementById('create-post-image').value.trim();
+            const imageUrl = selectedPostImageBase64 || document.getElementById('create-post-image').value.trim();
 
-            if (!caption && !imageUrl) return alert("يرجى كتابة نص أو وضع رابط صورة!");
+            if (!caption && !imageUrl) return showToast("يرجى كتابة نص أو اختيار صورة!", "error");
 
             const btn = document.getElementById('btn-publish-post');
             btn.disabled = true;
@@ -966,9 +1312,11 @@
 
                 document.getElementById('create-post-caption').value = '';
                 document.getElementById('create-post-image').value = '';
+                clearPostImagePreview();
+                showToast("تم نشر منشورك بنجاح!", "success");
                 switchTab('feed');
             } catch (err) {
-                alert("خطأ أثناء النشر: " + err.message);
+                showToast("خطأ أثناء النشر: " + err.message, "error");
             } finally {
                 btn.disabled = false;
             }
@@ -987,7 +1335,7 @@
         function renderFeedPosts(posts) {
             const container = document.getElementById('feed-posts-stream');
             if (posts.length === 0) {
-                container.innerHTML = `<div class="p-12 text-center bg-ig-card rounded-3xl border border-ig-border text-slate-500">لا توجد منشورات بعد. انشر أول منشور الآن!</div>`;
+                container.innerHTML = `<div class="p-12 text-center bg-ig-card rounded-3xl border border-ig-border text-slate-500">لا توجد منشورات بعد. كن أول من ينشر!</div>`;
                 return;
             }
 
@@ -1003,7 +1351,7 @@
                             <div class="flex items-center gap-3 cursor-pointer" onclick="viewUserProfile('${post.userId}')">
                                 <div class="w-10 h-10 rounded-full ${isFounder ? 'founder-gradient' : 'insta-gradient'} p-0.5 flex items-center justify-center font-bold text-white text-xs">
                                     <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center">
-                                        ${isFounder ? '👑' : post.authorName[0].toUpperCase()}
+                                        ${isFounder ? '👑' : (post.authorName || 'U')[0].toUpperCase()}
                                     </div>
                                 </div>
                                 <div>
@@ -1028,9 +1376,9 @@
                         </div>
 
                         ${post.imageUrl ? `
-                            <div class="w-full max-h-[500px] bg-black relative overflow-hidden flex items-center justify-center select-none cursor-pointer" ondblclick="handlePostDoubleTap('${post.id}')">
-                                <img src="${post.imageUrl}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
-                                <div id="double-tap-heart-${post.id}" class="absolute pointer-events-none hidden text-white text-6xl drop-shadow-2xl">
+                            <div class="w-full max-h-[520px] bg-black relative overflow-hidden flex items-center justify-center select-none cursor-pointer" ondblclick="handlePostDoubleTap('${post.id}')">
+                                <img src="${post.imageUrl}" class="w-full h-full object-cover">
+                                <div id="double-tap-heart-${post.id}" class="absolute pointer-events-none hidden text-white text-7xl drop-shadow-2xl">
                                     <i class="fa-solid fa-heart text-ig-red"></i>
                                 </div>
                             </div>
@@ -1039,7 +1387,7 @@
                         <div class="p-4 space-y-3">
                             <div class="flex items-center justify-between text-lg text-white">
                                 <div class="flex items-center gap-4">
-                                    <button onclick="toggleLikePost('${post.id}', ${isLiked})" class="transition hover:scale-110 ${isLiked ? 'text-ig-red' : 'text-white'}">
+                                    <button onclick="toggleLikePost('${post.id}', ${isLiked})" class="transition hover:scale-125 active:scale-95 ${isLiked ? 'text-ig-red' : 'text-white'}">
                                         <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
                                     </button>
                                     <button onclick="focusCommentInput('${post.id}')" class="hover:text-slate-400 transition"><i class="fa-regular fa-comment"></i></button>
@@ -1050,9 +1398,9 @@
 
                             ${post.text ? `<p class="text-xs text-slate-200 leading-relaxed"><b class="text-white">@${post.username}:</b> ${post.text}</p>` : ''}
 
-                            <div class="space-y-1.5 text-xs text-slate-300 border-t border-ig-border pt-2 max-h-28 overflow-y-auto no-scrollbar">
+                            <div class="space-y-1.5 text-xs text-slate-300 border-t border-ig-border pt-2 max-h-32 overflow-y-auto no-scrollbar">
                                 ${(post.comments || []).map(c => `
-                                    <div><b class="text-amber-400">${c.author}:</b> ${c.text}</div>
+                                    <div class="bg-ig-elevated p-2 rounded-xl"><b class="text-amber-400">${c.author}:</b> ${c.text}</div>
                                 `).join('')}
                             </div>
 
@@ -1101,13 +1449,14 @@
         };
 
         window.deletePost = async (postId) => {
-            if (confirm("هل أنت متأكد من حذف هذا المنشور؟")) {
+            if (confirm("هل أنت متأكد من رغبتك في حذف هذا المنشور؟")) {
                 await deleteDoc(doc(db, "posts", postId));
+                showToast("تم حذف المنشور", "info");
             }
         };
 
         window.toggleFollowUser = async (targetUid) => {
-            if (targetUid === currentUser.uid) return alert("لا يمكنك متابعة نفسك!");
+            if (targetUid === currentUser.uid) return showToast("لا يمكنك متابعة حسابك الشخصي!", "error");
 
             const myRef = doc(db, "users", currentUser.uid);
             const targetRef = doc(db, "users", targetUid);
@@ -1129,7 +1478,7 @@
         };
 
         // -------------------------------------------------------------
-        // المحادثات DMs
+        // المحادثات والدردشة Direct Messages
         // -------------------------------------------------------------
         let allDmMessages = [];
         window.setDmFilter = (filterName) => {
@@ -1161,11 +1510,11 @@
             const container = document.getElementById('dm-threads-container');
             if (dmActiveFilter === 'public') {
                 container.innerHTML = `
-                    <div onclick="startDirectChat('public', 'الدردشة العامة VIP')" class="p-3.5 rounded-2xl bg-ig-elevated border border-amber-500/20 cursor-pointer flex items-center gap-3">
+                    <div onclick="startDirectChat('public', 'غرفة الدردشة العامة VIP')" class="p-3.5 rounded-2xl bg-ig-elevated border border-amber-500/20 cursor-pointer flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full founder-gradient flex items-center justify-center font-bold text-white text-xs">👑</div>
                         <div>
                             <h4 class="font-bold text-xs text-white">غرفة الدردشة العامة</h4>
-                            <span class="text-[10px] text-amber-400">متاحة لجميع الأعضاء</span>
+                            <span class="text-[10px] text-amber-400">متاحة لجميع الأعضاء والمشتركين</span>
                         </div>
                     </div>
                 `;
@@ -1197,7 +1546,7 @@
             const filteredThreads = Array.from(myChatsMap.values()).filter(t => dmActiveFilter === 'requests' ? t.isRequest : !t.isRequest);
 
             if (filteredThreads.length === 0) {
-                container.innerHTML = `<div class="p-6 text-center text-xs text-slate-500">${dmActiveFilter === 'requests' ? 'لا توجد طلبات مراسلة معلقة.' : 'لا توجد محادثات أساسية.'}</div>`;
+                container.innerHTML = `<div class="p-6 text-center text-xs text-slate-500">${dmActiveFilter === 'requests' ? 'لا توجد طلبات مراسلة معلقة.' : 'لا توجد محادثات نشطة.'}</div>`;
                 return;
             }
 
@@ -1205,7 +1554,7 @@
                 <div onclick="startDirectChat('${th.uid}', '${th.name}')" class="p-3 rounded-2xl hover:bg-ig-elevated cursor-pointer flex items-center justify-between transition ${activeChatTargetId === th.uid ? 'bg-ig-elevated' : ''}">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full insta-gradient p-0.5 flex items-center justify-center font-bold text-white text-xs">
-                            <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center">${th.name[0].toUpperCase()}</div>
+                            <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center">${(th.name || 'U')[0].toUpperCase()}</div>
                         </div>
                         <div>
                             <h4 class="font-bold text-xs text-white">${th.name}</h4>
@@ -1222,7 +1571,7 @@
             activeChatTargetName = targetName;
             document.getElementById('dm-active-window').classList.remove('hidden');
             document.getElementById('active-chat-title').innerText = targetName;
-            document.getElementById('active-chat-avatar').innerText = targetName[0].toUpperCase();
+            document.getElementById('active-chat-avatar').innerText = (targetName || 'U')[0].toUpperCase();
 
             const isRequest = targetUid !== 'public' && !(currentUserData.following && currentUserData.following.includes(targetUid));
             document.getElementById('dm-request-notice').classList.toggle('hidden', !isRequest);
@@ -1256,9 +1605,15 @@
                 return `
                     <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
                         <span class="text-[10px] text-slate-500 mb-0.5">${msg.senderName}</span>
-                        <div class="px-4 py-2.5 rounded-2xl max-w-[80%] text-xs ${isMe ? 'bg-ig-blue text-white rounded-bl-none' : 'bg-ig-elevated text-white rounded-br-none'}">
-                            ${msg.text}
-                        </div>
+                        ${msg.audioUrl ? `
+                            <div class="p-2 rounded-2xl ${isMe ? 'bg-ig-blue text-white' : 'bg-ig-elevated text-white'} flex items-center gap-2">
+                                <audio controls src="${msg.audioUrl}" class="h-8 max-w-[200px]"></audio>
+                            </div>
+                        ` : `
+                            <div class="px-4 py-2.5 rounded-2xl max-w-[80%] text-xs ${isMe ? 'bg-ig-blue text-white rounded-bl-none' : 'bg-ig-elevated text-white rounded-br-none'}">
+                                ${msg.text}
+                            </div>
+                        `}
                     </div>
                 `;
             }).join('');
@@ -1284,7 +1639,7 @@
         });
 
         // -------------------------------------------------------------
-        // الملف الشخصي واستكشاف المنشورات
+        // الملف الشخصي واستكشاف المستخدمين والبحث
         // -------------------------------------------------------------
         window.openMyProfile = () => viewUserProfile(currentUser.uid);
 
@@ -1297,7 +1652,7 @@
             document.getElementById('prof-username').innerText = `@${userObj.username || 'user'}`;
             document.getElementById('prof-fullname').innerText = userObj.name;
             document.getElementById('prof-bio').innerText = userObj.bio || 'عضو في شبكة YamanGram';
-            document.getElementById('prof-avatar-box').innerText = userObj.name[0].toUpperCase();
+            document.getElementById('prof-avatar-box').innerText = (userObj.name || 'U')[0].toUpperCase();
             
             const isFounder = userObj.isFounder || (userObj.username === 'yamangadhat');
             document.getElementById('prof-founder-badge').classList.toggle('hidden', !isFounder);
@@ -1321,7 +1676,7 @@
                     <button onclick="startDirectChat('${uid}', '${userObj.name}')" class="px-4 py-2.5 rounded-xl bg-ig-elevated text-white text-xs font-bold hover:bg-ig-subtle transition">
                         مراسلة
                     </button>
-                    <button onclick="initiateWebRTCCall('${uid}', '${userObj.name}', true)" class="px-4 py-2.5 rounded-xl bg-ig-elevated border border-ig-border text-amber-400 text-xs font-bold hover:border-amber-400 transition" title="مكالمة فيديو">
+                    <button onclick="initiateWebRTCCall('${uid}', '${userObj.name}', true)" class="px-4 py-2.5 rounded-xl bg-ig-elevated border border-ig-border text-amber-400 text-xs font-bold hover:border-amber-400 transition" title="مكالمة فيديو HD">
                         <i class="fa-solid fa-video"></i>
                     </button>
                 `;
@@ -1347,6 +1702,7 @@
                 await updateDoc(doc(db, "users", currentUser.uid), { bio: newBio });
                 currentUserData.bio = newBio;
                 viewUserProfile(currentUser.uid);
+                showToast("تم تحديث البايو بنجاح!", "success");
             }
         };
 
@@ -1359,14 +1715,38 @@
             `).join('');
         }
 
-        // البحث
+        // البحث التفاعلي الحي عن المستخدمين
         document.getElementById('global-search-input').addEventListener('input', (e) => {
             const queryVal = e.target.value.toLowerCase().trim();
-            const founderCard = document.getElementById('founder-vip-card');
-            if (queryVal.includes('yaman') || queryVal.includes('gadhat') || queryVal.includes('يمان') || queryVal.includes('قدحات')) {
-                founderCard.classList.remove('hidden');
+            const resultsBox = document.getElementById('search-results-box');
+            
+            if (!queryVal) {
+                resultsBox.classList.add('hidden');
+                return;
+            }
+
+            const matched = allUsersCache.filter(u => 
+                (u.name && u.name.toLowerCase().includes(queryVal)) || 
+                (u.username && u.username.toLowerCase().includes(queryVal))
+            );
+
+            if (matched.length > 0) {
+                resultsBox.classList.remove('hidden');
+                resultsBox.innerHTML = matched.map(u => `
+                    <div onclick="viewUserProfile('${u.uid}')" class="p-2.5 rounded-xl hover:bg-ig-elevated cursor-pointer flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center font-bold text-xs text-white">${(u.name || 'U')[0].toUpperCase()}</div>
+                            <div>
+                                <h5 class="font-bold text-xs text-white">${u.name}</h5>
+                                <span class="text-[10px] text-slate-400">@${u.username}</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-arrow-left text-slate-500 text-xs"></i>
+                    </div>
+                `).join('');
             } else {
-                founderCard.classList.add('hidden');
+                resultsBox.classList.remove('hidden');
+                resultsBox.innerHTML = `<p class="text-xs text-slate-500 text-center py-2">لم يتم العثور على أي مستخدم بهذا الاسم.</p>`;
             }
         });
 

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YAMAN OS | شبكة يمان قدحات الألترا</title>
+    <title>YamanGram Pro | منصة التواصل الاحترافية</title>
     
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,28 +13,15 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: { 950: '#030712', 900: '#090d16', 800: '#111827', 700: '#1f2937' },
-                        lux: { gold: '#f59e0b', amber: '#fbbf24', neon: '#ec4899', cyan: '#06b6d4' }
-                    },
-                    animation: {
-                        'spin-slow': 'spin 8s linear infinite',
-                        'heart-burst': 'heartBurst 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-                        'shimmer': 'shimmer 2.5s infinite linear',
-                        'float': 'float 3s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        heartBurst: {
-                            '0%': { transform: 'scale(0) translateY(0) rotate(-15deg)', opacity: '0' },
-                            '50%': { transform: 'scale(1.3) translateY(-20px) rotate(0deg)', opacity: '1' },
-                            '100%': { transform: 'scale(1) translateY(-40px) rotate(10deg)', opacity: '0' }
-                        },
-                        shimmer: {
-                            '0%': { backgroundPosition: '-200% 0' },
-                            '100%': { backgroundPosition: '200% 0' }
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-6px)' }
+                        ig: {
+                            black: '#000000',
+                            card: '#121212',
+                            elevated: '#1c1c1e',
+                            border: '#262626',
+                            subtle: '#363636',
+                            blue: '#0095f6',
+                            red: '#ed4956',
+                            gold: '#f59e0b'
                         }
                     }
                 }
@@ -42,63 +29,56 @@
         }
     </script>
     
-    <!-- الخطوط والأيقونات والتأثيرات -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- الخطوط والأيقونات ومكتبة الاتصال PeerJS -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
     <style>
-        body { font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif; background-color: #030712; color: #f8fafc; overflow-x: hidden; }
-        .glass-ultra { background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .insta-mesh { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        .founder-hologram { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 30%, #a855f7 70%, #3b82f6 100%); background-size: 300% 300%; animation: gradientShift 6s ease infinite; }
-        @keyframes gradientShift { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
+        body { font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif; background-color: #000000; color: #f5f5f5; }
+        .insta-gradient { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .founder-gradient { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes heartFade {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+        .animate-heart-fade { animation: heartFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="selection:bg-pink-600 selection:text-white pb-20 md:pb-0 relative min-h-screen">
+<body class="bg-ig-black text-slate-100 min-h-screen selection:bg-ig-blue selection:text-white pb-16 md:pb-0 overflow-x-hidden">
 
-    <!-- خلفية نيونية متحركة خفيفة (Ambient Light) -->
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div class="absolute -top-32 -left-32 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute top-1/3 -right-32 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1.5s;"></div>
-        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 3s;"></div>
-    </div>
-
-    <!-- شاشة تسجيل الدخول وإنشاء الحساب الفاخرة -->
-    <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl">
-        <div class="glass-ultra w-full max-w-md p-8 rounded-3xl shadow-2xl relative border border-white/10 overflow-hidden">
-            <div class="absolute top-0 left-0 right-0 h-1.5 founder-hologram"></div>
-            
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 rounded-2xl founder-hologram mx-auto flex items-center justify-center shadow-xl shadow-amber-500/20 mb-4 animate-float">
-                    <span class="text-2xl text-white font-black">YG</span>
-                </div>
-                <h1 class="text-3xl font-black tracking-wide insta-mesh bg-clip-text text-transparent">YAMAN ULTRA</h1>
-                <p class="text-xs text-slate-400 mt-1" id="auth-desc">الجيل المستقبلي لشبكات التواصل الاجتماعي</p>
-                <div class="mt-3 px-3.5 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[11px] text-amber-400 font-bold inline-flex items-center gap-1.5">
-                    👑 الأدمن الرسمي: YamanGadhat
+    <!-- شاشة تسجيل الدخول / إنشاء الحساب -->
+    <div id="auth-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ig-black">
+        <div class="w-full max-w-sm p-8 rounded-3xl bg-ig-card border border-ig-border shadow-2xl space-y-6">
+            <div class="text-center space-y-2">
+                <h1 class="text-4xl font-black italic tracking-wide insta-gradient bg-clip-text text-transparent">YamanGram</h1>
+                <p class="text-xs text-slate-400 font-medium" id="auth-desc">المنصة الرسمية للتواصل والمكالمات الحية</p>
+                <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-[11px] text-amber-400 font-bold">
+                    <span>👑 حساب الأدمن:</span> <span class="tracking-wider">YamanGadhat</span>
                 </div>
             </div>
 
             <form id="auth-form" class="space-y-3.5">
-                <div id="signup-extra-fields" class="space-y-3.5 hidden">
-                    <input type="text" id="reg-name" placeholder="الاسم الكامل" class="w-full px-4 py-3.5 bg-slate-900/90 border border-slate-700/80 rounded-2xl text-sm focus:border-amber-400 outline-none text-white transition">
-                    <input type="text" id="reg-username" placeholder="اسم المستخدم (@username)" class="w-full px-4 py-3.5 bg-slate-900/90 border border-slate-700/80 rounded-2xl text-sm focus:border-amber-400 outline-none text-white transition">
+                <div id="signup-extra-fields" class="space-y-3 hidden">
+                    <input type="text" id="reg-name" placeholder="الاسم الكامل" class="w-full px-4 py-3.5 bg-ig-elevated border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
+                    <input type="text" id="reg-username" placeholder="اسم المستخدم (@username)" class="w-full px-4 py-3.5 bg-ig-elevated border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
                 </div>
-                <input type="text" id="auth-email-input" required placeholder="اليوزر أو البريد (YamanGadhat)" class="w-full px-4 py-3.5 bg-slate-900/90 border border-slate-700/80 rounded-2xl text-sm focus:border-amber-400 outline-none text-white transition">
-                <input type="password" id="auth-pass-input" required placeholder="كلمة المرور" class="w-full px-4 py-3.5 bg-slate-900/90 border border-slate-700/80 rounded-2xl text-sm focus:border-amber-400 outline-none text-white transition">
+                <input type="text" id="auth-email-input" required placeholder="اليوزر أو البريد الإلكتروني" class="w-full px-4 py-3.5 bg-ig-elevated border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
+                <input type="password" id="auth-pass-input" required placeholder="كلمة المرور" class="w-full px-4 py-3.5 bg-ig-elevated border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
                 
                 <p id="auth-error-msg" class="text-red-400 text-xs bg-red-950/40 p-3 rounded-xl border border-red-800/40 hidden"></p>
 
-                <button type="submit" id="auth-submit-btn" class="w-full py-4 rounded-2xl founder-hologram text-white font-black text-sm tracking-wide transition shadow-xl shadow-amber-500/20 active:scale-95">
-                    دخول المنصة VIP
+                <button type="submit" id="auth-submit-btn" class="w-full py-3.5 rounded-2xl bg-ig-blue hover:bg-blue-600 font-bold text-xs text-white transition shadow-lg shadow-blue-500/20 active:scale-98">
+                    تسجيل الدخول
                 </button>
             </form>
 
-            <div class="text-center mt-6 pt-4 border-t border-white/5">
-                <button id="toggle-auth-btn" class="text-xs text-slate-400 hover:text-amber-400 font-semibold transition">
+            <div class="text-center pt-4 border-t border-ig-border">
+                <button id="toggle-auth-btn" class="text-xs text-slate-400 hover:text-white font-semibold transition">
                     ليس لديك حساب؟ أنشئ حساباً جديداً
                 </button>
             </div>
@@ -106,240 +86,219 @@
     </div>
 
     <!-- التطبيق الكامل -->
-    <div id="main-app" class="hidden min-h-screen flex flex-col md:flex-row relative z-10">
+    <div id="main-app" class="hidden min-h-screen flex flex-col md:flex-row">
         
-        <!-- الشريط الجانبي الفخم للكمبيوتر (Sidebar) -->
-        <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 glass-ultra border-l border-white/10 p-6 justify-between z-30">
-            <div class="space-y-8">
+        <!-- الشريط الجانبي للكمبيوتر (Sidebar) -->
+        <aside class="hidden md:flex flex-col w-64 h-screen sticky top-0 bg-ig-black border-l border-ig-border p-5 justify-between z-30">
+            <div class="space-y-7">
                 <!-- الشعار -->
-                <div class="cursor-pointer px-2 flex items-center gap-3" onclick="switchTab('feed')">
-                    <div class="w-10 h-10 rounded-xl founder-hologram flex items-center justify-center font-black text-white text-lg shadow-lg shadow-amber-500/30">
-                        YG
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-black text-xl tracking-wider text-white">YAMAN</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/40">PRO</span>
-                        </div>
-                        <p class="text-[10px] text-slate-400">ULTRA NETWORK</p>
-                    </div>
+                <div class="cursor-pointer px-2 flex items-center gap-2.5" onclick="switchTab('feed')">
+                    <span class="text-2xl font-black italic tracking-wide insta-gradient bg-clip-text text-transparent">YamanGram</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 font-black border border-amber-500/40">PRO</span>
                 </div>
 
-                <!-- أزرار التنقل -->
-                <nav class="space-y-2 text-sm font-bold">
-                    <button onclick="switchTab('feed')" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-white/5 transition text-white" data-tab="feed">
+                <!-- أزرار التنقل الرئيسية -->
+                <nav class="space-y-1.5 text-sm font-bold">
+                    <button onclick="switchTab('feed')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-white" data-tab="feed">
                         <i class="fa-solid fa-house text-lg w-6"></i>
-                        <span>الرئيسية (Feed)</span>
+                        <span>الرئيسية</span>
                     </button>
-                    <button onclick="switchTab('explore')" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-white/5 transition text-slate-400 hover:text-white" data-tab="explore">
+                    <button onclick="switchTab('explore')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white" data-tab="explore">
                         <i class="fa-solid fa-compass text-lg w-6"></i>
-                        <span>استكشاف وبحث</span>
+                        <span>استكشاف</span>
                     </button>
-                    <button onclick="switchTab('messages')" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-white/5 transition text-slate-400 hover:text-white relative" data-tab="messages">
+                    <button onclick="switchTab('messages')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white relative" data-tab="messages">
                         <i class="fa-solid fa-paper-plane text-lg w-6"></i>
-                        <span>الرسائل (DMs)</span>
-                        <span id="unread-requests-dot" class="hidden w-2.5 h-2.5 rounded-full bg-amber-500 absolute right-8 top-4 animate-ping"></span>
+                        <span>الرسائل</span>
+                        <span id="unread-requests-dot" class="hidden w-2 h-2 rounded-full bg-ig-red absolute right-7 top-3.5"></span>
                     </button>
-                    <button onclick="switchTab('create')" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-white/5 transition text-slate-400 hover:text-white" data-tab="create">
+                    <button onclick="switchTab('create')" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white" data-tab="create">
                         <i class="fa-regular fa-square-plus text-lg w-6"></i>
-                        <span>إنشاء منشور</span>
+                        <span>إنشاء</span>
                     </button>
-                    <button onclick="openMyProfile()" class="nav-btn w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl hover:bg-white/5 transition text-slate-400 hover:text-white" data-tab="profile">
-                        <div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-white" id="nav-user-avatar">U</div>
-                        <span>بروفايلي</span>
+                    <button onclick="openMyProfile()" class="nav-btn w-full flex items-center gap-4 px-3.5 py-3 rounded-2xl hover:bg-ig-elevated transition text-slate-400 hover:text-white" data-tab="profile">
+                        <div class="w-6 h-6 rounded-full bg-slate-700 overflow-hidden flex items-center justify-center text-xs font-bold text-white" id="nav-user-avatar">U</div>
+                        <span>الملف الشخصي</span>
                     </button>
                 </nav>
             </div>
 
-            <!-- معلومات الحساب وتسجيل الخروج -->
-            <div class="pt-4 border-t border-white/10 flex items-center justify-between">
-                <button onclick="toggleLanguage()" class="text-xs text-amber-400 font-bold px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-amber-400 transition">
+            <!-- خيارات الحساب واللغة -->
+            <div class="pt-4 border-t border-ig-border flex items-center justify-between">
+                <button onclick="toggleLanguage()" class="text-xs text-amber-400 font-bold px-3 py-1.5 rounded-xl bg-ig-elevated border border-ig-border hover:border-amber-400 transition">
                     <i class="fa-solid fa-globe mr-1"></i> <span id="lang-btn-text">English</span>
                 </button>
-                <button onclick="logoutUser()" class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 flex items-center justify-center transition" title="تسجيل الخروج">
-                    <i class="fa-solid fa-power-off text-sm"></i>
+                <button onclick="logoutUser()" class="p-2 text-slate-400 hover:text-red-400 text-sm transition" title="تسجيل الخروج">
+                    <i class="fa-solid fa-power-off"></i>
                 </button>
             </div>
         </aside>
 
-        <!-- المحتوى المركزي لجميع الواجهات -->
-        <main class="flex-1 max-w-4xl mx-auto w-full min-h-screen flex flex-col">
+        <!-- المحتوى المركزي لجميع التبويبات -->
+        <main class="flex-1 max-w-2xl mx-auto w-full min-h-screen flex flex-col">
             
-            <!-- شريط علوي للهواتف -->
-            <div class="md:hidden flex items-center justify-between px-4 h-16 glass-ultra border-b border-white/10 sticky top-0 z-30">
-                <span class="text-xl font-black tracking-wider insta-mesh bg-clip-text text-transparent">YAMAN ULTRA</span>
-                <div class="flex items-center gap-3">
-                    <button onclick="switchTab('messages')" class="text-white relative text-lg p-2">
+            <!-- شريط علوي للهواتف فقط -->
+            <div class="md:hidden flex items-center justify-between px-4 h-14 bg-ig-black/95 backdrop-blur-md border-b border-ig-border sticky top-0 z-30">
+                <span class="text-xl font-black italic tracking-wide insta-gradient bg-clip-text text-transparent">YamanGram</span>
+                <div class="flex items-center gap-3.5">
+                    <button onclick="openCreateStoryModal()" class="text-amber-400 text-base" title="إضافة قصة"><i class="fa-solid fa-circle-plus"></i></button>
+                    <button onclick="switchTab('messages')" class="text-white relative text-base">
                         <i class="fa-regular fa-paper-plane"></i>
-                        <span id="unread-requests-dot-mobile" class="hidden w-2 h-2 rounded-full bg-amber-500 absolute top-1 right-1"></span>
-                    </button>
-                    <button onclick="logoutUser()" class="text-red-400 text-sm p-2">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span id="unread-requests-dot-mobile" class="hidden w-2 h-2 rounded-full bg-ig-red absolute -top-1 -right-1"></span>
                     </button>
                 </div>
             </div>
 
-            <!-- 1. تبويب الرئيسية (Feed) -->
-            <section id="tab-feed" class="tab-content flex-1 p-4 md:py-6 max-w-xl mx-auto w-full space-y-6">
+            <!-- 1. تبويب الرئيسية (Feed + Stories) -->
+            <section id="tab-feed" class="tab-content flex-1 p-3 md:py-6 w-full space-y-6">
                 
-                <!-- إعلان مثبت من المؤسس (Founder Announcement Banner) -->
-                <div class="glass-ultra p-4 rounded-3xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-900/60 to-purple-600/10 flex items-center justify-between gap-3 shadow-lg">
-                    <div class="flex items-center gap-3">
-                        <span class="text-xl">👑</span>
-                        <div class="text-xs">
-                            <h4 class="font-bold text-white">إعلان من المؤسس Yaman Gadhat</h4>
-                            <p class="text-slate-300 text-[11px]">أهلاً بكم في النسخة الألترا! استمتعوا بـ Double-Tap للقلوب والشات الحي.</p>
-                        </div>
-                    </div>
-                    <button onclick="playSfx('like'); confetti({particleCount: 50, spread: 60})" class="p-2 rounded-xl bg-amber-500/20 text-amber-400 text-xs font-bold hover:scale-105 transition">🔥</button>
-                </div>
-
                 <!-- شريط القصص (Stories Reel) -->
-                <div class="glass-ultra p-4 rounded-3xl border border-white/10 flex items-center gap-4 overflow-x-auto no-scrollbar">
-                    <!-- قصة يمان قدحات -->
-                    <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer group" onclick="openStoryViewer('yamangadhat')">
-                        <div class="w-16 h-16 rounded-full p-[2.5px] founder-hologram animate-spin-slow group-hover:scale-105 transition">
-                            <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-xl text-amber-400 font-bold border-2 border-slate-950">
-                                👑
-                            </div>
+                <div class="bg-ig-card border border-ig-border rounded-3xl p-3.5 flex items-center gap-4 overflow-x-auto no-scrollbar">
+                    
+                    <!-- زر إضافة قصة جديدة -->
+                    <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer" onclick="openCreateStoryModal()">
+                        <div class="w-16 h-16 rounded-full border-2 border-dashed border-slate-600 flex items-center justify-center hover:border-amber-400 transition bg-ig-elevated">
+                            <i class="fa-solid fa-plus text-amber-400 text-lg"></i>
                         </div>
-                        <span class="text-[11px] text-amber-400 font-bold flex items-center gap-0.5">Yaman <i class="fa-solid fa-circle-check text-[9px] text-blue-400"></i></span>
+                        <span class="text-[11px] text-slate-300 font-semibold">إضافة قصة</span>
                     </div>
 
-                    <!-- إضافة قصة جديدة -->
-                    <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer opacity-90 hover:opacity-100 transition" onclick="openStoryViewer('community')">
-                        <div class="w-16 h-16 rounded-full p-[2.5px] insta-mesh">
-                            <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center text-pink-400 font-bold border-2 border-slate-950 text-sm">
-                                ⚡
-                            </div>
-                        </div>
-                        <span class="text-[11px] text-slate-300">أحدث القصص</span>
-                    </div>
+                    <!-- قائمة القصص المنشورة الحية -->
+                    <div id="stories-stream-container" class="flex items-center gap-4"></div>
                 </div>
 
-                <!-- تدفق المنشورات الحية (Feed Stream) -->
+                <!-- تدفق المنشورات (Posts Stream) -->
                 <div id="feed-posts-stream" class="space-y-6">
-                    <div class="text-center py-16 glass-ultra rounded-3xl border border-white/5 text-slate-400 flex flex-col items-center gap-3">
-                        <i class="fa-solid fa-circle-notch fa-spin text-2xl text-amber-500"></i>
+                    <div class="text-center py-16 text-slate-500 text-sm flex flex-col items-center gap-3">
+                        <i class="fa-solid fa-circle-notch fa-spin text-xl text-ig-blue"></i>
                         <span>جاري تحميل المنشورات...</span>
                     </div>
                 </div>
             </section>
 
-            <!-- 2. تبويب البحث والاستكشاف (Explore & Search) -->
-            <section id="tab-explore" class="tab-content hidden flex-1 p-4 max-w-2xl mx-auto w-full space-y-5">
+            <!-- 2. تبويب البحث والاستكشاف (Explore) -->
+            <section id="tab-explore" class="tab-content hidden flex-1 p-4 w-full space-y-5">
                 <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-slate-500"></i>
-                    <input type="text" id="global-search-input" placeholder="ابحث بالاسم، اليوزر @username، أو Yaman Gadhat..." class="w-full pr-11 pl-4 py-3 bg-slate-900/90 border border-slate-700/80 rounded-2xl text-sm focus:border-amber-400 outline-none text-white transition">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-slate-500 text-sm"></i>
+                    <input type="text" id="global-search-input" placeholder="ابحث بالاسم، اليوزر @username، أو Yaman Gadhat..." class="w-full pr-11 pl-4 py-3 bg-ig-card border border-ig-border rounded-2xl text-xs focus:border-slate-400 outline-none text-white transition">
                 </div>
 
-                <!-- بطاقة المؤسس التفاعلية عند البحث -->
-                <div id="founder-vip-card" class="hidden glass-ultra p-6 rounded-3xl border-2 border-amber-500/50 bg-gradient-to-r from-amber-500/10 via-slate-900 to-pink-500/10 shadow-2xl space-y-3">
+                <!-- بطاقة المؤسس الموثقة فور البحث -->
+                <div id="founder-vip-card" class="hidden p-5 rounded-3xl bg-ig-card border border-amber-500/40 space-y-3 shadow-xl">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-2xl founder-hologram flex items-center justify-center text-3xl font-black text-white shadow-xl shadow-amber-500/30">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-14 h-14 rounded-2xl founder-gradient flex items-center justify-center text-2xl font-black text-white shadow-lg shadow-amber-500/20">
                                 👑
                             </div>
                             <div>
-                                <h3 class="font-black text-white text-base flex items-center gap-1.5">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-1.5">
                                     Yaman Gadhat (يمان قدحات)
                                     <i class="fa-solid fa-circle-check text-blue-400 text-xs"></i>
                                 </h3>
-                                <p class="text-xs text-amber-400 font-bold">@yamangadhat • مؤسس ومدير المنصة</p>
-                                <p class="text-[11px] text-slate-300">الحساب الرسمي للمطور والمؤسس التنفيذي</p>
+                                <p class="text-xs text-amber-400 font-bold">@yamangadhat • مؤسس المنصة</p>
                             </div>
                         </div>
-                        <button onclick="startDirectChat('yamangadhat_admin', 'Yaman Gadhat 👑')" class="px-5 py-2.5 founder-hologram text-white rounded-xl text-xs font-bold shadow-lg shadow-amber-500/20 hover:scale-105 transition">
-                            مراسلة خاصة
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="startDirectChat('yamangadhat_admin', 'Yaman Gadhat 👑')" class="px-3.5 py-2 bg-ig-blue hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition">
+                                مراسلة
+                            </button>
+                            <button onclick="startCall('yamangadhat_admin', 'Yaman Gadhat 👑', true)" class="p-2 bg-ig-elevated border border-ig-border hover:border-amber-400 text-amber-400 rounded-xl text-xs" title="اتصال مرئي">
+                                <i class="fa-solid fa-video"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- شبكة استكشاف المنشورات المربعة -->
+                <!-- نتائج البحث عن المستخدمين -->
+                <div id="search-users-results" class="space-y-2"></div>
+
+                <!-- شبكة استكشاف المنشورات -->
                 <div>
-                    <h4 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">شبكة الاستكشاف (Explore)</h4>
-                    <div id="explore-posts-grid" class="grid grid-cols-3 gap-2 rounded-3xl overflow-hidden"></div>
+                    <h4 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">استكشاف المنشورات</h4>
+                    <div id="explore-posts-grid" class="grid grid-cols-3 gap-1.5 rounded-2xl overflow-hidden"></div>
                 </div>
             </section>
 
             <!-- 3. تبويب إنشاء منشور جديد (Create Post) -->
             <section id="tab-create" class="tab-content hidden flex-1 p-4 max-w-lg mx-auto w-full space-y-5">
-                <div class="glass-ultra rounded-3xl p-6 border border-white/10 shadow-2xl space-y-5">
-                    <h3 class="font-black text-lg text-white border-b border-white/10 pb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-sparkles text-amber-400"></i> نشر محتوى فخم
-                    </h3>
+                <div class="bg-ig-card border border-ig-border rounded-3xl p-6 space-y-4">
+                    <h3 class="font-bold text-sm text-white border-b border-ig-border pb-3">إنشاء منشور احترافي</h3>
                     
-                    <textarea id="create-post-caption" rows="4" placeholder="ماذا تريد أن تشارك مع مجتمع Yaman Ultra؟ #yaman #pro" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-sm outline-none focus:border-amber-400 text-white resize-none"></textarea>
+                    <textarea id="create-post-caption" rows="4" placeholder="اكتب ما يدور في ذهنك... #yamangram" class="w-full bg-ig-black border border-ig-border rounded-2xl p-3.5 text-xs outline-none focus:border-slate-500 text-white resize-none"></textarea>
                     
                     <div class="space-y-1.5">
-                        <label class="text-xs text-slate-400 font-semibold">رابط صورة عالية الدقة (Image URL)</label>
-                        <input type="url" id="create-post-image" placeholder="https://example.com/photo.jpg" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs outline-none focus:border-amber-400 text-white">
+                        <label class="text-xs text-slate-400 font-semibold">رابط الصورة (Image URL)</label>
+                        <input type="url" id="create-post-image" placeholder="https://example.com/photo.jpg" class="w-full bg-ig-black border border-ig-border rounded-xl px-3.5 py-2.5 text-xs outline-none focus:border-slate-500 text-white">
                     </div>
 
-                    <!-- أزرار تفاعل سريعة قبل النشر -->
-                    <div class="flex gap-2 text-xs">
-                        <button type="button" onclick="document.getElementById('create-post-caption').value += ' 👑 #YamanVIP'" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-amber-400 text-amber-400">👑 #YamanVIP</button>
-                        <button type="button" onclick="document.getElementById('create-post-caption').value += ' 🔥 #Trending'" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-pink-400 text-pink-400">🔥 #Trending</button>
-                    </div>
-
-                    <button onclick="publishNewPost()" id="btn-publish-post" class="w-full py-4 founder-hologram text-white font-black rounded-2xl text-sm transition flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-102">
-                        <span>نشر المنشور الآن</span>
+                    <button onclick="publishNewPost()" id="btn-publish-post" class="w-full py-3.5 bg-ig-blue hover:bg-blue-600 text-white font-bold rounded-2xl text-xs transition flex items-center justify-center gap-2">
+                        <span>نشر المنشور</span>
                         <i class="fa-solid fa-paper-plane text-xs"></i>
                     </button>
                 </div>
             </section>
 
-            <!-- 4. تبويب الرسائل الخاصة (Direct Messages 2.0) -->
-            <section id="tab-messages" class="tab-content hidden flex-1 flex flex-col h-[calc(100vh-4.5rem)] md:h-screen p-2 md:p-6 max-w-4xl mx-auto w-full">
-                <div class="glass-ultra rounded-3xl flex-1 flex overflow-hidden border border-white/10 shadow-2xl">
+            <!-- 4. تبويب الرسائل الخاصة (Direct Messages + Calls) -->
+            <section id="tab-messages" class="tab-content hidden flex-1 flex flex-col h-[calc(100vh-4rem)] md:h-screen p-2 md:p-4 w-full">
+                <div class="bg-ig-card border border-ig-border rounded-3xl flex-1 flex overflow-hidden">
                     
                     <!-- قائمة المحادثات -->
-                    <div id="dm-conversations-list" class="w-full md:w-80 border-l border-white/10 flex flex-col">
-                        <div class="p-4 border-b border-white/10 space-y-3">
+                    <div id="dm-conversations-list" class="w-full md:w-80 border-l border-ig-border flex flex-col">
+                        <div class="p-4 border-b border-ig-border space-y-3">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-black text-base text-white">المحادثات DMs</h3>
-                                <span class="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full font-bold">Ultra Chat</span>
+                                <h3 class="font-bold text-sm text-white">الرسائل Direct</h3>
+                                <span class="text-[10px] px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full font-bold">VIP Chat</span>
                             </div>
                             
-                            <div class="grid grid-cols-3 gap-1 bg-slate-950 p-1 rounded-xl text-xs font-bold text-center">
-                                <button onclick="setDmFilter('primary')" id="dm-filter-primary" class="py-1.5 rounded-lg bg-white/10 text-white">الأساسية</button>
+                            <div class="grid grid-cols-3 gap-1 bg-ig-black p-1 rounded-xl text-xs font-semibold text-center">
+                                <button onclick="setDmFilter('primary')" id="dm-filter-primary" class="py-1.5 rounded-lg bg-ig-elevated text-white">الأساسية</button>
                                 <button onclick="setDmFilter('requests')" id="dm-filter-requests" class="py-1.5 rounded-lg text-slate-400 hover:text-white relative">
                                     الطلبات
-                                    <span id="requests-badge" class="hidden w-2 h-2 rounded-full bg-amber-500 absolute top-1 right-1"></span>
+                                    <span id="requests-badge" class="hidden w-2 h-2 rounded-full bg-ig-red absolute top-1 right-1"></span>
                                 </button>
                                 <button onclick="setDmFilter('public')" id="dm-filter-public" class="py-1.5 rounded-lg text-slate-400 hover:text-white">العامة</button>
                             </div>
                         </div>
 
-                        <div id="dm-threads-container" class="flex-1 overflow-y-auto p-2 space-y-1 text-sm no-scrollbar"></div>
+                        <div id="dm-threads-container" class="flex-1 overflow-y-auto p-2 space-y-1 text-xs no-scrollbar"></div>
                     </div>
 
-                    <!-- نافذة الشات النشطة -->
-                    <div id="dm-active-window" class="hidden md:flex flex-1 flex-col bg-slate-950/80">
-                        <div class="p-4 border-b border-white/10 flex items-center justify-between bg-slate-900/60">
+                    <!-- نافذة المحادثة النشطة -->
+                    <div id="dm-active-window" class="hidden md:flex flex-1 flex-col bg-ig-black">
+                        <div class="p-3.5 px-4 border-b border-ig-border flex items-center justify-between bg-ig-card">
                             <div class="flex items-center gap-3">
                                 <button onclick="closeActiveChatMobile()" class="md:hidden text-slate-400 p-1"><i class="fa-solid fa-arrow-right"></i></button>
-                                <div class="w-10 h-10 rounded-2xl founder-hologram flex items-center justify-center font-black text-xs text-white" id="active-chat-avatar">U</div>
+                                <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white" id="active-chat-avatar">U</div>
                                 <div>
-                                    <h4 class="font-black text-xs text-white" id="active-chat-title">المحادثة</h4>
-                                    <span class="text-[10px] text-green-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></span> متصل الآن</span>
+                                    <h4 class="font-bold text-xs text-white" id="active-chat-title">المحادثة</h4>
+                                    <span class="text-[10px] text-green-400">متصل الآن</span>
                                 </div>
+                            </div>
+
+                            <!-- أزرار المكالمات الصوتية والمرئية داخل المحادثة -->
+                            <div class="flex items-center gap-2" id="chat-call-actions">
+                                <button onclick="startCall(activeChatTargetId, activeChatTargetName, false)" class="w-8 h-8 rounded-full bg-ig-elevated text-slate-300 hover:text-white flex items-center justify-center transition" title="مكالمة صوتية">
+                                    <i class="fa-solid fa-phone text-xs"></i>
+                                </button>
+                                <button onclick="startCall(activeChatTargetId, activeChatTargetName, true)" class="w-8 h-8 rounded-full bg-ig-elevated text-slate-300 hover:text-white flex items-center justify-center transition" title="مكالمة فيديو">
+                                    <i class="fa-solid fa-video text-xs"></i>
+                                </button>
                             </div>
                         </div>
 
                         <!-- إشعار طلب المراسلة -->
-                        <div id="dm-request-notice" class="hidden p-3 bg-amber-950/60 border-b border-amber-800/60 text-center text-xs text-amber-300 flex items-center justify-center gap-2">
-                            <span>هذا المستخدم لا تتابعه (طلب مراسلة).</span>
-                            <button onclick="acceptMessageRequest()" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-black font-black rounded-lg text-[11px]">قبول المحادثة ومتابعة</button>
+                        <div id="dm-request-notice" class="hidden p-3 bg-amber-950/40 border-b border-amber-800/40 text-center text-xs text-amber-300">
+                            هذا المستخدم لا تتابعه. الرسالة في قسم <b>طلبات المراسلة</b>.
+                            <button onclick="acceptMessageRequest()" class="mr-2 px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-black font-bold rounded-lg text-[11px]">قبول ومتابعة</button>
                         </div>
 
-                        <!-- نافذة الرسائل -->
+                        <!-- تدفق الرسائل -->
                         <div id="dm-messages-stream" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs no-scrollbar"></div>
 
-                        <!-- صندوق إرسال الرسالة -->
-                        <form id="dm-send-form" class="p-3 border-t border-white/10 bg-slate-900/60 flex gap-2">
-                            <input type="text" id="dm-text-input" placeholder="اكتب رسالة مشفرة..." required class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-amber-400">
-                            <button type="submit" class="px-5 py-3 founder-hologram text-white rounded-xl font-bold text-xs hover:scale-105 transition shadow-lg">
+                        <!-- صندوق كتابة الرسالة -->
+                        <form id="dm-send-form" class="p-3 border-t border-ig-border bg-ig-card flex gap-2">
+                            <input type="text" id="dm-text-input" placeholder="اكتب رسالة..." required class="flex-1 bg-ig-black border border-ig-border rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-slate-500">
+                            <button type="submit" class="px-4 py-2.5 bg-ig-blue hover:bg-blue-600 text-white rounded-xl font-bold text-xs transition">
                                 <i class="fa-solid fa-paper-plane"></i>
                             </button>
                         </form>
@@ -348,90 +307,164 @@
                 </div>
             </section>
 
-            <!-- 5. تبويب البروفايل (Profile VIP) -->
-            <section id="tab-profile" class="tab-content hidden flex-1 p-4 max-w-2xl mx-auto w-full space-y-6">
-                <div class="glass-ultra rounded-3xl p-6 md:p-8 space-y-6 border border-white/10 shadow-2xl">
-                    <div class="flex items-center gap-6">
-                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-3xl p-1 founder-hologram flex-shrink-0 shadow-xl shadow-amber-500/20">
-                            <div class="w-full h-full rounded-2xl bg-slate-950 flex items-center justify-center font-black text-2xl text-white" id="prof-avatar-box">
+            <!-- 5. تبويب الملف الشخصي (Profile) -->
+            <section id="tab-profile" class="tab-content hidden flex-1 p-4 w-full space-y-6">
+                <div class="bg-ig-card border border-ig-border rounded-3xl p-6 space-y-5">
+                    <div class="flex items-center gap-5">
+                        <div class="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 insta-gradient flex-shrink-0">
+                            <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center font-black text-2xl text-white" id="prof-avatar-box">
                                 U
                             </div>
                         </div>
                         <div class="flex-1 space-y-3">
                             <div class="flex flex-wrap items-center gap-3">
-                                <h2 class="text-lg font-black text-white" id="prof-username">@username</h2>
-                                <span id="prof-founder-badge" class="hidden text-amber-400 text-sm" title="مؤسس المنصة"><i class="fa-solid fa-crown"></i></span>
-                                <button id="prof-action-btn" class="px-4 py-1.5 rounded-xl bg-white/10 text-xs font-bold text-white hover:bg-white/20 transition">تعديل</button>
+                                <h2 class="text-base font-bold text-white" id="prof-username">@username</h2>
+                                <span id="prof-founder-badge" class="hidden text-amber-400 text-xs" title="مؤسس المنصة"><i class="fa-solid fa-crown"></i></span>
                             </div>
                             
-                            <div class="flex items-center gap-6 text-xs">
+                            <!-- إحصائيات -->
+                            <div class="flex items-center gap-5 text-xs">
                                 <div><b class="text-white text-sm" id="prof-posts-count">0</b> <span class="text-slate-400">منشور</span></div>
                                 <div><b class="text-white text-sm" id="prof-followers-count">0</b> <span class="text-slate-400">متابع</span></div>
                                 <div><b class="text-white text-sm" id="prof-following-count">0</b> <span class="text-slate-400">يتابع</span></div>
                             </div>
 
                             <div>
-                                <h3 class="text-sm font-bold text-white" id="prof-fullname">الاسم الكامل</h3>
-                                <p class="text-xs text-slate-300 mt-1" id="prof-bio">مرحباً بكم في حسابي على Yaman Ultra! 🚀</p>
+                                <h3 class="text-xs font-bold text-white" id="prof-fullname">الاسم الكامل</h3>
+                                <p class="text-xs text-slate-300 mt-1" id="prof-bio">عضو في شبكة YamanGram Pro</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- أزرار الإجراءات السريعة (متابعة / مراسلة / اتصال) -->
+                    <div class="flex items-center gap-2 pt-2 border-t border-ig-border" id="prof-action-bar">
+                        <button id="prof-action-btn" class="flex-1 py-2 rounded-xl bg-ig-elevated text-xs font-bold text-white hover:bg-ig-subtle transition">تعديل</button>
+                    </div>
                 </div>
 
+                <!-- شبكة المنشورات المربعة -->
                 <div class="space-y-3">
-                    <div class="border-t border-white/10 pt-3 flex justify-center text-xs font-bold text-amber-400 gap-2">
-                        <i class="fa-solid fa-table-cells text-sm"></i> المنشورات المميزة
+                    <div class="border-t border-ig-border pt-3 flex justify-center text-xs font-bold text-white gap-2">
+                        <i class="fa-solid fa-table-cells text-sm"></i> المنشورات
                     </div>
-                    <div id="prof-posts-grid" class="grid grid-cols-3 gap-2 rounded-3xl overflow-hidden"></div>
+                    <div id="prof-posts-grid" class="grid grid-cols-3 gap-1.5 rounded-2xl overflow-hidden"></div>
                 </div>
             </section>
 
         </main>
 
-        <!-- شريط الهواتف السفلي (Mobile Bottom Bar) -->
-        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 glass-ultra border-t border-white/10 flex items-center justify-around z-40">
-            <button onclick="switchTab('feed')" class="text-slate-400 hover:text-amber-400 text-lg p-2"><i class="fa-solid fa-house"></i></button>
-            <button onclick="switchTab('explore')" class="text-slate-400 hover:text-amber-400 text-lg p-2"><i class="fa-solid fa-compass"></i></button>
-            <button onclick="switchTab('create')" class="text-amber-400 text-2xl p-2"><i class="fa-solid fa-circle-plus"></i></button>
-            <button onclick="switchTab('messages')" class="text-slate-400 hover:text-amber-400 text-lg p-2"><i class="fa-regular fa-paper-plane"></i></button>
-            <button onclick="openMyProfile()" class="text-slate-400 hover:text-amber-400 text-lg p-2"><i class="fa-solid fa-user"></i></button>
+        <!-- شريط الهواتف السفلي -->
+        <nav class="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-ig-black border-t border-ig-border flex items-center justify-around z-40">
+            <button onclick="switchTab('feed')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-house"></i></button>
+            <button onclick="switchTab('explore')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-compass"></i></button>
+            <button onclick="switchTab('create')" class="text-slate-400 hover:text-white text-2xl"><i class="fa-regular fa-square-plus"></i></button>
+            <button onclick="switchTab('messages')" class="text-slate-400 hover:text-white text-lg"><i class="fa-regular fa-paper-plane"></i></button>
+            <button onclick="openMyProfile()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-user"></i></button>
         </nav>
     </div>
 
-    <!-- نافذة عارض القصص التفاعلي بشريط التقدم (Story Viewer Modal) -->
-    <div id="story-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl hidden flex items-center justify-center p-4">
-        <div class="w-full max-w-sm h-[600px] glass-ultra rounded-3xl overflow-hidden border border-white/20 relative flex flex-col justify-between p-5 shadow-2xl">
+    <!-- نافذة نشر قصة جديدة (Create Story Modal) -->
+    <div id="create-story-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="w-full max-w-sm bg-ig-card border border-ig-border rounded-3xl p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-ig-border pb-3">
+                <h3 class="font-bold text-sm text-white">نشر قصة جديدة (Story)</h3>
+                <button onclick="closeCreateStoryModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <textarea id="story-caption-input" rows="3" placeholder="اكتب نصاً لقصتك..." class="w-full bg-ig-black border border-ig-border rounded-xl p-3 text-xs outline-none focus:border-slate-500 text-white resize-none"></textarea>
+            <input type="url" id="story-image-input" placeholder="رابط صورة للقصة (اختياري)..." class="w-full bg-ig-black border border-ig-border rounded-xl px-3 py-2 text-xs outline-none focus:border-slate-500 text-white">
+
+            <button onclick="publishNewStory()" class="w-full py-3 bg-ig-blue hover:bg-blue-600 text-white font-bold rounded-xl text-xs transition">
+                مشاركة في القصة
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة عارض القصص مع شريط التقدم (Story Viewer) -->
+    <div id="story-viewer-modal" class="fixed inset-0 z-50 bg-black/98 backdrop-blur-2xl hidden flex items-center justify-center p-2 md:p-4">
+        <div class="w-full max-w-sm h-[90vh] max-h-[640px] bg-ig-card rounded-3xl overflow-hidden border border-ig-border relative flex flex-col justify-between p-4 select-none shadow-2xl">
             <!-- شريط تقدم القصة -->
             <div class="w-full bg-white/20 h-1 rounded-full overflow-hidden mb-3">
-                <div id="story-progress" class="bg-amber-400 h-full w-0 transition-all duration-100 ease-linear"></div>
+                <div id="story-progress-bar" class="bg-white h-full w-0 transition-all duration-100 ease-linear"></div>
             </div>
 
             <!-- معلومات صاحب القصة -->
             <div class="flex items-center justify-between text-white z-10">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-full founder-hologram p-0.5 flex items-center justify-center text-sm font-bold">
-                        👑
-                    </div>
+                <div class="flex items-center gap-2.5 cursor-pointer" id="story-user-header">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-xs text-white" id="story-user-avatar">U</div>
                     <div>
-                        <h4 class="font-bold text-xs" id="story-author-name">Yaman Gadhat</h4>
-                        <span class="text-[10px] text-amber-400">مؤسس المنصة • قصة رسمية</span>
+                        <h4 class="font-bold text-xs" id="story-user-name">User</h4>
+                        <span class="text-[10px] text-slate-400">قصة مباشرة</span>
                     </div>
                 </div>
                 <button onclick="closeStoryViewer()" class="text-slate-400 hover:text-white text-lg p-2"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- محتوى القصة -->
-            <div class="flex-1 flex items-center justify-center text-center p-6" id="story-content-area">
-                <p class="text-lg font-black text-white leading-relaxed" id="story-text">
-                    🚀 مرحباً بكم في تحديث YAMAN ULTRA الأقوى على الإطلاق!
-                </p>
+            <!-- محتوى القصة (نص أو صورة) -->
+            <div class="flex-1 flex items-center justify-center text-center p-4 relative overflow-hidden">
+                <img id="story-viewer-image" class="hidden absolute inset-0 w-full h-full object-cover rounded-2xl">
+                <p id="story-viewer-text" class="text-base font-bold text-white leading-relaxed z-10 px-4"></p>
             </div>
 
-            <!-- تفاعل سريع مع القصة -->
-            <div class="flex items-center gap-2 pt-3 border-t border-white/10 z-10">
-                <input type="text" placeholder="رد على القصة..." class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none">
-                <button onclick="playSfx('like'); confetti({particleCount: 40}); closeStoryViewer()" class="p-2 rounded-xl bg-pink-600 text-white text-xs">❤️</button>
+            <!-- شريط رد سريع -->
+            <div class="pt-3 border-t border-white/10 flex items-center gap-2 z-10">
+                <input type="text" id="story-reply-input" placeholder="أرسل رسالة إلى القصة..." class="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-xs text-white outline-none">
+                <button onclick="sendStoryReply()" class="px-3.5 py-2 bg-ig-blue text-white rounded-xl text-xs font-bold">إرسال</button>
             </div>
+        </div>
+    </div>
+
+    <!-- نافذة المكالمة المباشرة (Live Video/Audio Call UI) -->
+    <div id="call-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl hidden flex flex-col items-center justify-between p-6">
+        <div class="text-center space-y-1">
+            <h3 class="font-black text-base text-white" id="call-partner-name">المكالمة</h3>
+            <p class="text-xs text-slate-400" id="call-status">جاري الاتصال...</p>
+        </div>
+
+        <!-- منطقة الفيديو (محلي والطرف الآخر) -->
+        <div class="w-full max-w-md h-[420px] bg-ig-card rounded-3xl overflow-hidden relative border border-ig-border flex items-center justify-center shadow-2xl">
+            <video id="remote-video" autoplay playsinline class="w-full h-full object-cover"></video>
+            <video id="local-video" autoplay playsinline muted class="w-28 h-36 object-cover rounded-2xl border-2 border-white/20 absolute bottom-3 right-3 shadow-lg bg-black"></video>
+            <div id="audio-call-placeholder" class="hidden flex flex-col items-center gap-3">
+                <div class="w-24 h-24 rounded-full insta-gradient flex items-center justify-center text-3xl text-white font-black animate-pulse">
+                    <i class="fa-solid fa-microphone"></i>
+                </div>
+                <span class="text-xs text-slate-300 font-semibold">مكالمة صوتية نشطة</span>
+            </div>
+        </div>
+
+        <!-- أزرار التحكم بالمكالمة -->
+        <div class="flex items-center gap-4">
+            <button onclick="toggleMuteMic()" id="btn-toggle-mic" class="w-12 h-12 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button onclick="endActiveCall()" class="w-14 h-14 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-lg transition">
+                <i class="fa-solid fa-phone-slash text-lg"></i>
+            </button>
+            <button onclick="toggleCamera()" id="btn-toggle-cam" class="w-12 h-12 rounded-full bg-ig-elevated text-white hover:bg-ig-subtle flex items-center justify-center transition">
+                <i class="fa-solid fa-video"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة استقبال مكالمة واردة (Incoming Call Dialog) -->
+    <div id="incoming-call-modal" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md bg-ig-card border-2 border-ig-blue rounded-3xl p-4 shadow-2xl hidden flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full insta-gradient flex items-center justify-center text-white font-bold animate-bounce">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+                <h4 class="font-bold text-xs text-white" id="incoming-caller-name">مكالمة واردة...</h4>
+                <p class="text-[10px] text-slate-400">يريد بدء مكالمة معك</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="acceptIncomingCall()" class="w-10 h-10 rounded-full bg-green-600 hover:bg-green-500 text-white flex items-center justify-center shadow-md">
+                <i class="fa-solid fa-phone"></i>
+            </button>
+            <button onclick="rejectIncomingCall()" class="w-10 h-10 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center shadow-md">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
     </div>
 
@@ -441,7 +474,7 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, setDoc, getDoc, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // إعدادات Firebase الخاصة بمشروعك (yaman-be0f8)
+        // إعدادات Firebase الخاصة بك
         const firebaseConfig = {
             apiKey: "AIzaSyDZWCgDTUHuyBWIT0kS6hGdsjxyYRuWHxc",
             authDomain: "yaman-be0f8.firebaseapp.com",
@@ -455,53 +488,25 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // -------------------------------------------------------------
-        // محرك المؤثرات الصوتية المدمج (Web Audio API)
-        // -------------------------------------------------------------
-        let audioCtx = null;
-        window.playSfx = (type) => {
-            try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                const now = audioCtx.currentTime;
-
-                if (type === 'like') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
-                    gain.gain.setValueAtTime(0.25, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-                    osc.start(now);
-                    osc.stop(now + 0.15);
-                } else if (type === 'send') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(520, now);
-                    osc.frequency.exponentialRampToValueAtTime(1040, now + 0.2);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                }
-            } catch(e) {}
-        };
-
-        // متغيرات الحالة
+        // متغيرات الحالة (State)
         let currentUser = null;
         let currentUserData = { followers: [], following: [], username: '', name: '' };
         let isSignUp = false;
         let allPosts = [];
+        let allStories = [];
         let activeChatTargetId = 'public';
         let activeChatTargetName = 'الدردشة العامة VIP';
         let dmActiveFilter = 'primary';
         let currentViewingProfileUid = null;
 
-        // تبديل التبويبات
+        // متغيرات WebRTC المكالمات
+        let peer = null;
+        let activeCallObj = null;
+        let localMediaStream = null;
+        let incomingCallObj = null;
+
+        // تبديل الواجهات
         window.switchTab = (tabName) => {
-            playSfx('like');
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`tab-${tabName}`);
             if (target) target.classList.remove('hidden');
@@ -512,7 +517,7 @@
             });
         };
 
-        // مصادقة الأدمن والمستخدمين
+        // مصادقة الدخول
         const authForm = document.getElementById('auth-form');
         const toggleAuthBtn = document.getElementById('toggle-auth-btn');
         const signupExtraFields = document.getElementById('signup-extra-fields');
@@ -521,7 +526,7 @@
         toggleAuthBtn.addEventListener('click', () => {
             isSignUp = !isSignUp;
             signupExtraFields.classList.toggle('hidden', !isSignUp);
-            document.getElementById('auth-submit-btn').innerText = isSignUp ? "إنشاء حساب VIP" : "دخول المنصة VIP";
+            document.getElementById('auth-submit-btn').innerText = isSignUp ? "إنشاء الحساب" : "تسجيل الدخول";
             toggleAuthBtn.innerText = isSignUp ? "لديك حساب؟ سجل دخولك" : "ليس لديك حساب؟ أنشئ حساباً جديداً";
             authErrorMsg.classList.add('hidden');
         });
@@ -550,7 +555,7 @@
                         name: finalName,
                         username: finalUsername,
                         email: emailInput,
-                        bio: "مرحباً بكم في حسابي على Yaman Ultra!",
+                        bio: "مرحباً بكم في حسابي على YamanGram!",
                         followers: [],
                         following: [],
                         isFounder: emailInput === "yamangadhat@vip.admin",
@@ -569,7 +574,7 @@
                             name: "Yaman Gadhat 👑",
                             username: "yamangadhat",
                             email: emailInput,
-                            bio: "المؤسس والمدير العام التنفيذي لمنصة Yaman Ultra VIP.",
+                            bio: "المؤسس والمدير العام التنفيذي لمنصة YamanGram Pro.",
                             followers: [],
                             following: [],
                             isFounder: true,
@@ -589,7 +594,7 @@
 
         window.logoutUser = () => signOut(auth);
 
-        // مراقبة المستخدم
+        // مراقبة تسجيل الدخول
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -605,7 +610,7 @@
                         uid: user.uid,
                         name: user.displayName || user.email.split('@')[0],
                         username: user.email.split('@')[0],
-                        bio: "عضو في شبكة Yaman Ultra",
+                        bio: "عضو في شبكة YamanGram",
                         followers: [],
                         following: [],
                         isFounder: user.email === "yamangadhat@vip.admin"
@@ -615,17 +620,252 @@
 
                 document.getElementById('nav-user-avatar').innerText = currentUserData.name[0].toUpperCase();
 
+                // تهيئة الاتصال والمكالمات PeerJS
+                initPeerConnection();
+
+                // الاستماع للمنشورات والقصص والرسائل
                 listenToPosts();
+                listenToStories();
                 listenToDirectMessages();
             } else {
                 currentUser = null;
+                if (peer) peer.destroy();
                 document.getElementById('auth-screen').classList.remove('hidden');
                 document.getElementById('main-app').classList.add('hidden');
             }
         });
 
         // -------------------------------------------------------------
-        // النشر وتغذية المنشورات الحية مع Double-Tap Heart
+        // نظام المكالمات الحية (Audio/Video WebRTC Calls)
+        // -------------------------------------------------------------
+        function initPeerConnection() {
+            const cleanUid = currentUser.uid.replace(/[^a-zA-Z0-9]/g, '');
+            peer = new Peer(cleanUid, {
+                debug: 1
+            });
+
+            peer.on('call', (call) => {
+                incomingCallObj = call;
+                document.getElementById('incoming-caller-name').innerText = call.metadata?.callerName || "مكالمة واردة...";
+                document.getElementById('incoming-call-modal').classList.remove('hidden');
+            });
+        }
+
+        window.startCall = async (targetUid, targetName, isVideo) => {
+            if (targetUid === currentUser.uid || targetUid === 'public') {
+                return alert("يرجى اختيار مستخدم للاتصال به!");
+            }
+
+            try {
+                localMediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: isVideo,
+                    audio: true
+                });
+
+                document.getElementById('local-video').srcObject = localMediaStream;
+                document.getElementById('call-partner-name').innerText = targetName;
+                document.getElementById('call-status').innerText = "جاري الاتصال...";
+                document.getElementById('call-modal').classList.remove('hidden');
+                document.getElementById('audio-call-placeholder').classList.toggle('hidden', isVideo);
+                document.getElementById('remote-video').classList.toggle('hidden', !isVideo);
+
+                const targetCleanUid = targetUid.replace(/[^a-zA-Z0-9]/g, '');
+                const call = peer.call(targetCleanUid, localMediaStream, {
+                    metadata: { callerName: currentUserData.name, isVideo: isVideo }
+                });
+
+                activeCallObj = call;
+                handleCallStreams(call);
+            } catch (err) {
+                alert("تعذر الوصول للكاميرا أو الميكروفون: " + err.message);
+            }
+        };
+
+        window.acceptIncomingCall = async () => {
+            document.getElementById('incoming-call-modal').classList.add('hidden');
+            if (!incomingCallObj) return;
+
+            const isVideo = incomingCallObj.metadata?.isVideo ?? true;
+            try {
+                localMediaStream = await navigator.mediaDevices.getUserMedia({
+                    video: isVideo,
+                    audio: true
+                });
+
+                document.getElementById('local-video').srcObject = localMediaStream;
+                document.getElementById('call-partner-name').innerText = incomingCallObj.metadata?.callerName || "المكالمة النشطة";
+                document.getElementById('call-status').innerText = "متصل الآن";
+                document.getElementById('call-modal').classList.remove('hidden');
+                document.getElementById('audio-call-placeholder').classList.toggle('hidden', isVideo);
+                document.getElementById('remote-video').classList.toggle('hidden', !isVideo);
+
+                incomingCallObj.answer(localMediaStream);
+                activeCallObj = incomingCallObj;
+                handleCallStreams(incomingCallObj);
+            } catch (err) {
+                alert("تعذر قبول المكالمة: " + err.message);
+            }
+        };
+
+        window.rejectIncomingCall = () => {
+            document.getElementById('incoming-call-modal').classList.add('hidden');
+            if (incomingCallObj) incomingCallObj.close();
+            incomingCallObj = null;
+        };
+
+        function handleCallStreams(call) {
+            call.on('stream', (remoteStream) => {
+                document.getElementById('remote-video').srcObject = remoteStream;
+                document.getElementById('call-status').innerText = "متصل الآن";
+            });
+
+            call.on('close', () => endActiveCall());
+            call.on('error', () => endActiveCall());
+        }
+
+        window.endActiveCall = () => {
+            if (activeCallObj) activeCallObj.close();
+            if (localMediaStream) {
+                localMediaStream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('call-modal').classList.add('hidden');
+            activeCallObj = null;
+            localMediaStream = null;
+        };
+
+        window.toggleMuteMic = () => {
+            if (localMediaStream) {
+                const audioTrack = localMediaStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    audioTrack.enabled = !audioTrack.enabled;
+                    document.getElementById('btn-toggle-mic').classList.toggle('bg-red-600', !audioTrack.enabled);
+                }
+            }
+        };
+
+        window.toggleCamera = () => {
+            if (localMediaStream) {
+                const videoTrack = localMediaStream.getVideoTracks()[0];
+                if (videoTrack) {
+                    videoTrack.enabled = !videoTrack.enabled;
+                    document.getElementById('btn-toggle-cam').classList.toggle('bg-red-600', !videoTrack.enabled);
+                }
+            }
+        };
+
+        // -------------------------------------------------------------
+        // نظام القصص الحقيقي (Stories System)
+        // -------------------------------------------------------------
+        window.openCreateStoryModal = () => document.getElementById('create-story-modal').classList.remove('hidden');
+        window.closeCreateStoryModal = () => document.getElementById('create-story-modal').classList.add('hidden');
+
+        window.publishNewStory = async () => {
+            const caption = document.getElementById('story-caption-input').value.trim();
+            const imageUrl = document.getElementById('story-image-input').value.trim();
+
+            if (!caption && !imageUrl) return alert("يرجى كتابة نص أو وضع رابط صورة!");
+
+            try {
+                await addDoc(collection(db, "stories"), {
+                    userId: currentUser.uid,
+                    authorName: currentUserData.name,
+                    username: currentUserData.username,
+                    isFounder: currentUserData.isFounder || false,
+                    caption: caption,
+                    imageUrl: imageUrl || null,
+                    createdAt: serverTimestamp()
+                });
+
+                document.getElementById('story-caption-input').value = '';
+                document.getElementById('story-image-input').value = '';
+                closeCreateStoryModal();
+            } catch (err) {
+                alert("خطأ أثناء نشر القصة: " + err.message);
+            }
+        };
+
+        function listenToStories() {
+            const q = query(collection(db, "stories"), orderBy("createdAt", "desc"));
+            onSnapshot(q, (snap) => {
+                allStories = [];
+                snap.forEach(d => allStories.push({ id: d.id, ...d.data() }));
+                renderStoriesReel(allStories);
+            });
+        }
+
+        function renderStoriesReel(stories) {
+            const container = document.getElementById('stories-stream-container');
+            
+            // تجميع أحدث قصة لكل مستخدم
+            const userStoriesMap = new Map();
+            stories.forEach(s => {
+                if (!userStoriesMap.has(s.userId)) {
+                    userStoriesMap.set(s.userId, s);
+                }
+            });
+
+            container.innerHTML = Array.from(userStoriesMap.values()).map(story => {
+                const isFounder = story.isFounder || (story.username === 'yamangadhat');
+                return `
+                    <div class="flex flex-col items-center gap-1.5 flex-shrink-0 cursor-pointer" onclick="viewUserStory('${story.id}')">
+                        <div class="w-16 h-16 rounded-full p-[2px] ${isFounder ? 'founder-gradient' : 'insta-gradient'}">
+                            <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center text-xs font-bold text-white border-2 border-ig-black">
+                                ${isFounder ? '👑' : story.authorName[0].toUpperCase()}
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-300 max-w-[65px] truncate">${story.authorName}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        let storyProgressTimer = null;
+        window.viewUserStory = (storyId) => {
+            const story = allStories.find(s => s.id === storyId);
+            if (!story) return;
+
+            const modal = document.getElementById('story-viewer-modal');
+            const prog = document.getElementById('story-progress-bar');
+            const img = document.getElementById('story-viewer-image');
+            const txt = document.getElementById('story-viewer-text');
+
+            modal.classList.remove('hidden');
+            document.getElementById('story-user-name').innerText = story.authorName;
+            document.getElementById('story-user-avatar').innerText = story.authorName[0].toUpperCase();
+
+            if (story.imageUrl) {
+                img.src = story.imageUrl;
+                img.classList.remove('hidden');
+                txt.innerText = story.caption || '';
+            } else {
+                img.classList.add('hidden');
+                txt.innerText = story.caption;
+            }
+
+            prog.style.width = '0%';
+            setTimeout(() => prog.style.width = '100%', 50);
+
+            clearTimeout(storyProgressTimer);
+            storyProgressTimer = setTimeout(() => closeStoryViewer(), 5000);
+        };
+
+        window.closeStoryViewer = () => {
+            clearTimeout(storyProgressTimer);
+            document.getElementById('story-viewer-modal').classList.add('hidden');
+            document.getElementById('story-progress-bar').style.width = '0%';
+        };
+
+        window.sendStoryReply = () => {
+            const val = document.getElementById('story-reply-input').value.trim();
+            if (val) {
+                alert("تم إرسال ردك على القصة بنجاح!");
+                document.getElementById('story-reply-input').value = '';
+                closeStoryViewer();
+            }
+        };
+
+        // -------------------------------------------------------------
+        // نظام المنشورات والتغذية (Feed & Explore)
         // -------------------------------------------------------------
         window.publishNewPost = async () => {
             const caption = document.getElementById('create-post-caption').value.trim();
@@ -651,8 +891,6 @@
 
                 document.getElementById('create-post-caption').value = '';
                 document.getElementById('create-post-image').value = '';
-                playSfx('send');
-                confetti({ particleCount: 80, spread: 70 });
                 switchTab('feed');
             } catch (err) {
                 alert("خطأ أثناء النشر: " + err.message);
@@ -674,7 +912,7 @@
         function renderFeedPosts(posts) {
             const container = document.getElementById('feed-posts-stream');
             if (posts.length === 0) {
-                container.innerHTML = `<div class="p-12 text-center glass-ultra rounded-3xl border border-white/10 text-slate-500">لا توجد منشورات بعد. كن أول من ينشر!</div>`;
+                container.innerHTML = `<div class="p-12 text-center bg-ig-card rounded-3xl border border-ig-border text-slate-500">لا توجد منشورات بعد. انشر أول منشور الآن!</div>`;
                 return;
             }
 
@@ -685,18 +923,18 @@
                 const isFollowingAuthor = currentUserData.following && currentUserData.following.includes(post.userId);
 
                 return `
-                    <article class="glass-ultra rounded-3xl overflow-hidden border ${isFounder ? 'border-amber-500/40 bg-gradient-to-b from-amber-500/5 to-transparent' : 'border-white/10'} shadow-2xl space-y-3">
+                    <article class="bg-ig-card border border-ig-border rounded-3xl overflow-hidden shadow-xl space-y-3">
                         <!-- ترويسة المنشور -->
                         <div class="p-4 flex items-center justify-between">
                             <div class="flex items-center gap-3 cursor-pointer" onclick="viewUserProfile('${post.userId}')">
-                                <div class="w-11 h-11 rounded-2xl ${isFounder ? 'founder-hologram' : 'bg-gradient-to-tr from-blue-600 to-indigo-600'} p-0.5 flex items-center justify-center font-black text-white text-xs shadow-lg">
-                                    <div class="w-full h-full rounded-2xl bg-slate-950 flex items-center justify-center">
+                                <div class="w-10 h-10 rounded-full ${isFounder ? 'founder-gradient' : 'insta-gradient'} p-0.5 flex items-center justify-center font-bold text-white text-xs">
+                                    <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center">
                                         ${isFounder ? '👑' : post.authorName[0].toUpperCase()}
                                     </div>
                                 </div>
                                 <div>
                                     <div class="flex items-center gap-1.5">
-                                        <h4 class="font-black text-xs text-white hover:underline">${post.authorName}</h4>
+                                        <h4 class="font-bold text-xs text-white hover:underline">${post.authorName}</h4>
                                         ${isFounder ? '<i class="fa-solid fa-circle-check text-[10px] text-blue-400"></i>' : ''}
                                     </div>
                                     <span class="text-[10px] text-slate-400">@${post.username || 'user'}</span>
@@ -705,59 +943,52 @@
 
                             <div class="flex items-center gap-2">
                                 ${post.userId !== currentUser.uid ? `
-                                    <button onclick="toggleFollowUser('${post.userId}')" class="text-xs px-3.5 py-1.5 rounded-xl font-bold transition ${isFollowingAuthor ? 'bg-white/10 text-slate-300' : 'founder-hologram text-white shadow-md'}">
-                                        ${isFollowingAuthor ? 'يتابع' : 'متابعة +'}
+                                    <button onclick="toggleFollowUser('${post.userId}')" class="text-xs px-3.5 py-1.5 rounded-xl font-bold transition ${isFollowingAuthor ? 'bg-ig-elevated text-slate-300' : 'bg-ig-blue text-white'}">
+                                        ${isFollowingAuthor ? 'يتابع' : 'متابعة'}
                                     </button>
                                 ` : ''}
                                 ${isOwnerOrAdmin ? `
-                                    <button onclick="deletePost('${post.id}')" class="text-slate-500 hover:text-red-400 text-xs p-2 transition"><i class="fa-solid fa-trash"></i></button>
+                                    <button onclick="deletePost('${post.id}')" class="text-slate-500 hover:text-red-400 text-xs p-1.5"><i class="fa-solid fa-trash"></i></button>
                                 ` : ''}
                             </div>
                         </div>
 
-                        <!-- صورة المنشور مع Double-Tap لتفعيل القلب -->
+                        <!-- صورة المنشور وتفاعل Double Tap -->
                         ${post.imageUrl ? `
-                            <div class="w-full max-h-[500px] bg-black relative overflow-hidden flex items-center justify-center select-none" ondblclick="triggerDoubleTapHeart(event, '${post.id}')">
+                            <div class="w-full max-h-[500px] bg-black relative overflow-hidden flex items-center justify-center select-none cursor-pointer" ondblclick="handlePostDoubleTap('${post.id}')">
                                 <img src="${post.imageUrl}" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
-                                <div id="double-heart-${post.id}" class="absolute pointer-events-none hidden text-red-500 text-7xl animate-heart-burst drop-shadow-2xl">
-                                    <i class="fa-solid fa-heart"></i>
+                                <div id="double-tap-heart-${post.id}" class="absolute pointer-events-none hidden text-white text-6xl drop-shadow-2xl">
+                                    <i class="fa-solid fa-heart text-ig-red"></i>
                                 </div>
                             </div>
                         ` : ''}
 
-                        <!-- التفاعل والنص والتعليقات -->
+                        <!-- أزرار الإجراءات والتعليقات -->
                         <div class="p-4 space-y-3">
                             <div class="flex items-center justify-between text-lg text-white">
                                 <div class="flex items-center gap-4">
-                                    <button onclick="toggleLikePost('${post.id}', ${isLiked})" class="transition hover:scale-125 ${isLiked ? 'text-red-500 animate-bounce' : 'text-white'}">
+                                    <button onclick="toggleLikePost('${post.id}', ${isLiked})" class="transition hover:scale-110 ${isLiked ? 'text-ig-red' : 'text-white'}">
                                         <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
                                     </button>
-                                    <button onclick="focusCommentInput('${post.id}')" class="hover:text-amber-400 transition"><i class="fa-regular fa-comment"></i></button>
+                                    <button onclick="focusCommentInput('${post.id}')" class="hover:text-slate-400 transition"><i class="fa-regular fa-comment"></i></button>
                                     <button onclick="startDirectChat('${post.userId}', '${post.authorName}')" class="hover:text-blue-400 transition"><i class="fa-regular fa-paper-plane"></i></button>
                                 </div>
                                 <span class="text-xs font-bold text-slate-400">${post.likes ? post.likes.length : 0} إعجاب</span>
                             </div>
 
-                            <!-- شريط التفاعل السريع بـ Emojis -->
-                            <div class="flex items-center gap-2 py-1">
-                                <button onclick="quickReact('${post.id}', '🔥')" class="text-xs p-1.5 rounded-lg bg-white/5 hover:scale-125 transition">🔥</button>
-                                <button onclick="quickReact('${post.id}', '👑')" class="text-xs p-1.5 rounded-lg bg-white/5 hover:scale-125 transition">👑</button>
-                                <button onclick="quickReact('${post.id}', '❤️')" class="text-xs p-1.5 rounded-lg bg-white/5 hover:scale-125 transition">❤️</button>
-                                <button onclick="quickReact('${post.id}', '🚀')" class="text-xs p-1.5 rounded-lg bg-white/5 hover:scale-125 transition">🚀</button>
-                            </div>
-
                             ${post.text ? `<p class="text-xs text-slate-200 leading-relaxed"><b class="text-white">@${post.username}:</b> ${post.text}</p>` : ''}
 
                             <!-- تعليقات المنشور -->
-                            <div class="space-y-1.5 text-xs text-slate-300 border-t border-white/5 pt-2 max-h-32 overflow-y-auto no-scrollbar">
+                            <div class="space-y-1.5 text-xs text-slate-300 border-t border-ig-border pt-2 max-h-28 overflow-y-auto no-scrollbar">
                                 ${(post.comments || []).map(c => `
-                                    <div class="bg-white/5 p-2 rounded-xl"><b class="text-amber-400">${c.author}:</b> ${c.text}</div>
+                                    <div><b class="text-amber-400">${c.author}:</b> ${c.text}</div>
                                 `).join('')}
                             </div>
 
+                            <!-- كتابة تعليق -->
                             <div class="flex items-center gap-2 pt-1">
-                                <input type="text" id="comm-input-${post.id}" placeholder="اكتب تعليقاً فخماً..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs outline-none text-white focus:border-amber-400">
-                                <button onclick="addCommentToPost('${post.id}')" class="founder-hologram text-white font-bold text-xs px-3 py-2 rounded-xl hover:scale-105 transition">إرسال</button>
+                                <input type="text" id="comm-input-${post.id}" placeholder="أضف تعليقاً..." class="flex-1 bg-ig-black border border-ig-border rounded-xl px-3.5 py-2 text-xs outline-none text-white focus:border-slate-500">
+                                <button onclick="addCommentToPost('${post.id}')" class="text-ig-blue font-bold text-xs px-2 hover:underline">نشر</button>
                             </div>
                         </div>
                     </article>
@@ -765,26 +996,17 @@
             }).join('');
         }
 
-        // تفاعل Double-Tap للقلب المنبثق
-        window.triggerDoubleTapHeart = (event, postId) => {
-            const heartEl = document.getElementById(`double-heart-${postId}`);
-            if (heartEl) {
-                heartEl.classList.remove('hidden');
-                setTimeout(() => heartEl.classList.add('hidden'), 700);
+        window.handlePostDoubleTap = (postId) => {
+            const h = document.getElementById(`double-tap-heart-${postId}`);
+            if (h) {
+                h.classList.remove('hidden');
+                h.classList.add('animate-heart-fade');
+                setTimeout(() => h.classList.add('hidden'), 800);
             }
-            playSfx('like');
-            confetti({ particleCount: 35, spread: 50, origin: { y: 0.6 } });
             toggleLikePost(postId, false);
         };
 
-        window.quickReact = (postId, emoji) => {
-            playSfx('like');
-            confetti({ particleCount: 25, spread: 40 });
-            addCommentToPostDirect(postId, emoji);
-        };
-
         window.toggleLikePost = async (postId, currentlyLiked) => {
-            playSfx('like');
             const postRef = doc(db, "posts", postId);
             if (currentlyLiked) {
                 await updateDoc(postRef, { likes: arrayRemove(currentUser.uid) });
@@ -797,11 +1019,6 @@
             const input = document.getElementById(`comm-input-${postId}`);
             const text = input.value.trim();
             if (!text) return;
-            await addCommentToPostDirect(postId, text);
-            input.value = '';
-        };
-
-        async function addCommentToPostDirect(postId, text) {
             const postRef = doc(db, "posts", postId);
             await updateDoc(postRef, {
                 comments: arrayUnion({
@@ -810,21 +1027,20 @@
                     createdAt: new Date().toISOString()
                 })
             });
-            playSfx('send');
-        }
+            input.value = '';
+        };
 
         window.deletePost = async (postId) => {
-            if (confirm("هل تريد حذف هذا المنشور نهائياً؟")) {
+            if (confirm("هل أنت متأكد من حذف هذا المنشور؟")) {
                 await deleteDoc(doc(db, "posts", postId));
             }
         };
 
         // -------------------------------------------------------------
-        // نظام المتابعة الحقيقي
+        // المتابعة والمحادثات DMs
         // -------------------------------------------------------------
         window.toggleFollowUser = async (targetUid) => {
             if (targetUid === currentUser.uid) return alert("لا يمكنك متابعة نفسك!");
-            playSfx('like');
 
             const myRef = doc(db, "users", currentUser.uid);
             const targetRef = doc(db, "users", targetUid);
@@ -839,58 +1055,22 @@
                 await updateDoc(targetRef, { followers: arrayUnion(currentUser.uid) });
                 if (!currentUserData.following) currentUserData.following = [];
                 currentUserData.following.push(targetUid);
-                confetti({ particleCount: 40, spread: 60 });
             }
 
             renderFeedPosts(allPosts);
             if (currentViewingProfileUid) viewUserProfile(currentViewingProfileUid);
         };
 
-        // -------------------------------------------------------------
-        // عارض القصص مع شريط التقدم (Story Viewer)
-        // -------------------------------------------------------------
-        let storyTimer = null;
-        window.openStoryViewer = (type) => {
-            playSfx('like');
-            const modal = document.getElementById('story-modal');
-            const progressBar = document.getElementById('story-progress');
-            const storyText = document.getElementById('story-text');
-            const authorName = document.getElementById('story-author-name');
-
-            modal.classList.remove('hidden');
-            progressBar.style.width = '0%';
-
-            if (type === 'yamangadhat') {
-                authorName.innerText = "Yaman Gadhat 👑";
-                storyText.innerText = "🌟 مرحباً بكم جميعاً في منصة YAMAN ULTRA VIP! استمتعوا بأحدث التحديثات والمراسلة الحية.";
-            } else {
-                authorName.innerText = "مجتمع Yaman Ultra";
-                storyText.innerText = "🔥 شارك أفكارك وتواصل مع المطورين والأعضاء في الوقت الفعلي!";
-            }
-
-            setTimeout(() => progressBar.style.width = '100%', 50);
-            storyTimer = setTimeout(() => closeStoryViewer(), 5000);
-        };
-
-        window.closeStoryViewer = () => {
-            clearTimeout(storyTimer);
-            document.getElementById('story-modal').classList.add('hidden');
-            document.getElementById('story-progress').style.width = '0%';
-        };
-
-        // -------------------------------------------------------------
-        // نظام المحادثات DMs والطلبات
-        // -------------------------------------------------------------
         let allDmMessages = [];
         window.setDmFilter = (filterName) => {
             dmActiveFilter = filterName;
             ['primary', 'requests', 'public'].forEach(f => {
                 const btn = document.getElementById(`dm-filter-${f}`);
                 if (f === filterName) {
-                    btn.classList.add('bg-white/10', 'text-white');
+                    btn.classList.add('bg-ig-elevated', 'text-white');
                     btn.classList.remove('text-slate-400');
                 } else {
-                    btn.classList.remove('bg-white/10', 'text-white');
+                    btn.classList.remove('bg-ig-elevated', 'text-white');
                     btn.classList.add('text-slate-400');
                 }
             });
@@ -911,11 +1091,11 @@
             const container = document.getElementById('dm-threads-container');
             if (dmActiveFilter === 'public') {
                 container.innerHTML = `
-                    <div onclick="startDirectChat('public', 'الدردشة العامة VIP')" class="p-3.5 rounded-2xl glass-ultra border border-amber-500/30 cursor-pointer flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl founder-hologram flex items-center justify-center font-bold text-white text-xs">👑</div>
+                    <div onclick="startDirectChat('public', 'الدردشة العامة VIP')" class="p-3.5 rounded-2xl bg-ig-elevated border border-amber-500/20 cursor-pointer flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full founder-gradient flex items-center justify-center font-bold text-white text-xs">👑</div>
                         <div>
-                            <h4 class="font-bold text-xs text-white">غرفة الدردشة العامة VIP</h4>
-                            <span class="text-[10px] text-amber-400">مفتوحة للجميع</span>
+                            <h4 class="font-bold text-xs text-white">غرفة الدردشة العامة</h4>
+                            <span class="text-[10px] text-amber-400">متاحة لجميع الأعضاء</span>
                         </div>
                     </div>
                 `;
@@ -952,10 +1132,10 @@
             }
 
             container.innerHTML = filteredThreads.map(th => `
-                <div onclick="startDirectChat('${th.uid}', '${th.name}')" class="p-3 rounded-2xl hover:bg-white/5 cursor-pointer flex items-center justify-between transition ${activeChatTargetId === th.uid ? 'bg-white/10' : ''}">
+                <div onclick="startDirectChat('${th.uid}', '${th.name}')" class="p-3 rounded-2xl hover:bg-ig-elevated cursor-pointer flex items-center justify-between transition ${activeChatTargetId === th.uid ? 'bg-ig-elevated' : ''}">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl founder-hologram p-0.5 flex items-center justify-center font-bold text-white text-xs">
-                            <div class="w-full h-full rounded-2xl bg-slate-950 flex items-center justify-center">${th.name[0].toUpperCase()}</div>
+                        <div class="w-10 h-10 rounded-full insta-gradient p-0.5 flex items-center justify-center font-bold text-white text-xs">
+                            <div class="w-full h-full rounded-full bg-ig-black flex items-center justify-center">${th.name[0].toUpperCase()}</div>
                         </div>
                         <div>
                             <h4 class="font-bold text-xs text-white">${th.name}</h4>
@@ -976,6 +1156,7 @@
 
             const isRequest = targetUid !== 'public' && !(currentUserData.following && currentUserData.following.includes(targetUid));
             document.getElementById('dm-request-notice').classList.toggle('hidden', !isRequest);
+            document.getElementById('chat-call-actions').classList.toggle('hidden', targetUid === 'public');
 
             renderActiveChatMessages();
             switchTab('messages');
@@ -1005,7 +1186,7 @@
                 return `
                     <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
                         <span class="text-[10px] text-slate-500 mb-0.5">${msg.senderName}</span>
-                        <div class="px-4 py-2.5 rounded-2xl max-w-[80%] text-xs shadow-md ${isMe ? 'founder-hologram text-white rounded-bl-none' : 'bg-slate-900 border border-white/10 text-white rounded-br-none'}">
+                        <div class="px-4 py-2.5 rounded-2xl max-w-[80%] text-xs ${isMe ? 'bg-ig-blue text-white rounded-bl-none' : 'bg-ig-elevated text-white rounded-br-none'}">
                             ${msg.text}
                         </div>
                     </div>
@@ -1030,7 +1211,6 @@
                 createdAt: serverTimestamp()
             });
             input.value = '';
-            playSfx('send');
         });
 
         // -------------------------------------------------------------
@@ -1046,7 +1226,7 @@
 
             document.getElementById('prof-username').innerText = `@${userObj.username || 'user'}`;
             document.getElementById('prof-fullname').innerText = userObj.name;
-            document.getElementById('prof-bio').innerText = userObj.bio || 'عضو في شبكة Yaman Ultra VIP';
+            document.getElementById('prof-bio').innerText = userObj.bio || 'عضو في شبكة YamanGram';
             document.getElementById('prof-avatar-box').innerText = userObj.name[0].toUpperCase();
             
             const isFounder = userObj.isFounder || (userObj.username === 'yamangadhat');
@@ -1057,18 +1237,24 @@
             const userPosts = allPosts.filter(p => p.userId === uid);
             document.getElementById('prof-posts-count').innerText = userPosts.length;
 
-            const actionBtn = document.getElementById('prof-action-btn');
+            const actionBar = document.getElementById('prof-action-bar');
             if (uid === currentUser.uid) {
-                actionBtn.innerText = "تعديل البايو";
-                actionBtn.onclick = () => {
-                    const newBio = prompt("اكتب البايو الجديد:", userObj.bio);
-                    if (newBio) updateDoc(doc(db, "users", uid), { bio: newBio });
-                };
+                actionBar.innerHTML = `
+                    <button onclick="editMyBio()" class="flex-1 py-2.5 rounded-xl bg-ig-elevated text-xs font-bold text-white hover:bg-ig-subtle transition">تعديل الملف الشخصي</button>
+                `;
             } else {
                 const isFollowing = currentUserData.following && currentUserData.following.includes(uid);
-                actionBtn.innerText = isFollowing ? "إلغاء المتابعة" : "متابعة +";
-                actionBtn.className = `px-4 py-1.5 rounded-xl text-xs font-bold transition ${isFollowing ? 'bg-white/10 text-white' : 'founder-hologram text-white'}`;
-                actionBtn.onclick = () => toggleFollowUser(uid);
+                actionBar.innerHTML = `
+                    <button onclick="toggleFollowUser('${uid}')" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition ${isFollowing ? 'bg-ig-elevated text-white' : 'bg-ig-blue text-white'}">
+                        ${isFollowing ? 'إلغاء المتابعة' : 'متابعة +'}
+                    </button>
+                    <button onclick="startDirectChat('${uid}', '${userObj.name}')" class="px-4 py-2.5 rounded-xl bg-ig-elevated text-white text-xs font-bold hover:bg-ig-subtle transition">
+                        مراسلة
+                    </button>
+                    <button onclick="startCall('${uid}', '${userObj.name}', true)" class="px-4 py-2.5 rounded-xl bg-ig-elevated border border-ig-border text-amber-400 text-xs font-bold hover:border-amber-400 transition" title="مكالمة فيديو">
+                        <i class="fa-solid fa-video"></i>
+                    </button>
+                `;
             }
 
             const grid = document.getElementById('prof-posts-grid');
@@ -1076,8 +1262,8 @@
                 grid.innerHTML = `<div class="col-span-3 py-10 text-center text-xs text-slate-500">لا توجد منشورات بعد.</div>`;
             } else {
                 grid.innerHTML = userPosts.map(p => `
-                    <div class="aspect-square bg-slate-900 rounded-2xl overflow-hidden relative group">
-                        ${p.imageUrl ? `<img src="${p.imageUrl}" class="w-full h-full object-cover">` : `<div class="w-full h-full p-2 flex items-center justify-center text-[10px] text-slate-400 text-center bg-slate-950">${p.text}</div>`}
+                    <div class="aspect-square bg-ig-elevated rounded-2xl overflow-hidden relative group">
+                        ${p.imageUrl ? `<img src="${p.imageUrl}" class="w-full h-full object-cover">` : `<div class="w-full h-full p-2 flex items-center justify-center text-[10px] text-slate-400 text-center bg-ig-card">${p.text}</div>`}
                     </div>
                 `).join('');
             }
@@ -1085,11 +1271,20 @@
             switchTab('profile');
         };
 
+        window.editMyBio = async () => {
+            const newBio = prompt("اكتب البايو الجديد لحسابك:", currentUserData.bio);
+            if (newBio) {
+                await updateDoc(doc(db, "users", currentUser.uid), { bio: newBio });
+                currentUserData.bio = newBio;
+                viewUserProfile(currentUser.uid);
+            }
+        };
+
         function renderExploreGrid(posts) {
             const grid = document.getElementById('explore-posts-grid');
             grid.innerHTML = posts.map(p => `
-                <div class="aspect-square bg-slate-900 rounded-2xl overflow-hidden cursor-pointer relative group" onclick="viewUserProfile('${p.userId}')">
-                    ${p.imageUrl ? `<img src="${p.imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">` : `<div class="w-full h-full p-2 flex items-center justify-center text-[10px] text-slate-400 text-center bg-slate-950">${p.text || 'منشور'}</div>`}
+                <div class="aspect-square bg-ig-elevated rounded-2xl overflow-hidden cursor-pointer relative group" onclick="viewUserProfile('${p.userId}')">
+                    ${p.imageUrl ? `<img src="${p.imageUrl}" class="w-full h-full object-cover group-hover:scale-105 transition">` : `<div class="w-full h-full p-2 flex items-center justify-center text-[10px] text-slate-400 text-center bg-ig-card">${p.text || 'منشور'}</div>`}
                 </div>
             `).join('');
         }
